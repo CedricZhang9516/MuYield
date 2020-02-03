@@ -5,10 +5,11 @@
 void DiffusionModel(
 		//double* X0, double* Y0, double* Z0,
 		//double Vx0, double Vy0, double Vz0, double theta0, double phi0,
-		int (*GeometryFunction)(double, double, double) )
+		bool (*GeometryFunction)(double, double, double))
 		//std::vector<double>* DiffusionVertexX,
 		//std::vector<double>* DiffusionVertexY,
-		//std::vector<double>* DiffusionVertexZ)
+		//std::vector<double>* DiffusionVertexZ,
+		//std::vector<double>* DiffusionVertexT)
 		//double DecayT, double Thick,
 		//double* DiffusionT,
 		//double* X_sf, double* Y_sf, double* Z_sf,
@@ -19,6 +20,8 @@ void DiffusionModel(
 	//double TPoint* MCLmfp(){
 
 	//* DiffusionT = 0;
+
+
 
 	double t = 0;
 	double z  = Z0;

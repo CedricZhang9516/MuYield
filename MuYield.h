@@ -10,32 +10,52 @@
 
 
 double* MCLmfp();
-void FillTZ();
+//void FillTZ();
 void ShootLaser(double , double , double , double , double , double  ,double );
 void ShootLaserPulseE(double , double , double , double , double , double  ,double );
 
 void SetTreeBranch(TTree * tree);
 void SetHist(TFile * f);
 void WriteHist();
-void InitialTreeVar();
 
-int InsideAerogel(double x, double y, double z);
 
 void DrawHistPlot();
 void DrawGeo();
 void Setstyle(TH1D*, int);
 void SetstyleG(TGraph*, int);
-double expo(double, double);
+//double expo(double, double);
 
-double GenerateGaus(double, double );
-double GenerateUniform(double, double );
-double GenerateHlineY(TH1D*);
+//double GenerateGaus(double, double );
+//double GenerateUniform(double, double );
+//double GenerateHlineY(TH1D*);
 
-double MichelSpec();
+//double MichelSpec();
+
+void InitializingXYZ0();
 
 bool InsideLaserRegion(double, double, double);
+bool InsideAerogel(double x, double y, double z);
+
 
 TString name;
+
+
+double Thick = 7.12;
+double D = 87000;// diffussion coefficient mm^2/s
+double T = 322;
+double light = 299792458; // m/s
+double massMu = 106.16/light/light; // MeV/c2
+double lifeMu = 2.2e-6; //s
+double k = 8.62e-11 ; //Boltzmann constant, MeV/K
+double PI = 3.1415926;
+double Tstep = 1e-9;
+double tLaser = 1.3e-6;
+double Ef = 20000;//V/m
+double A = 1.6932087e16;//Ef/massMu, mm/s^2
+double zMesh = 10;//mm
+double yMesh = 30;//mm
+
+double vel0_avrg = 1000*sqrt(8*k*T/(PI*massMu));
 
 // only for debug
 int NLaserR = 0;
@@ -58,24 +78,10 @@ double Bx = 0.0696;//mT
 double Bz = 0.0696;//mT
 //double Bz = 0;//mT
 
+TVector3 Bamb(Bx,By,Bz);
+double Omega = 14 * Bamb.Mag() * (2*PI);
 
-double Thick = 7.12;
-double D = 87000;// diffussion coefficient mm^2/s
-double T = 322;
-double light = 299792458; // m/s
-double massMu = 106.16/light/light; // MeV/c2
-double lifeMu = 2.2e-6; //s
-double k = 8.62e-11 ; //Boltzmann constant, MeV/K
-double PI = 3.1415926;
-double Tstep = 1e-9;
-double tLaser = 1.3e-6;
-double Ef = 20000;//V/m
-double A = 1.6932087e16;//Ef/massMu, mm/s^2
-double zMesh = 10;//mm
-double yMesh = 30;//mm
-
-double vel0_avrg = 1000*sqrt(8*k*T/(PI*massMu));
-
+//double Omega;// = 14 * Bamb.Mag() * (2*PI);
 
 //aux parameters, middle-step use, not to be saved:
 //double x,y,z,t,vx,vy,vz,theta,phi;
@@ -127,10 +133,10 @@ double t0;// = -1;// is not the initial t, but the total time spent inside aerog
 double DiffusionT;
 
 
-std::vector<double>* DiffusionVertexX = new std::vector<double>(5,0);;
-std::vector<double>* DiffusionVertexY = new std::vector<double>(5,0);;
-std::vector<double>* DiffusionVertexZ = new std::vector<double>(5,0);;
-std::vector<double>* DiffusionVertexT = new std::vector<double>(5,0);;
+std::vector<double>* DiffusionVertexX;// = new std::vector<double>;//(5,0);
+std::vector<double>* DiffusionVertexY;// = new std::vector<double>;//(5,0);
+std::vector<double>* DiffusionVertexZ;// = new std::vector<double>;//(5,0);
+std::vector<double>* DiffusionVertexT;// = new std::vector<double>;//(5,0);
 
 
 double DecayX;// = -1;
@@ -150,7 +156,11 @@ double DecayPositronMomtY;
 double DecayPositronMomtZ;
 
 
-
+/*
+	omega_x = 14*Bx/(2*PI);
+	omega_y = 14*By/(2*PI);
+	omega_z = 14*Bz/(2*PI);
+*/
 
 
 
@@ -239,6 +249,84 @@ TH2D *hEmissionXY;
 
 ////////////////////////////////////////
 
+double expo(double x, double a)
+{
+	return exp(-x/a);
+}
+
+double GenerateGaus(double mean, double sigma){
+    return gRandom->Gaus(mean,sigma);
+
+}
+double GenerateUniform(double ti,double tf){
+
+    return gRandom->Uniform(ti,tf);
+}
+
+double GenerateHlineY(TH1D *hY0tgt_hline){
+
+	int intn;
+	do{
+		tempX = ((double) rand() / (RAND_MAX)) * 6000;  // l=0~0.01 mm
+		tempY = -60 + ((double) rand() / (RAND_MAX)) * 120;  // l=0~0.01 mm
+		tempZ = (tempY*10.0)/1 ;
+
+		intn = (int) tempZ;
+
+	}while(tempX>hY0tgt_hline->GetBinContent((intn + 1001)));
+
+	return tempY;
+}
+
+void Setstyle(TH1D *g, int c){
+	g->SetFillColor(c);
+    g->SetFillStyle(3001);
+    g->SetLineColor(c);
+    g->SetMarkerColor(1);
+   	g->SetMarkerSize(0.5);
+    g->SetMarkerStyle(20);
+}
+
+void SetstyleG(TGraph *g, Int_t c){
+    g->SetLineColor(c);
+    g->SetLineStyle(4);
+    g->SetLineWidth(4);
+    g->SetMarkerColor(c);
+    g->SetMarkerStyle(14);
+
+}
+
+void InitializingXYZ0(){
+	//double* X0, double* Y0, double* Z0
+
+	//beam xy: uniformed or gaussian from tdr
+	//x0=((double) rand() / (RAND_MAX))*40;//0-20mm;index_m+xStep/2;
+	//y0=((double) rand() / (RAND_MAX))*40;//0-20mm;
+
+	if(MCtype == 1){
+
+		Z0 = - ((double) rand() / (RAND_MAX)) * Thick;    // z0=-0.0~-7.12mm
+		X0 = GenerateGaus(0,31.96);//
+		Y0 = GenerateGaus(0,14.36);//2mm
+		//y0 = GenerateHlineY(hY0tgt_hline);//only for test
+
+		///NEW GEOMETRY here!!!!
+		//tempZ = ((double) rand() / (RAND_MAX));
+		//if( tempZ <=(1.0/3) )Z0 = Z0 + (7+Thick) ;
+		//if( tempZ >=(2.0/3) )Z0 = Z0 - (7+Thick) ;
+	}
+
+	//if(flag_newGeo == 1 && fabs(Y0)>20)continue;
+	// for triumf case z
+	if(MCtype == 2){
+		X0 = -5 + ((double) rand() / (RAND_MAX))*10;//0-20mm;index_m+xStep/2;
+		Y0 = -5 + ((double) rand() / (RAND_MAX))*10;//0-20mm;
+		Z0 = GenerateGaus(0,1.69);//2mm
+		if( Z0 > 0) Z0 = - Z0;
+	}
+
+
+}
 
 void DrawHistPlot(){
 
@@ -336,6 +424,177 @@ void DrawGeo(){
 
 }
 
+void SetTreeBranch(TTree * tree){
+
+	tree->Branch("TBeam",&TBeam,"TBeam/D");
+	tree->Branch("DecayT",&DecayT,"DecayT/D");
+	tree->Branch("X0",&X0,"X0/D");
+	tree->Branch("Y0",&Y0,"Y0/D");
+	tree->Branch("Z0",&Z0,"Z0/D");
+	tree->Branch("vel0",&vel0,"vel0/D");
+	tree->Branch("theta0",&theta0,"theta0/D");
+	tree->Branch("phi0",&phi0,"phi0/D");
+	tree->Branch("Vz0",&Vz0,"Vz0/D");
+	tree->Branch("Vx0",&Vx0,"Vx0/D");
+	tree->Branch("Vy0",&Vy0,"Vy0/D");
+	tree->Branch("Lmfp",&Lmfp,"Lmfp/D");
+
+	tree->Branch("t0",&t0,"t0/D");
+	tree->Branch("DiffusionT",&DiffusionT,"DiffusionT/D");
+
+	tree->Branch("X_sf",&X_sf,"X_sf/D");
+	tree->Branch("Y_sf",&Y_sf,"Y_sf/D");
+	tree->Branch("Z_sf",&Z_sf,"Z_sf/D");
+	tree->Branch("VX_sf",&VX_sf,"VX_sf/D");
+	tree->Branch("VY_sf",&VY_sf,"VY_sf/D");
+	tree->Branch("VZ_sf",&VZ_sf,"VZ_sf/D");
+	tree->Branch("theta_sf",&theta_sf,"theta_sf/D");
+	tree->Branch("phi_sf",&phi_sf,"phi_sf/D");
+
+	//double DiffusionT;
+	tree->Branch("DiffusionVertexX", DiffusionVertexX, "DiffusionVertexX/D");// std::vector<double> DiffusionVertexX;
+	tree->Branch("DiffusionVertexY", DiffusionVertexY, "DiffusionVertexY/D");// std::vector<double> DiffusionVertexY;
+	tree->Branch("DiffusionVertexZ", DiffusionVertexZ, "DiffusionVertexZ/D");// std::vector<double> DiffusionVertexZ;
+	tree->Branch("DiffusionVertexT", DiffusionVertexT, "DiffusionVertexT/D");// std::vector<double> DiffusionVertexT;
+
+	tree->Branch("DecayX",&DecayX,"DecayX/D");
+	tree->Branch("DecayY",&DecayY,"DecayY/D");
+	tree->Branch("DecayZ",&DecayZ,"DecayZ/D");
+
+	tree->Branch("SpinX",&SpinX,"SpinX/D");
+	tree->Branch("SpinY",&SpinY,"SpinY/D");
+	tree->Branch("SpinZ",&SpinZ,"SpinZ/D");
+
+	tree->Branch("DecayPositronMomtX",&DecayPositronMomtX,"DecayPositronMomtX/D");
+	tree->Branch("DecayPositronMomtY",&DecayPositronMomtY,"DecayPositronMomtY/D");
+	tree->Branch("DecayPositronMomtZ",&DecayPositronMomtZ,"DecayPositronMomtZ/D");
+
+
+
+	///////////////////
+
+
+	tree->Branch("LaserX",&LaserX,"LaserX/D");
+	tree->Branch("LaserY",&LaserY,"LaserY/D");
+	tree->Branch("LaserZ",&LaserZ,"LaserZ/D");
+	tree->Branch("LaserE",&LaserE,"LaserE/D");
+	tree->Branch("LaserXp",&LaserXp,"LaserXp/D");
+	tree->Branch("LaserYp",&LaserYp,"LaserYp/D");
+
+	tree->Branch("MeshEk",&MeshEk,"MeshEk/D");
+	tree->Branch("MeshE",&MeshE,"MeshE/D");
+	tree->Branch("MeshT",&MeshT,"MeshT/D");
+	tree->Branch("MeshT_ab",&MeshT_ab,"MeshT_ab/D");
+	tree->Branch("MeshX",&MeshX,"MeshX/D");
+	tree->Branch("MeshY",&MeshY,"MeshY/D");
+	tree->Branch("MeshZ",&MeshZ,"MeshZ/D");
+	tree->Branch("MeshXp",&MeshXp,"MeshXp/D");
+	tree->Branch("MeshYp",&MeshYp,"MeshYp/D");
+	tree->Branch("MeshBeta",&MeshBeta,"MeshBeta/D");
+	tree->Branch("MeshVY",&MeshVY,"MeshVY/D");
+	tree->Branch("MeshVX",&MeshVX,"MeshVX/D");
+	tree->Branch("MeshVZ",&MeshVZ,"MeshVZ/D");
+
+	tree->Branch("DriftT",&DriftT,"DriftT/D");
+	tree->Branch("DriftT_ab",&DriftT_ab,"DriftT_ab/D");
+	tree->Branch("DriftX",&DriftX,"DriftX/D");
+	tree->Branch("DriftY",&DriftY,"DriftY/D");
+	tree->Branch("DriftZ",&DriftZ,"DriftZ/D");
+}
+
+
+
+void InitialTreeVar(){
+
+	TBeam = -1;
+	DecayT = -1;
+	X0 = -1;
+	Y0 = -1;
+	Z0 = -1;
+	vel0 = -1;
+	theta0 = -1;
+	phi0 = -1;
+	Vz0 = -1;
+	Vx0 = -1;
+	Vy0 = -1;
+	Lmfp = -1;
+
+	t0 = -1;// is not the initial t, but the total time spent inside aerogel
+	DiffusionT = -1;
+
+	// diffusion/surface information
+
+	X_sf = -1;
+	Y_sf = -1;
+	Z_sf = -1;
+	VX_sf = -1;
+	VY_sf = -1;
+	VZ_sf = -1;
+	theta_sf = -1;
+	phi_sf = -1;
+
+	DecayX = -1;
+	DecayY = -1;
+	DecayZ = -1;
+
+
+
+	SpinX = 0;
+	SpinY =   TMath::Sin(2*PI * 11.54/360);
+	SpinZ = - TMath::Cos(2*PI * 11.54/360);
+
+	DecayPositronMomtX = 0;
+	DecayPositronMomtY = 0;
+	DecayPositronMomtZ = 0;
+
+	//DiffusionVertexX->clear();
+	//DiffusionVertexY->clear();
+	//DiffusionVertexZ->clear();
+	//DiffusionVertexT->clear();
+
+	//(5,0);
+	//(5,0);
+	//(5,0);
+	//(5,0);
+
+
+
+
+	// laser region/decay information
+	LaserX = -1;
+	LaserY = -1;
+	LaserXp = -1;
+	LaserYp = -1;
+	LaserZ = -1;
+	LaserE = -1;
+
+
+
+	// Mesh plane information
+
+	MeshEk = -1;
+	MeshE = -1;
+	MeshT = -1;
+	MeshT_ab = -1;
+	MeshX = -1;
+	MeshY = -1;
+	MeshZ = -1;
+	MeshXp = -1;
+	MeshYp = -1;
+
+	MeshBeta = -1;
+	MeshVY = -1;
+	MeshVX = -1;
+	MeshVZ = -1;
+
+	DriftT = -1;
+	DriftT_ab = -1;
+	DriftX = -1;
+	DriftY = -1;
+	DriftZ = -1;
+
+
+}
 
 #endif
 
