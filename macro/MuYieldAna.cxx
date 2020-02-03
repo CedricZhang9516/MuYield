@@ -1,22 +1,248 @@
-void Setstyle(TH1D *g, int c){
-	g->SetFillColor(c);
-    g->SetFillStyle(3001);
-    g->SetLineColor(c);
-    g->SetMarkerColor(1);
-   	g->SetMarkerSize(0.5);
-    g->SetMarkerStyle(20);
+#include "MuYieldAna.h"
+#include "/Users/zhangce/WorkArea/CZhang/CZhangNew.h"
+
+void MuYieldAna(){
+
+	const char * filename ="./Root/PulseE0824_tree_Type1_D87000_T322_Nrepeat280000_Xfree1_Thick2.00_NewGeo1_.root";
+
+	int Nentries = tree->GetEntries();
+
+	for(int i = 0; i<Nentries; i++){
+		tree->GetEntry(i);
+
+		XXp = MeshX * MeshXp;
+		hXXp->Fill(XXp);
+		Xp2 = MeshXp * MeshXp;
+		hXp2->Fill(Xp2);
+		X2 = MeshX * MeshX;
+		hX2->Fill(X2);
+
+		YYp = MeshY * MeshYp;
+		hYYp->Fill(YYp);
+		Yp2 = MeshYp * MeshYp;
+		hYp2->Fill(Yp2);
+		Y2 = MeshY * MeshY;
+		hY2->Fill(Y2);
+
+		BetaGamma = MeshBeta * (1/sqrt(1 - MeshBeta*MeshBeta ));
+		hBetaGamma->Fill(BetaGamma);
+
+		//EmissionX->SetPoint(i,MeshZ,MeshXp);
+		//if(flag_Newgeo==1){
+		//	EmissionX->Fill(MeshZ,MeshXp);
+		//	EmissionY->Fill(MeshX,MeshYp);
+		//}
+
+		//if(flag_Newgeo==0){
+			EmissionX->Fill(MeshX,MeshXp);
+			EmissionY->Fill(MeshY,MeshYp);
+			CorrMeshTE->Fill(MeshT,MeshEk);
+		//}
+
+		hMeshEk->Fill(MeshEk);
+		hMeshT->Fill(MeshT);
+		hMeshT_ab->Fill(MeshT_ab);
+		hMeshX->Fill(MeshX);
+		hMeshY->Fill(MeshY);
+		hMeshZ->Fill(MeshZ);
+		hMeshXp->Fill(MeshXp);
+		hMeshYp->Fill(MeshYp);
+
+		hMeshBeta->Fill(MeshBeta);
+		hMeshVY->Fill(MeshVY);
+		hMeshVX->Fill(MeshVX);
+		hMeshVZ->Fill(MeshVZ);
+
+		hDriftT->Fill(DriftT);
+		hDriftT_ab->Fill(DriftT_ab);
+		hDriftX->Fill(DriftX);
+		hDriftY->Fill(DriftY);
+		hDriftZ->Fill(DriftZ);
+
+	}
+
+	TCanvas *c5 = new TCanvas("c5","c5",600,800);
+	c5->Divide(1,2);
+	c5->cd(1);
+	EmissionX->Draw("colz");
+	c5->cd(2);
+	EmissionY->Draw("colz");
+	c5->SaveAs(Pngname);
+
+	TCanvas *c4 = new TCanvas("c4","c4",900,600);
+	c4->Divide(3,4);
+	c4->cd(1);
+	EmissionX->Draw("colz");
+	c4->cd(2);
+	EmissionY->Draw("colz");
+
+	c4->cd(3);
+	//hMeshEk->Draw();
+	tree->Draw("MeshEk");
+	SetXTitleTreeDraw("MeV");
+
+	c4->cd(4);
+	//hMeshT_ab->Draw();
+	tree->Draw("MeshT_ab");
+	SetXTitleTreeDraw("s");
+
+	c4->cd(5);
+	//hMeshX->Draw();
+	tree->Draw("MeshX");
+	SetXTitleTreeDraw("mm");
+	c4->cd(6);
+	//hMeshY->Draw();
+	tree->Draw("MeshY");
+	SetXTitleTreeDraw("mm");
+	c4->cd(7);
+	hMeshZ->Draw();
+	c4->cd(8);
+	//hMeshXp->Draw();
+	tree->Draw("MeshXp");
+	SetXTitleTreeDraw("MeshXp");
+
+	c4->cd(9);
+	//hMeshYp->Draw();
+	tree->Draw("MeshYp");
+	SetXTitleTreeDraw("MeshYp");
+
+	c4->cd(10);
+	//hMeshVY->Draw();
+	tree->Draw("MeshVX");
+	SetXTitleTreeDraw("mm/s");
+	c4->cd(11);
+	//hMeshVX->Draw();
+	tree->Draw("MeshVY");
+	SetXTitleTreeDraw("mm/s");
+
+	c4->cd(12);
+	tree->Draw("MeshVZ");
+	SetXTitleTreeDraw("mm/s");
+	//hMeshVZ->Draw();
+	c4->SaveAs(Pdfname);
+
+
+	TCanvas *c3 = new TCanvas("c3","c3",1000,1000);
+	c3->Divide(3,4);
+	//c3->cd(1);hDriftT->Draw();
+	c3->cd(1);tree->Draw("DriftT_ab","decayT>=(DriftT_ab-TBeam)");//hDriftT_ab->Draw();
+	c3->cd(2);tree->Draw("DriftX","decayT>=(DriftT_ab-TBeam)");//hDriftX->Draw();
+	c3->cd(3);tree->Draw("DriftY","decayT>=(DriftT_ab-TBeam)");//hDriftY->Draw();
+	c3->cd(4);tree->Draw("DriftZ","decayT>=(DriftT_ab-TBeam)");//hDriftZ->Draw();
+	c3->cd(5);//tree->Draw("CorrMeshTE");
+	CorrMeshTE->Draw("colz");
+
+	//tree->Draw("MeshVZ");
+
+	//TCanvas *c6 = new TCanvas("c6","c6",900,600);
+
+	c3->cd(6);hXXp->Draw();
+	c3->cd(7);hXp2->Draw();
+	c3->cd(8);hX2->Draw();
+	c3->cd(9);hYYp->Draw();
+	c3->cd(10);hYp2->Draw();
+	c3->cd(11);hY2->Draw();
+	c3->cd(12);hBetaGamma->Draw();
+
+	c3->SaveAs("./Root/Geo1_PulseE.pdf");
+
 }
 
-void SetstyleG(TGraph *g, Int_t c){
-    g->SetLineColor(c);
-    g->SetLineStyle(4);
-    g->SetLineWidth(4);
-    g->SetMarkerColor(c);
-    g->SetMarkerStyle(14);
 
+
+void FillTZ()
+{
+
+	double delT = DecayT - t0;
+
+	t = t0;
+
+	x = X_sf;
+	y = Y_sf;
+	z = Z_sf;
+	vx = VX_sf;
+	vy = VY_sf;
+	vz = VZ_sf;
+
+	//double flag = 0;
+
+	for(int i =0; i < nbinT; i++){
+
+		if(Tstep*i >= delT)break;
+
+		x = x + vx * (Tstep);
+		y = y + vy * (Tstep);
+		z = z + vz * (Tstep);
+		t = t + Tstep;
+
+		hZT2D->Fill(TBeam + t, z);
+
+		if(fabs(y)<=20 && Tstep*i <= delT)
+		{
+			if( (MCtype == 1 || MCtype == 3) && flag_xfree == 0 && fabs(x)>20)continue;
+			if( z >= 1 && z <= 6) {hTlaserR->Fill(TBeam + t);}
+			if( z >= (-6-Thick) && z <= (-1-Thick)) {hTlaserL->Fill(TBeam + t);}
+		}
+	}
 }
 
 
+
+void ShootLaser(double distance, double x_, double y_, double z_, double vx_, double vy_ ,double vz_)
+{
+	x = x_;
+	y = y_;
+	z = z_;
+
+	vx = vx_;
+	vy = vy_;
+	vz = vz_;
+
+	t = (sqrt(vz*vz + 2*A * distance) - vz)/A;
+
+	x = x + vx * t ;
+	y = y + vy * t ;
+	z = z + vz * t + 0.5 * A * t * t;
+
+	vz = vz + A * t;
+
+	double v = sqrt(vx*vx + vy*vy + vz*vz);
+
+	double Xp = vx/vz;
+	double Yp = vy/vz;
+
+	double beta = v * 1e-3/light;
+	double Ek = 0.5 * massMu * 1e-6 * (vx*vx + vy*vy + vz*vz);//v:mm/s, Ek: MeV
+
+
+	MeshX = x;
+	MeshY = y;
+	MeshZ = z;
+
+	MeshVX = vx;
+	MeshVY = vy;
+	MeshVZ = vz;
+
+	MeshT = t;
+	MeshT_ab = MeshT + tLaser;
+	MeshXp = Xp;
+	MeshYp = Yp;
+	MeshEk = Ek;
+	MeshBeta = beta;
+
+	///////// Drift
+
+	t = DriftD/vz;//500mm
+	DriftT = t;
+	DriftT_ab = DriftT + MeshT_ab;
+
+	DriftZ = MeshZ + MeshVZ * t;
+	DriftX = MeshX + MeshVX * t;
+	DriftY = MeshY + MeshVY * t;
+
+}
+
+/*
 void DrawHistPlot(){
 
 	TCanvas *c2 = new TCanvas("c2","c2",800,600);
@@ -73,100 +299,8 @@ void DrawHistPlot(){
 	}
 
 }
-
-/*
-void FillTZ()
-{
-
-	double delT = DecayT - t0;
-
-	t = t0;
-
-	x = X_sf;
-	y = Y_sf;
-	z = Z_sf;
-	vx = VX_sf;
-	vy = VY_sf;
-	vz = VZ_sf;
-
-	//double flag = 0;
-
-	for(int i =0; i < nbinT; i++){
-
-		if(Tstep*i >= delT)break;
-
-		x = x + vx * (Tstep);
-		y = y + vy * (Tstep);
-		z = z + vz * (Tstep);
-		t = t + Tstep;
-
-		hZT2D->Fill(TBeam + t, z);
-
-		if(fabs(y)<=20 && Tstep*i <= delT)
-		{
-			if( (MCtype == 1 || MCtype == 3) && flag_xfree == 0 && fabs(x)>20)continue;
-			if( z >= 1 && z <= 6) {hTlaserR->Fill(TBeam + t);}
-			if( z >= (-6-Thick) && z <= (-1-Thick)) {hTlaserL->Fill(TBeam + t);}
-		}
-	}
-}
 */
 
-/*
-void ShootLaser(double distance, double x_, double y_, double z_, double vx_, double vy_ ,double vz_)
-{
-	x = x_;
-	y = y_;
-	z = z_;
-
-	vx = vx_;
-	vy = vy_;
-	vz = vz_;
-
-	t = (sqrt(vz*vz + 2*A * distance) - vz)/A;
-
-	x = x + vx * t ;
-	y = y + vy * t ;
-	z = z + vz * t + 0.5 * A * t * t;
-
-	vz = vz + A * t;
-
-	double v = sqrt(vx*vx + vy*vy + vz*vz);
-
-	double Xp = vx/vz;
-	double Yp = vy/vz;
-
-	double beta = v * 1e-3/light;
-	double Ek = 0.5 * massMu * 1e-6 * (vx*vx + vy*vy + vz*vz);//v:mm/s, Ek: MeV
-
-
-	MeshX = x;
-	MeshY = y;
-	MeshZ = z;
-
-	MeshVX = vx;
-	MeshVY = vy;
-	MeshVZ = vz;
-
-	MeshT = t;
-	MeshT_ab = MeshT + tLaser;
-	MeshXp = Xp;
-	MeshYp = Yp;
-	MeshEk = Ek;
-	MeshBeta = beta;
-
-	///////// Drift
-
-	t = DriftD/vz;//500mm
-	DriftT = t;
-	DriftT_ab = DriftT + MeshT_ab;
-
-	DriftZ = MeshZ + MeshVZ * t;
-	DriftX = MeshX + MeshVX * t;
-	DriftY = MeshY + MeshVY * t;
-
-}
-*/
 
 /*
 void ShootLaserPulseE(double distance, double x_, double y_, double z_, double vx_, double vy_ ,double vz_)
@@ -248,7 +382,7 @@ void ShootLaserPulseE(double distance, double x_, double y_, double z_, double v
 
 }
 */
-
+/*
 void SetHist(TFile * f){
 
 	 T0 = new TH1D("T0","T0",100,0,1.0e-6); // Tbeam distribution
@@ -355,3 +489,5 @@ void WriteHist(){
 
 
 }
+
+*/
