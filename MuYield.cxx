@@ -5,13 +5,14 @@
 void MuYield(
 	TString name_ = "Dev_200202",
 	int MCtype_ = 2,
-	int Nrepeat_ = 2e3,//8.4e5,//2e6,//8.4e5,//1e6,//2.8e5,//1e6,//2.8e4,
+	int Nrepeat_ = 2e4,//8.4e5,//2e6,//8.4e5,//1e6,//2.8e5,//1e6,//2.8e4,
 	int flag_xfree_ = 1,
 	int flag_newGeo_ = 0,
 	double Thick_ = 7.12)
 {
 	cout<<"Initialize..."<<endl;
 
+	name = name_;
 	MCtype = MCtype_;
 	flag_xfree = flag_xfree_;
 	flag_newGeo = flag_newGeo_;
@@ -31,7 +32,7 @@ void MuYield(
 	//flag = 0: no x limit, otherwise = 1;
 
 
-	treefile = new TFile(Form("./Root/%s_tree_Type%0.0d_D%0.0f_T%0.0f_Nrepeat%0.0d_Xfree%d_Thick%0.2f_NewGeo%d_.root",
+	treefile = new TFile(Form("./Root/%s_tree_Type%0.0d_D%0.0f_T%0.0f_Nrepeat%0.0d_Xfree%d_Thick%0.2f_NewGeo%d.root",
 		name.Data(),MCtype,D,T,Nrepeat,flag_xfree,Thick,flag_newGeo), "recreate");
 	tree = new TTree("tree","MuYield event");
 	SetTreeBranch(tree);
@@ -51,7 +52,8 @@ void MuYield(
 
 	////////////////////////////////////////
 
-	cout<<Form("Main Monte Carlo Simulation:\n_MCType_%0.0d_D_%0.0f_T_%0.0f_Nrepeat_%0.0d_flag_xfree_%d_thick_%0.2f_NewGeo_%d_",MCtype,D,T,Nrepeat,flag_xfree,Thick,flag_newGeo)<<endl;
+	cout<<Form("Main Monte Carlo Simulation:\n%s_MCType_%0.0d_D_%0.0f_T_%0.0f_Nrepeat_%0.0d_flag_xfree_%d_thick_%0.2f_NewGeo_%d",
+		name.Data(),MCtype,D,T,Nrepeat,flag_xfree,Thick,flag_newGeo)<<endl;
 
 	Nemission = 0;
 	NLaserR = 0;
@@ -62,7 +64,7 @@ void MuYield(
 
 	for(int index_m=0; index_m < Nrepeat; index_m++){
 
-		if(index_m>=10000 && index_m%10000==0) cout << index_m << " in the total of  "<<Nrepeat<<endl;
+		if(index_m>=10000 && index_m%10000==0) cout << index_m << " in the total of "<<Nrepeat<<endl;
 
 		InitialTreeVar();
 
@@ -157,17 +159,13 @@ void MuYield(
 		DecayX = X_sf + VX_sf * (DecayT - t0);
 		DecayY = Y_sf + VY_sf * (DecayT - t0);
 		DecayZ = Z_sf + VZ_sf * (DecayT - t0);
-/*
-		if(flag_newGeo == 0 && Z_sf<0){
-			tree->Fill();
-			continue;
-		}
 
-		if( t0 >= DecayT ){
-			tree->Fill();
-			continue;
-		}
-*/
+
+		//if(flag_newGeo == 0 && Z_sf<0){continue;}
+
+
+		if(flag_newGeo == 0 && Z_sf>-Thick){tree->Fill();}
+		else continue;
 
 		/////////////////// Here the Mu successfully get emitted out of the aerogel
 
@@ -179,28 +177,61 @@ void MuYield(
 
 
 	///////// Draw the last event's tracks
+/*
 	TGraph * g = new TGraph();
 	for(int i = 0; i<DiffusionVertexX->size() ;i++)g->SetPoint(i,DiffusionVertexZ->at(i),DiffusionVertexY->at(i));
 	g->Draw("APL*");
-
-
-	//histfile->Write();
+*/
 
 	//////// Save the tree file
 	treefile->cd();
 	treefile->Write();
-	cout<<"Tree Entries: "<<tree->GetEntries()<<endl;
+	cout<<"Total Nrepeat: "<<Nrepeat<<endl
+		<<"Nemission: "<<Nemission<<endl
+		<<"Tree Entries: "<<tree->GetEntries()<<endl;
 
 		//return ResultSP;
 }
 
+void InitializingXYZ0(){
+
+	//double* X0, double* Y0, double* Z0
+
+	//beam xy: uniformed or gaussian from tdr
+	//x0=((double) rand() / (RAND_MAX))*40;//0-20mm;index_m+xStep/2;
+	//y0=((double) rand() / (RAND_MAX))*40;//0-20mm;
+
+	if(MCtype == 1){
+
+		Z0 = - ((double) rand() / (RAND_MAX)) * Thick;    // z0=-0.0~-7.12mm
+		X0 = GenerateGaus(0,31.96);//
+		Y0 = GenerateGaus(0,14.36);//2mm
+		//y0 = GenerateHlineY(hY0tgt_hline);//only for test
+
+		///NEW GEOMETRY here!!!!
+		//tempZ = ((double) rand() / (RAND_MAX));
+		//if( tempZ <=(1.0/3) )Z0 = Z0 + (7+Thick) ;
+		//if( tempZ >=(2.0/3) )Z0 = Z0 - (7+Thick) ;
+	}
+
+	//if(flag_newGeo == 1 && fabs(Y0)>20)continue;
+	// for triumf case z
+	if(MCtype == 2){
+		X0 = -5 + ((double) rand() / (RAND_MAX))*10;//0-20mm;index_m+xStep/2;
+		Y0 = -5 + ((double) rand() / (RAND_MAX))*10;//0-20mm;
+		Z0 = GenerateGaus(0,1.69);//2mm
+		if( Z0 > 0) Z0 = - Z0;
+	}
+
+
+}
 
 
 bool InsideAerogel(double x, double y, double z){
 
-	if( (z <= 0 && z >= -7.12 )
-		|| (z <= -9 && z >= -11)
-		|| (z <= 9 && z >= 7) ) return true;
+	if( ( z <= 0 && z >= -7.12 ) ) return true;
+		//|| (z <= -9 && z >= -11)
+		//|| (z <= 9 && z >= 7) ) return true;
 	else return false;
 
 }

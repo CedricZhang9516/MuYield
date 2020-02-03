@@ -93,7 +93,7 @@ void DiffusionModel(
 
 	double Nhits = N;
 
-	if(t>DecayT) t = t - L/vel0;
+	if(t>DecayT) t = DecayT;// t - L/vel0;
 
 
 	DiffusionT = t;
