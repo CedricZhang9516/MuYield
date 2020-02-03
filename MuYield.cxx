@@ -1,25 +1,23 @@
-
 #include "MuYield.h"
-#include "MyMuonDecay.hh"
+#include "MyMuonDecay.h"
+#include "InitializingXYZ0.h"
+#include "DiffusionModel.h"
 
 void MuYield(
-	TString name = "TRIUMF0827_Spin_DecayPositron_0125",
+	TString name = "Dev_200202",
 	int MCtype = 2,
-	int Nrepeat = 1e5,//8.4e5,//2e6,//8.4e5,//1e6,//2.8e5,//1e6,//2.8e4,
+	int Nrepeat = 1e3,//8.4e5,//2e6,//8.4e5,//1e6,//2.8e5,//1e6,//2.8e4,
 	int flag_xfree = 1,
 	int flag_newGeo = 0,
 	double Thick = 7.12)
 {
 	cout<<"Initialize..."<<endl;
 
-	double By = -0.1035;//mT
-	double Bx = 0.0696;//mT
-	double Bz = 0.0696;//mT
-
+/*
 	omega_x = 14*Bx/(2*PI);
 	omega_y = 14*By/(2*PI);
 	omega_z = 14*Bz/(2*PI);
-
+*/
 
 	N_DiffusionTrack = -1;//4660 for new geo; 271 for old geo.//gRandom->Integer(Nrepeat);
 	flag_DiffusionTrack = 0;
@@ -53,16 +51,15 @@ void MuYield(
 
 	//////Read from hline file to generate actual simulation
 	// H-line
-	if(H_line){
-		double x_dec, y_dec, z_dec, Nentries;
-		TFile *hlinefile = new TFile("./Root/hline_ATH475_BEAMG-2EDM_output_1e6_gendat_afterfit_SEPON_sum.root");
-		TTree * Thlinefile = (TTree*) hlinefile->Get("101");
-		Thlinefile->SetBranchAddress("x_dec", &x_dec);
-		Thlinefile->SetBranchAddress("y_dec", &y_dec);
-		Thlinefile->SetBranchAddress("z_dec", &z_dec);
-		Nentries = Thlinefile->GetEntries();
-	}
-	else Nrepeat = Nentries;
+	double x_dec, y_dec, z_dec, Nentries;
+	TFile *hlinefile = new TFile("./Root/hline_ATH475_BEAMG-2EDM_output_1e6_gendat_afterfit_SEPON_sum.root");
+	TTree * Thlinefile = (TTree*) hlinefile->Get("101");
+	Thlinefile->SetBranchAddress("x_dec", &x_dec);
+	Thlinefile->SetBranchAddress("y_dec", &y_dec);
+	Thlinefile->SetBranchAddress("z_dec", &z_dec);
+	Nentries = Thlinefile->GetEntries();
+
+	if(MCtype == 3) Nrepeat = Nentries;
 
 	//if(MCtype == 3)
 
@@ -94,7 +91,16 @@ void MuYield(
 			Y0 = y_dec;
 			Z0 = z_dec;
 		}
-		else InitializingXYZ0( X0,Y0,Z0 );
+		else InitializingXYZ0( MCtype, &X0, &Y0, &Z0 );
+		if( fabs(Y0)>20)continue;
+
+		/// Generate the time structure
+
+		if(MCtype == 2) TBeam = 0;
+		else{
+			TBeam = GenerateUniform(0.0e-6,0.2e-6);
+			if( ((double) rand() / (RAND_MAX))<=0.5 )TBeam = TBeam + 0.6e-6;
+		}
 
 
 		// Generate Maxwell-Boltzmann speed distribution.
@@ -109,6 +115,21 @@ void MuYield(
 		vel0 = tempX*1000 ; // UNIT: [mm/s]
 
 
+		// Random walk, Generate theta and phi
+		tempX = TMath::ACos(-1 + 2 * ((double)rand()/(RAND_MAX)));
+		tempY = ((double) rand()/(RAND_MAX)) * 2* PI;
+
+		theta0 = tempX;  // in rad unit: [0,PI]
+		phi0 = tempY; //[0,+2PI] radians
+
+
+		// initial velocity input in MCmfp random walk
+		Vx0 = vel0 * sin(theta0) * cos(phi0);
+		Vy0 = vel0 * sin(theta0) * sin(phi0);
+		Vz0 = vel0 * cos(theta0);
+
+		Lmfp = 12*D/(PI * vel0_avrg);//mm
+
 		// Generate time of Mu Lifetime
 		do{
 			tempX = ((double) rand() / (RAND_MAX)) * 10e-5;  // t=0~10^-5 s
@@ -118,161 +139,76 @@ void MuYield(
 
 		DecayT = tempX;
 
-		// Random walk, Generate theta and phi
-		tempX = TMath::ACos(-1 + 2 * ((double)rand()/(RAND_MAX)));
-		tempY = ((double) rand()/(RAND_MAX)) * 2* PI;
+		SpinX = 0;
+		SpinY =   TMath::Sin(2*PI * 11.54/360);
+		SpinZ = - TMath::Cos(2*PI * 11.54/360);
 
-		theta0 = tempX;  // in rad unit: [0,PI]
-		phi0 = tempY; //[0,+2PI] radians
-		hTheta0->Fill(TMath::Cos(theta0));
-		hPhi0->Fill(phi0);
+		TVector3 Spin(SpinX, SpinY, SpinZ);
 
-		// initial velocity input in MCmfp random walk
-		Vx0 = vel0 * sin(theta0) * cos(phi0);
-		Vy0 = vel0 * sin(theta0) * sin(phi0);
-		Vz0 = vel0 * cos(theta0);
+		DecayPositronMomtX = 0;
+		DecayPositronMomtY = 0;
+		DecayPositronMomtZ = 0;
 
-		Lmfp = 12*D/(PI * vel0_avrg);//mm
+		TVector3 Bamb(Bx,By,Bz);
 
+		//TVector3 Spin2 = Spin - Spin.Dot(Bamb.Unit())*Bamb.Unit();
+		//TVector3 Spin3 = Spin.Dot(Bamb.Unit())*Bamb.Unit();
+
+		double Omega = 14 * Bamb.Mag() * (2*PI);
+		double delT = DecayT;
+		//double delT = DecayT - TBeam;
+
+		Spin.Rotate(Omega * delT *1e6, Bamb); // rotation around v2
+
+		//Spin2.Rotate(Omega * delT * 1e6, Bamb);
+		//Spin3 = Spin2 + Spin3;
+
+		SpinX = Spin.X();
+		SpinY = Spin.Y();
+		SpinZ = Spin.Z();
+
+		TVector3* DecayPositronMomentum = G4MuonDecay(Spin);
+
+		DecayPositronMomtX = DecayPositronMomentum->X();
+		DecayPositronMomtY = DecayPositronMomentum->Y();
+		DecayPositronMomtZ = DecayPositronMomentum->Z();
 
 		//////////////// Fill the necessary histogram for the check
 
 		hLmfp->Fill(Lmfp * 1000);//um
 		hDecayT->Fill(DecayT);
 		hvel0->Fill(vel0);
+		T0->Fill(TBeam);
+		hZ0tgt->Fill(Z0);
+		hX0tgt->Fill(X0);
+		hY0tgt->Fill(Y0);
+		hTheta0->Fill(TMath::Cos(theta0));
+		hPhi0->Fill(phi0);
 
-		//////////////// Input the initial condition into random walk diffusion model
+		////////////////
 
 
 
-		MCLmfp(t0,
-			X_sf, Y_sf, Z_sf,
-			VX_sf, VY_sf, VZ_sf,
-			theta_sf, phi_sf
+
+		DiffusionModel(
+			//&X0, &Y0, &Z0,
+			//Vx0, Vy0, Vz0, theta0, phi0,
+			InsideAerogel//void (*GeometryFunction)(double, double, double),
+			//&DiffusionVertexX,
+			//&DiffusionVertexY,
+			//&DiffusionVertexZ
+			//DecayT, Thick,
+			//&DiffusionT,
+			//&X_sf, &Y_sf, &Z_sf,
+			//&VX_sf, &VY_sf, &VZ_sf,
+			//&theta_sf, &phi_sf
 		);
-
-
-		typedef void (*FunType)(int);
-
-		DiffusionModel(
-			GeometryFunction,
-			X_sf, Y_sf, Z_sf,
-			VX_sf, VY_sf, VZ_sf,
-			theta_sf, phi_sf);
-
-
-		DiffusionModel(
-			&X0, &Y0, &Z0,
-			GeoCylindrical,//void (*GeometryFunction)(double, double, double),
-			&DiffusionVertexX,
-			&DiffusionVertexY,
-			&DiffusionVertexZ,
-			&DiffusionT,
-			&X_sf, &Y_sf, &Z_sf,
-			&VX_sf, &VY_sf, &VZ_sf,
-			&theta_sf, &phi_sf
-		)
-
-
-
-
-
-		double* ResultDiff;
-
-		ResultDiff = MCLmfp();
-
-
-
-
-		t0 = ResultDiff[0];
-		X_sf = ResultDiff[1];
-		Y_sf = ResultDiff[2];
-		Z_sf = ResultDiff[3];
-		// Emission number: 158480 for hline file (z<0 + z>0)
-		VX_sf = ResultDiff[4];
-		VY_sf = ResultDiff[5];
-		VZ_sf = ResultDiff[6];
-
-		theta_sf = ResultDiff[7];
-		phi_sf = ResultDiff[8];
-
+		//cout<<DiffusionT<<endl;
+		//cout<<DiffusionVertexX->at(DiffusionVertexX->size()-1)<<DiffusionVertexY->at(DiffusionVertexX->size()-1)<<endl;
 
 		DecayX = X_sf + VX_sf * (DecayT - t0);
 		DecayY = Y_sf + VY_sf * (DecayT - t0);
 		DecayZ = Z_sf + VZ_sf * (DecayT - t0);
-
-		hDecayX->Fill(DecayX);
-		hDecayY->Fill(DecayY);
-		hDecayZ->Fill(DecayZ);
-
-
-		SpinX = 0;
-		SpinY =   TMath::Sin(2*PI * 11.54/360);
-		SpinZ = - TMath::Cos(2*PI * 11.54/360);
-
-		// Asymmetry
-		// (2X-1) = A, A = 0.5; X = 0.75, 75% of the Spin vector remain as above, 25% reversed
-		if(G4UniformRand()<0.25){
-			SpinX = 0;
-			SpinY = - TMath::Sin(2*PI * 11.54/360);
-			SpinZ = TMath::Cos(2*PI * 11.54/360);
-		}
-
-
-		DecayPositronMomtX = 0;
-		DecayPositronMomtY = 0;
-		DecayPositronMomtZ = 0;
-
-		//v1.Rotate(TMath::Pi()/4, v2); // rotation around v2
-		//v2 = v1.Unit(); // get unit vector parallel to v1
-		//s = v1.Dot(v2);   // scalar product
-		//omega_x = 14*Bx/(2*PI);
-
-
-		TVector3 Spin(SpinX, SpinY, SpinZ);
-		//TVector3 Spin2(SpinX, SpinY, SpinZ);
-		//TVector3 Spin2(SpinX, SpinY, SpinZ);
-		TVector3 Bamb(Bx,By,Bz);
-
-		TVector3 Spin2 = Spin - Spin.Dot(Bamb.Unit())*Bamb.Unit(); // check, the transverse component
-		TVector3 Spin3 = Spin.Dot(Bamb.Unit())*Bamb.Unit();// check, the component paralle to the B
-
-		//double TransverseB = Bamb.Perp(Spin);
-		//double Omega = 14*TransverseB/(2*PI);
-		//double Omega = 14*Bamb.Mag()/(2*PI);//MHz
-		double Omega = 14*Bamb.Mag()*(2*PI);//MHz
-		double delT = DecayT;
-
-
-		Spin.Rotate(Omega * delT *1e6, Bamb); // rotation around v2
-
-		Spin2.Rotate(Omega * delT * 1e6, Bamb); //check
-		Spin3 = Spin2 + Spin3; //check
-		//Spin.Rotate(Omega2 * delT *1e6, Bamb); // rotation around v2
-		//t = 0;
-
-		SpinX = Spin.X();
-		SpinY = Spin.Y();
-		SpinZ = Spin.Z();
-
-
-		//Check
-		if(abs(SpinX-Spin3.X())>0.001 || abs(SpinY-Spin3.Y())>0.001 || abs(SpinZ-Spin3.Z())>0.001){
-			//cout<<SpinX<<" "<<Spin3.X()<<endl;
-			cout<<SpinZ<<" "<<Spin3.Z()<<endl;
-			//cout<<SpinY<<" "<<Spin3.Y()<<endl;
-		}
-
-		TVector3* DecayPositronMomentum = G4MuonDecay(Spin);
-/*
-		cout<<DecayPositronMomentum->X()<<" "
-			<<DecayPositronMomentum->Y()<<" "
-			<<DecayPositronMomentum->Z()<<endl;
-*/
-		DecayPositronMomtX = DecayPositronMomentum->X();
-		DecayPositronMomtY = DecayPositronMomentum->Y();
-		DecayPositronMomtZ = DecayPositronMomentum->Z();
-
 
 
 
@@ -295,185 +231,66 @@ void MuYield(
 
 		Nemission++;
 
-		hZ0tgt_emission->Fill(Z0);
-
-		// for triumf check plots
-		TEmission->Fill(t0 + TBeam);
-		VEmission->Fill(vel0);
-
-		//reset xyz at emission surface, z = 0
-
-		// Emission number: 81714 for hline file (z>0)
-
-		hEmissionXY->Fill(X_sf,Y_sf);
-		hTheta0_emission->Fill(theta_sf);
-		hPhi0_emission->Fill(phi_sf);
-
-		//////////////////// Into the laser region
-		aux1=0;aux2=0;
-
-		FillTZ();
-
-		// calculate the decay position
-
-
-
-		if( fabs(DecayY) <= 20 && MCtype == 2 ){
-			//hDecayT->Fill(DecayT);
-			if(DecayZ >= 0 && DecayZ <= 40)hTlaserVtot->Fill(DecayT + TBeam);
-			if(DecayZ >=10 && DecayZ <= 20)hTlaserV1->Fill(DecayT + TBeam);
-			if(DecayZ >=20 && DecayZ <= 30)hTlaserV2->Fill(DecayT + TBeam);
-			if(DecayZ >=30 && DecayZ <= 40)hTlaserV3->Fill(DecayT + TBeam);
-		}
-
-
-
-
-		h_electronmomentum->Fill(DecayPositronMomentum->Mag());
-
-		h_ctheta->Fill(TMath::Cos(DecayPositronMomentum->Angle(Spin)) );
-
-
-		// in the laser region: 22088 for hline file
-
-		tree->Fill();//Only for TYPE3-Hline file, save once the info on the surface for furture convenience
-
-
-
-	}//index loop Nrepeat
-
-	//cout<<"Nemission, Nrepeat: "<<Nemission<<" "<<Nrepeat<<" Nemission/Nrepeat ratio "<<Nemission*1.0/(Nrepeat)<<endl;
-	//cout<<"N from hline file "<<Nhline<<endl;
-	//cout<<tLaser<<" LaserArea count "<<LaseryieldCount<<" ratio "<<LaseryieldCount*1.0/(2*Nrepeat)<<endl;
-	//cout<<tLaser<<" Vac 10-40 count "<<VacYieldCount<<" ratio "<<VacYieldCount*2.0/(2*Nrepeat)<<endl;
-
-	// Draw Plot
-
-	//DrawHistPlot();
-	//DrawGeo();
-
-	//WriteHist();
-	histfile->Write();
-	//histfile->Close();
-	//rootfile->Write();
-
-	treefile->cd();
-	//tree->Write();
-	treefile->Write();
-
-	cout<<"Tree (Mesh) Entries: "<<tree->GetEntries()<<endl;
-	const char * treefilename = Form("./Root/%s_tree_Type%0.0d_D%0.0f_T%0.0f_Nrepeat%0.0d_Xfree%d_Thick%0.2f_NewGeo%d_.root",name.Data(),MCtype,D,T,Nrepeat,flag_xfree,Thick,flag_newGeo);
-	//DrawTreeFile(treefilename,flag_newGeo);
-
-	//treefile->Close();
-	//treefile->Write();
-
-	TCanvas * spincheck = new TCanvas("spincheck","spincheck",100,100);
-	spincheck->Divide(2,1);
-	spincheck->cd(1);
-	h_electronmomentum->Draw();
-	spincheck->cd(2);
-	h_ctheta->Draw();
-
-
-
-	//gROOT->ProcessLine("new TBrowser");
-
-	//return ResultSP;
-}
-
-void DrawHistPlot(){
-
-	TCanvas *c2 = new TCanvas("c2","c2",800,600);
-	c2->Divide(3,4);
-
-
-	c2->cd(1);  T0->SetTitle("TBeam"); Setstyle(T0,29);T0->Draw("HIST");
-	c2->cd(2);  hvel0->SetTitle("initial velocity (mm/s);vel0 (mm/s);");
-	          hvel0->GetXaxis()->SetNdivisions(5,kTRUE); Setstyle(hvel0,29);hvel0->Draw("HIST");
-	c2->cd(3);  hX0tgt->SetTitle("x0tgt"); Setstyle(hX0tgt,29);hX0tgt->Draw("HIST");
-	c2->cd(4);  hY0tgt->SetTitle("y0tgt"); Setstyle(hY0tgt,29);hY0tgt->Draw("HIST");
-	c2->cd(5);hZ0tgt->SetTitle("z0_tgt"); Setstyle(hZ0tgt,29);hZ0tgt->Draw("HIST");
- 	c2->cd(6);Setstyle(hZ0tgt_emission,29);hZ0tgt_emission->Draw("HIST");
- 	//hZ0tgt_emission->Fit("expo","R","",-2,-0.01);
-
-	c2->cd(7);
-	hTlaserR->SetTitle("Emission Mu-r; t (us);"); //SetstyleG(TLaser,8);
-	Setstyle(hTlaserR,29);
-	hTlaserR->Draw();
-	c2->cd(8);
-	hTlaserL->SetTitle("Emission Mu-l; t (us);");
-	Setstyle(hTlaserL,29);
-	hTlaserL->Draw();
-	c2->cd(9);
-	hZT2D->Draw("colz");
-	c2->cd(10);
-	hEmissionXY->Draw("colz");
-
-	c2->cd(11);
-	Setstyle(hZLaserL,29);hZLaserL->Draw();
-	c2->cd(12);
-	Setstyle(hZLaserR,29);hZLaserR->Draw();
-
-	c2->SaveAs(Form("./Root/%s_hist_Type%0.0d_D%0.0f_T%0.0f_Nrepeat%0.0d_Xfree%d_Thick%0.2f_NewGeo%d_.pdf",name.Data(),MCtype,D,T,Nrepeat,flag_xfree,Thick,flag_newGeo));
-
-
-	if(MCtype==2){
-
-		TCanvas *c5 = new TCanvas("c5","c5",800,600);
-		c5->Divide(3,3);
-		c5->cd(1);Setstyle( hTlaserVtot,29); hTlaserVtot->Draw("EP");
-		c5->cd(2);Setstyle(hTlaserV1,29);hTlaserV1->Draw("EP");
-		c5->cd(3);Setstyle(hTlaserV2,29);hTlaserV2->Draw("EP");
-		c5->cd(4);Setstyle(hTlaserV3,29);hTlaserV3->Draw("EP");
-
-		//TCanvas *c6 = new TCanvas("c6","c6",1000,1000);
-		//c6->Divide(3,2);
-		c5->cd(5);Setstyle(hDecayZ,29); hDecayZ->Draw("");
-		c5->cd(6);Setstyle(TEmission,29);TEmission->Draw("");
-		c5->cd(7);Setstyle(VEmission,29);VEmission->Draw("");
-		c5->cd(8);Setstyle(hTheta0_emission,29);hTheta0_emission->Draw("");
-		c5->cd(9);Setstyle(hTheta0,29);hTheta0->Draw("");
+		tree->Fill();
 
 	}
 
+
+
+	///////// Draw the last event's tracks
+	TGraph * g = new TGraph();
+	for(int i = 0; i<DiffusionVertexX->size() ;i++)g->SetPoint(i,DiffusionVertexZ->at(i),DiffusionVertexY->at(i));
+	g->Draw("APL*");
+
+
+	histfile->Write();
+
+	//////// Save the tree file
+	treefile->cd();
+	treefile->Write();
+	cout<<"Tree (Mesh) Entries: "<<tree->GetEntries()<<endl;
+
+		//return ResultSP;
 }
 
-void DrawGeo(){
-	//TBox *aerogel = new TBox(-2,-7.05,0.0,-5.15);
-	TBox *aerogel = new TBox(-2,-15,0.0,20);
-	//TBox *aerogel = new TBox(-0.5,-8.3,0.0,-7.7);
-	//TBox *LaserRegion = new TBox(1,-7.05,6.0,-5.15);
-	TBox *LaserRegion = new TBox(1,-15,6.0,20);
-	TBox *LaserRegion2 = new TBox(-8,-15,-3,20);
-
-	aerogel->SetFillStyle(3002);
-	aerogel->SetFillColor(1);
-	LaserRegion->SetFillStyle(3004);
-	LaserRegion->SetFillColor(3);
-	LaserRegion2->SetFillStyle(3004);
-	LaserRegion2->SetFillColor(3);
 
 
-	DiffusionTrack->GetXaxis()->SetRangeUser(-2.0,11.0);
-	//DiffusionTrack->GetYaxis()->SetRangeUser(-7.05,-5.15);
-	//DiffusionTrack->GetYaxis()->SetRangeUser(-8.3,-7.7);
-	DiffusionTrack->GetYaxis()->SetRangeUser(-15,35);
-	DiffusionTrack->GetXaxis()->SetLimits(-11,11);
+int InsideAerogel(double x, double y, double z){
 
-	TCanvas *c6 = new TCanvas("c6","c6",800,600);
-	DiffusionTrack->SetMarkerStyle(20);
-	DiffusionTrack->SetMarkerSize(0.4);
-	DiffusionTrack->SetMarkerColor(2);
-	DiffusionTrack->SetLineColor(2);
-
-
-	DiffusionTrack->Draw("ALP");
-	LaserRegion->Draw();
-	LaserRegion2->Draw();
-	aerogel->Draw();
+	if( (z <= 0 && z >= -7.12 )
+		|| (z <= -9 && z >= -11)
+		|| (z <= 9 && z >= 7) ) return 1;
+	else return 0;
 
 }
+
+bool InsideLaserRegion(double x, double y, double z){ // t = t0 + tbeam
+	if( (DecayT + TBeam) < tLaser) return false;
+	if( (t0 + TBeam) > tLaser)return false;
+
+	if( flag_xfree == 0 && (fabs(x)>20 || fabs(y)>20) )return false;
+	if( flag_xfree == 1 && fabs(y)>20 )return false;
+
+	if( z <= 6 && z>= 1)return true;
+	if( z >= (-6-Thick) && z <= (-1-Thick) && flag_newGeo == 1)return true;
+	return false;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 void Setstyle(TH1D *g, int c){
 	g->SetFillColor(c);
@@ -520,7 +337,7 @@ double GenerateHlineY(TH1D *hY0tgt_hline){
 
 	return tempY;
 }
-
+/*
 double* MCLmfp(){
 
 	t = 0;
@@ -592,8 +409,8 @@ double* MCLmfp(){
 	ResultDiff[8] = phi;
 	return ResultDiff;
 }
-
-
+*/
+/*
 void FillTZ()
 {
 
@@ -629,8 +446,9 @@ void FillTZ()
 		}
 	}
 }
+*/
 
-
+/*
 void ShootLaser(double distance, double x_, double y_, double z_, double vx_, double vy_ ,double vz_)
 {
 	x = x_;
@@ -684,8 +502,9 @@ void ShootLaser(double distance, double x_, double y_, double z_, double vx_, do
 	DriftY = MeshY + MeshVY * t;
 
 }
+*/
 
-
+/*
 void ShootLaserPulseE(double distance, double x_, double y_, double z_, double vx_, double vy_ ,double vz_)
 {
 
@@ -764,22 +583,11 @@ void ShootLaserPulseE(double distance, double x_, double y_, double z_, double v
 	DriftY = MeshY + MeshVY * t;
 
 }
+*/
 
 
-bool InsideLaserRegion(double x, double y, double z){ // t = t0 + tbeam
-	if( (DecayT + TBeam) < tLaser) return false;
-	if( (t0 + TBeam) > tLaser)return false;
 
-	if( flag_xfree == 0 && (fabs(x)>20 || fabs(y)>20) )return false;
-	if( flag_xfree == 1 && fabs(y)>20 )return false;
-
-	if( z <= 6 && z>= 1)return true;
-	if( z >= (-6-Thick) && z <= (-1-Thick) && flag_newGeo == 1)return true;
-	return false;
-}
-
-
-void SetTreeBranch(){
+void SetTreeBranch(TTree * tree){
 
 	tree->Branch("TBeam",&TBeam,"TBeam/D");
 	tree->Branch("DecayT",&DecayT,"DecayT/D");
@@ -794,6 +602,9 @@ void SetTreeBranch(){
 	tree->Branch("Vy0",&Vy0,"Vy0/D");
 	tree->Branch("Lmfp",&Lmfp,"Lmfp/D");
 
+	tree->Branch("t0",&t0,"t0/D");
+	tree->Branch("DiffusionT",&DiffusionT,"DiffusionT/D");
+
 	tree->Branch("X_sf",&X_sf,"X_sf/D");
 	tree->Branch("Y_sf",&Y_sf,"Y_sf/D");
 	tree->Branch("Z_sf",&Z_sf,"Z_sf/D");
@@ -803,7 +614,11 @@ void SetTreeBranch(){
 	tree->Branch("theta_sf",&theta_sf,"theta_sf/D");
 	tree->Branch("phi_sf",&phi_sf,"phi_sf/D");
 
-	tree->Branch("t0",&t0,"t0/D");
+	//double DiffusionT;
+	tree->Branch("DiffusionVertexX", DiffusionVertexX, "DiffusionVertexX/D");// std::vector<double> DiffusionVertexX;
+	tree->Branch("DiffusionVertexY", DiffusionVertexY, "DiffusionVertexY/D");// std::vector<double> DiffusionVertexY;
+	tree->Branch("DiffusionVertexZ", DiffusionVertexZ, "DiffusionVertexZ/D");// std::vector<double> DiffusionVertexZ;
+	tree->Branch("DiffusionVertexT", DiffusionVertexT, "DiffusionVertexT/D");// std::vector<double> DiffusionVertexT;
 
 	tree->Branch("DecayX",&DecayX,"DecayX/D");
 	tree->Branch("DecayY",&DecayY,"DecayY/D");
@@ -816,6 +631,10 @@ void SetTreeBranch(){
 	tree->Branch("DecayPositronMomtX",&DecayPositronMomtX,"DecayPositronMomtX/D");
 	tree->Branch("DecayPositronMomtY",&DecayPositronMomtY,"DecayPositronMomtY/D");
 	tree->Branch("DecayPositronMomtZ",&DecayPositronMomtZ,"DecayPositronMomtZ/D");
+
+
+
+
 
 
 	tree->Branch("LaserX",&LaserX,"LaserX/D");
@@ -846,7 +665,8 @@ void SetTreeBranch(){
 	tree->Branch("DriftZ",&DriftZ,"DriftZ/D");
 }
 
-void SetHist(){
+void SetHist(TFile * f){
+
 	 T0 = new TH1D("T0","T0",100,0,1.0e-6); // Tbeam distribution
 
 	 hLmfp = new TH1D("hLmfp","hLmfp;Lmfp (um)",100,0,100); // um
@@ -899,7 +719,8 @@ void SetHist(){
 }
 
 void WriteHist(){
-	T0 ->Write();
+
+	 T0 ->Write();
 
 	 hLmfp ->Write();
 
@@ -963,6 +784,9 @@ void InitialTreeVar(){
 	Vy0 = -1;
 	Lmfp = -1;
 
+	t0 = -1;// is not the initial t, but the total time spent inside aerogel
+	DiffusionT = -1;
+
 	// diffusion/surface information
 
 	X_sf = -1;
@@ -974,7 +798,21 @@ void InitialTreeVar(){
 	theta_sf = -1;
 	phi_sf = -1;
 
-	t0 = -1;// is not the initial t, but the total time spent inside aerogel
+	DecayX = -1;
+	DecayY = -1;
+	DecayZ = -1;
+
+	DiffusionVertexX->clear();
+	DiffusionVertexY->clear();
+	DiffusionVertexZ->clear();
+
+
+
+
+
+
+
+
 
 	// laser region/decay information
 	LaserX = -1;
@@ -984,9 +822,7 @@ void InitialTreeVar(){
 	LaserZ = -1;
 	LaserE = -1;
 
-	DecayX = -1;
-	DecayY = -1;
-	DecayZ = -1;
+
 
 	// Mesh plane information
 

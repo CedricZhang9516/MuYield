@@ -1,41 +1,43 @@
 #include "/Users/zhangce/WorkArea/CZhang/CZhang.cxx"
 #include "TPoint.h"
+#include "MuYield.h"
 
 void DiffusionModel(
-		double X0, double Y0, double Z0,
-		void (*GeometryFunction)(double, double, double),
-		std::vector<double> DiffusionVertexX,
-		std::vector<double> DiffusionVertexY,
-		std::vector<double> DiffusionVertexZ,
-		double DiffusionT,
-		double X_sf, double Y_sf, double Z_sf,
-		double VX_sf, double VY_sf, double VZ_sf,
-		double theta_sf, double phi_sf)
+		//double* X0, double* Y0, double* Z0,
+		//double Vx0, double Vy0, double Vz0, double theta0, double phi0,
+		int (*GeometryFunction)(double, double, double) )
+		//std::vector<double>* DiffusionVertexX,
+		//std::vector<double>* DiffusionVertexY,
+		//std::vector<double>* DiffusionVertexZ)
+		//double DecayT, double Thick,
+		//double* DiffusionT,
+		//double* X_sf, double* Y_sf, double* Z_sf,
+		//double* VX_sf, double* VY_sf, double* VZ_sf,
+		//double* theta_sf, double* phi_sf
 	{
 
+	//double TPoint* MCLmfp(){
 
+	//* DiffusionT = 0;
 
+	double t = 0;
+	double z  = Z0;
+	double x  = X0;
+	double y  = Y0;
+	double vx = Vx0;
+	double vy = Vy0;
+	double vz = Vz0;
 
+	double theta = theta0;
+	double phi = phi0;
 
-//double TPoint* MCLmfp(){
-
-	DiffusionT = 0;
-
-	t = 0;
-	z = Z0;
-	x = X0;
-	y = Y0;
-	vx = Vx0;
-	vy = Vy0;
-	vz = Vz0;
-	theta = theta0;
-	phi = phi0;
-
-	double L;
+	double L = 0;
 	int N = 0; // only for debug
 
+	//double tempX, tempY;
+
 	//static double ResultDiff[9];
-	static double DiffusionTrak[2];
+	//static double DiffusionTrak[2];
 
 	do{
 
@@ -69,25 +71,36 @@ void DiffusionModel(
 		}
 		N++;
 
-	}while( (z <= 0 && z >= -Thick && t<DecayT)
+		DiffusionVertexX->push_back(x);
+		DiffusionVertexY->push_back(y);
+		DiffusionVertexZ->push_back(z);
+		DiffusionVertexT->push_back(t);
+
+		//cout<<DiffusionVertexX->size()<<endl;
+
+	}while(GeometryFunction(x,y,z) && t < DecayT);
+
+/*
+		(z <= 0 && z >= -Thick && t<DecayT)
 		|| (z <= -9 && z >= -11 && t<DecayT)
 		|| (z <= 9 && z >= 7 && t<DecayT)
 		);
-
+*/
 	if( MCtype != 2 && (fabs(y)>130 || fabs(x)>130) ) t = 100000;
 
-	Nhits = N;
+	double Nhits = N;
 
-	if(t>DecayT)t = t - L/vel0;
+	if(t>DecayT) t = t - L/vel0;
 
-	ResultDiff[0] = t;
-	ResultDiff[1] = x;
-	ResultDiff[2] = y;
-	ResultDiff[3] = z;
-	ResultDiff[4] = vx;
-	ResultDiff[5] = vy;
-	ResultDiff[6] = vz;
-	ResultDiff[7] = theta;
-	ResultDiff[8] = phi;
-	return ResultDiff;
+
+	DiffusionT = t;
+	X_sf = x;
+	Y_sf = y;
+	Z_sf = z;
+	VX_sf = vx;
+	VY_sf = vy;
+	VZ_sf = vz;
+	theta_sf = theta;
+	phi_sf = phi;
+	//return ResultDiff;
 }

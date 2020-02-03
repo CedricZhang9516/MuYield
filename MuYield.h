@@ -1,3 +1,6 @@
+#ifndef _MuYield
+#define _MuYield
+
 #include <iostream>
 #include <fstream>
 #include <cmath>
@@ -11,10 +14,12 @@ void FillTZ();
 void ShootLaser(double , double , double , double , double , double  ,double );
 void ShootLaserPulseE(double , double , double , double , double , double  ,double );
 
-void SetTreeBranch();
-void SetHist();
+void SetTreeBranch(TTree * tree);
+void SetHist(TFile * f);
 void WriteHist();
 void InitialTreeVar();
+
+int InsideAerogel(double x, double y, double z);
 
 void DrawHistPlot();
 void DrawGeo();
@@ -73,7 +78,7 @@ double vel0_avrg = 1000*sqrt(8*k*T/(PI*massMu));
 
 
 //aux parameters, middle-step use, not to be saved:
-double x,y,z,t,vx,vy,vz,theta,phi;
+//double x,y,z,t,vx,vy,vz,theta,phi;
 double tempX, tempY, tempZ;
 int aux1,aux2;
 double aux3;
@@ -119,14 +124,14 @@ double theta_sf;// = -1;
 double phi_sf;// = -1;
 
 double t0;// = -1;// is not the initial t, but the total time spent inside aerogel
+double DiffusionT;
 
-// laser region/decay information
-double LaserX;// = -1;
-double LaserY;// = -1;
-double LaserXp;// = -1;
-double LaserYp;// = -1;
-double LaserZ;// = -1;
-double LaserE;
+
+std::vector<double>* DiffusionVertexX = new std::vector<double>(5,0);;
+std::vector<double>* DiffusionVertexY = new std::vector<double>(5,0);;
+std::vector<double>* DiffusionVertexZ = new std::vector<double>(5,0);;
+std::vector<double>* DiffusionVertexT = new std::vector<double>(5,0);;
+
 
 double DecayX;// = -1;
 double DecayY;// = -1;
@@ -146,6 +151,20 @@ double DecayPositronMomtZ;
 
 
 
+
+
+
+
+
+
+
+// laser region/decay information
+double LaserX;// = -1;
+double LaserY;// = -1;
+double LaserXp;// = -1;
+double LaserYp;// = -1;
+double LaserZ;// = -1;
+double LaserE;
 
 // Mesh plane information
 
@@ -219,3 +238,104 @@ TH1D *hPhi0_emission;
 TH2D *hEmissionXY;
 
 ////////////////////////////////////////
+
+
+void DrawHistPlot(){
+
+	TCanvas *c2 = new TCanvas("c2","c2",800,600);
+	c2->Divide(3,4);
+
+
+	c2->cd(1);  T0->SetTitle("TBeam"); Setstyle(T0,29);T0->Draw("HIST");
+	c2->cd(2);  hvel0->SetTitle("initial velocity (mm/s);vel0 (mm/s);");
+	          hvel0->GetXaxis()->SetNdivisions(5,kTRUE); Setstyle(hvel0,29);hvel0->Draw("HIST");
+	c2->cd(3);  hX0tgt->SetTitle("x0tgt"); Setstyle(hX0tgt,29);hX0tgt->Draw("HIST");
+	c2->cd(4);  hY0tgt->SetTitle("y0tgt"); Setstyle(hY0tgt,29);hY0tgt->Draw("HIST");
+	c2->cd(5);hZ0tgt->SetTitle("z0_tgt"); Setstyle(hZ0tgt,29);hZ0tgt->Draw("HIST");
+ 	c2->cd(6);Setstyle(hZ0tgt_emission,29);hZ0tgt_emission->Draw("HIST");
+ 	//hZ0tgt_emission->Fit("expo","R","",-2,-0.01);
+
+	c2->cd(7);
+	hTlaserR->SetTitle("Emission Mu-r; t (us);"); //SetstyleG(TLaser,8);
+	Setstyle(hTlaserR,29);
+	hTlaserR->Draw();
+	c2->cd(8);
+	hTlaserL->SetTitle("Emission Mu-l; t (us);");
+	Setstyle(hTlaserL,29);
+	hTlaserL->Draw();
+	c2->cd(9);
+	hZT2D->Draw("colz");
+	c2->cd(10);
+	hEmissionXY->Draw("colz");
+
+	c2->cd(11);
+	Setstyle(hZLaserL,29);hZLaserL->Draw();
+	c2->cd(12);
+	Setstyle(hZLaserR,29);hZLaserR->Draw();
+
+	c2->SaveAs(Form("./Root/%s_hist_Type%0.0d_D%0.0f_T%0.0f_Nrepeat%0.0d_Xfree%d_Thick%0.2f_NewGeo%d_.pdf",name.Data(),MCtype,D,T,Nrepeat,flag_xfree,Thick,flag_newGeo));
+
+
+	if(MCtype==2){
+
+		TCanvas *c5 = new TCanvas("c5","c5",800,600);
+		c5->Divide(3,3);
+		c5->cd(1);Setstyle( hTlaserVtot,29); hTlaserVtot->Draw("EP");
+		c5->cd(2);Setstyle(hTlaserV1,29);hTlaserV1->Draw("EP");
+		c5->cd(3);Setstyle(hTlaserV2,29);hTlaserV2->Draw("EP");
+		c5->cd(4);Setstyle(hTlaserV3,29);hTlaserV3->Draw("EP");
+
+		//TCanvas *c6 = new TCanvas("c6","c6",1000,1000);
+		//c6->Divide(3,2);
+		c5->cd(5);Setstyle(hDecayZ,29); hDecayZ->Draw("");
+		c5->cd(6);Setstyle(TEmission,29);TEmission->Draw("");
+		c5->cd(7);Setstyle(VEmission,29);VEmission->Draw("");
+		c5->cd(8);Setstyle(hTheta0_emission,29);hTheta0_emission->Draw("");
+		c5->cd(9);Setstyle(hTheta0,29);hTheta0->Draw("");
+
+	}
+
+}
+
+
+
+
+void DrawGeo(){
+	//TBox *aerogel = new TBox(-2,-7.05,0.0,-5.15);
+	TBox *aerogel = new TBox(-2,-15,0.0,20);
+	//TBox *aerogel = new TBox(-0.5,-8.3,0.0,-7.7);
+	//TBox *LaserRegion = new TBox(1,-7.05,6.0,-5.15);
+	TBox *LaserRegion = new TBox(1,-15,6.0,20);
+	TBox *LaserRegion2 = new TBox(-8,-15,-3,20);
+
+	aerogel->SetFillStyle(3002);
+	aerogel->SetFillColor(1);
+	LaserRegion->SetFillStyle(3004);
+	LaserRegion->SetFillColor(3);
+	LaserRegion2->SetFillStyle(3004);
+	LaserRegion2->SetFillColor(3);
+
+
+	DiffusionTrack->GetXaxis()->SetRangeUser(-2.0,11.0);
+	//DiffusionTrack->GetYaxis()->SetRangeUser(-7.05,-5.15);
+	//DiffusionTrack->GetYaxis()->SetRangeUser(-8.3,-7.7);
+	DiffusionTrack->GetYaxis()->SetRangeUser(-15,35);
+	DiffusionTrack->GetXaxis()->SetLimits(-11,11);
+
+	TCanvas *c6 = new TCanvas("c6","c6",800,600);
+	DiffusionTrack->SetMarkerStyle(20);
+	DiffusionTrack->SetMarkerSize(0.4);
+	DiffusionTrack->SetMarkerColor(2);
+	DiffusionTrack->SetLineColor(2);
+
+
+	DiffusionTrack->Draw("ALP");
+	LaserRegion->Draw();
+	LaserRegion2->Draw();
+	aerogel->Draw();
+
+}
+
+
+#endif
+
