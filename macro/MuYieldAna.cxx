@@ -1,3 +1,79 @@
+void Setstyle(TH1D *g, int c){
+	g->SetFillColor(c);
+    g->SetFillStyle(3001);
+    g->SetLineColor(c);
+    g->SetMarkerColor(1);
+   	g->SetMarkerSize(0.5);
+    g->SetMarkerStyle(20);
+}
+
+void SetstyleG(TGraph *g, Int_t c){
+    g->SetLineColor(c);
+    g->SetLineStyle(4);
+    g->SetLineWidth(4);
+    g->SetMarkerColor(c);
+    g->SetMarkerStyle(14);
+
+}
+
+
+void DrawHistPlot(){
+
+	TCanvas *c2 = new TCanvas("c2","c2",800,600);
+	c2->Divide(3,4);
+
+
+	c2->cd(1);  T0->SetTitle("TBeam"); Setstyle(T0,29);T0->Draw("HIST");
+	c2->cd(2);  hvel0->SetTitle("initial velocity (mm/s);vel0 (mm/s);");
+	          hvel0->GetXaxis()->SetNdivisions(5,kTRUE); Setstyle(hvel0,29);hvel0->Draw("HIST");
+	c2->cd(3);  hX0tgt->SetTitle("x0tgt"); Setstyle(hX0tgt,29);hX0tgt->Draw("HIST");
+	c2->cd(4);  hY0tgt->SetTitle("y0tgt"); Setstyle(hY0tgt,29);hY0tgt->Draw("HIST");
+	c2->cd(5);hZ0tgt->SetTitle("z0_tgt"); Setstyle(hZ0tgt,29);hZ0tgt->Draw("HIST");
+ 	c2->cd(6);Setstyle(hZ0tgt_emission,29);hZ0tgt_emission->Draw("HIST");
+ 	//hZ0tgt_emission->Fit("expo","R","",-2,-0.01);
+
+	c2->cd(7);
+	hTlaserR->SetTitle("Emission Mu-r; t (us);"); //SetstyleG(TLaser,8);
+	Setstyle(hTlaserR,29);
+	hTlaserR->Draw();
+	c2->cd(8);
+	hTlaserL->SetTitle("Emission Mu-l; t (us);");
+	Setstyle(hTlaserL,29);
+	hTlaserL->Draw();
+	c2->cd(9);
+	hZT2D->Draw("colz");
+	c2->cd(10);
+	hEmissionXY->Draw("colz");
+
+	c2->cd(11);
+	Setstyle(hZLaserL,29);hZLaserL->Draw();
+	c2->cd(12);
+	Setstyle(hZLaserR,29);hZLaserR->Draw();
+
+	c2->SaveAs(Form("./Root/%s_hist_Type%0.0d_D%0.0f_T%0.0f_Nrepeat%0.0d_Xfree%d_Thick%0.2f_NewGeo%d_.pdf",name.Data(),MCtype,D,T,Nrepeat,flag_xfree,Thick,flag_newGeo));
+
+
+	if(MCtype==2){
+
+		TCanvas *c5 = new TCanvas("c5","c5",800,600);
+		c5->Divide(3,3);
+		c5->cd(1);Setstyle( hTlaserVtot,29); hTlaserVtot->Draw("EP");
+		c5->cd(2);Setstyle(hTlaserV1,29);hTlaserV1->Draw("EP");
+		c5->cd(3);Setstyle(hTlaserV2,29);hTlaserV2->Draw("EP");
+		c5->cd(4);Setstyle(hTlaserV3,29);hTlaserV3->Draw("EP");
+
+		//TCanvas *c6 = new TCanvas("c6","c6",1000,1000);
+		//c6->Divide(3,2);
+		c5->cd(5);Setstyle(hDecayZ,29); hDecayZ->Draw("");
+		c5->cd(6);Setstyle(TEmission,29);TEmission->Draw("");
+		c5->cd(7);Setstyle(VEmission,29);VEmission->Draw("");
+		c5->cd(8);Setstyle(hTheta0_emission,29);hTheta0_emission->Draw("");
+		c5->cd(9);Setstyle(hTheta0,29);hTheta0->Draw("");
+
+	}
+
+}
+
 /*
 void FillTZ()
 {

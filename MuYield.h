@@ -8,39 +8,18 @@
 #include <array>
 #include <time.h>
 
-
-double* MCLmfp();
-//void FillTZ();
-void ShootLaser(double , double , double , double , double , double  ,double );
-void ShootLaserPulseE(double , double , double , double , double , double  ,double );
-
-void SetTreeBranch(TTree * tree);
-void SetHist(TFile * f);
-void WriteHist();
-
-
-void DrawHistPlot();
-void DrawGeo();
-void Setstyle(TH1D*, int);
-void SetstyleG(TGraph*, int);
-//double expo(double, double);
-
-//double GenerateGaus(double, double );
-//double GenerateUniform(double, double );
-//double GenerateHlineY(TH1D*);
-
-//double MichelSpec();
-
-void InitializingXYZ0();
-
 bool InsideLaserRegion(double, double, double);
 bool InsideAerogel(double x, double y, double z);
-
 
 TString name;
 
 
-double Thick = 7.12;
+int MCtype;// = 1;
+int flag_xfree;// = 0;
+int flag_newGeo;// = 0;
+int Nrepeat;// = 1e5;
+double Thick;// = 7.12;
+
 double D = 87000;// diffussion coefficient mm^2/s
 double T = 322;
 double light = 299792458; // m/s
@@ -57,6 +36,10 @@ double yMesh = 30;//mm
 
 double vel0_avrg = 1000*sqrt(8*k*T/(PI*massMu));
 
+double By = -0.1035;//mT
+double Bx = 0.0696;//mT
+double Bz = 0.0696;//mT
+
 // only for debug
 int NLaserR = 0;
 int NLaserL = 0;
@@ -65,18 +48,6 @@ int Nhline = 0;
 
 /////////input and constant
 
-int MCtype = 1;
-int flag_xfree = 0;
-int flag_newGeo = 0;
-int Nrepeat = 1e5;
-int nbinT = 4500;
-
-double By = -0.1035;//mT
-//double Bx = 0;//mT
-double Bx = 0.0696;//mT
-//double By = 0;//mT
-double Bz = 0.0696;//mT
-//double Bz = 0;//mT
 
 TVector3 Bamb(Bx,By,Bz);
 double Omega = 14 * Bamb.Mag() * (2*PI);
@@ -161,11 +132,6 @@ double DecayPositronMomtZ;
 	omega_y = 14*By/(2*PI);
 	omega_z = 14*Bz/(2*PI);
 */
-
-
-
-
-
 
 
 // laser region/decay information
@@ -278,25 +244,9 @@ double GenerateHlineY(TH1D *hY0tgt_hline){
 	return tempY;
 }
 
-void Setstyle(TH1D *g, int c){
-	g->SetFillColor(c);
-    g->SetFillStyle(3001);
-    g->SetLineColor(c);
-    g->SetMarkerColor(1);
-   	g->SetMarkerSize(0.5);
-    g->SetMarkerStyle(20);
-}
-
-void SetstyleG(TGraph *g, Int_t c){
-    g->SetLineColor(c);
-    g->SetLineStyle(4);
-    g->SetLineWidth(4);
-    g->SetMarkerColor(c);
-    g->SetMarkerStyle(14);
-
-}
 
 void InitializingXYZ0(){
+
 	//double* X0, double* Y0, double* Z0
 
 	//beam xy: uniformed or gaussian from tdr
@@ -328,67 +278,9 @@ void InitializingXYZ0(){
 
 }
 
-void DrawHistPlot(){
-
-	TCanvas *c2 = new TCanvas("c2","c2",800,600);
-	c2->Divide(3,4);
 
 
-	c2->cd(1);  T0->SetTitle("TBeam"); Setstyle(T0,29);T0->Draw("HIST");
-	c2->cd(2);  hvel0->SetTitle("initial velocity (mm/s);vel0 (mm/s);");
-	          hvel0->GetXaxis()->SetNdivisions(5,kTRUE); Setstyle(hvel0,29);hvel0->Draw("HIST");
-	c2->cd(3);  hX0tgt->SetTitle("x0tgt"); Setstyle(hX0tgt,29);hX0tgt->Draw("HIST");
-	c2->cd(4);  hY0tgt->SetTitle("y0tgt"); Setstyle(hY0tgt,29);hY0tgt->Draw("HIST");
-	c2->cd(5);hZ0tgt->SetTitle("z0_tgt"); Setstyle(hZ0tgt,29);hZ0tgt->Draw("HIST");
- 	c2->cd(6);Setstyle(hZ0tgt_emission,29);hZ0tgt_emission->Draw("HIST");
- 	//hZ0tgt_emission->Fit("expo","R","",-2,-0.01);
-
-	c2->cd(7);
-	hTlaserR->SetTitle("Emission Mu-r; t (us);"); //SetstyleG(TLaser,8);
-	Setstyle(hTlaserR,29);
-	hTlaserR->Draw();
-	c2->cd(8);
-	hTlaserL->SetTitle("Emission Mu-l; t (us);");
-	Setstyle(hTlaserL,29);
-	hTlaserL->Draw();
-	c2->cd(9);
-	hZT2D->Draw("colz");
-	c2->cd(10);
-	hEmissionXY->Draw("colz");
-
-	c2->cd(11);
-	Setstyle(hZLaserL,29);hZLaserL->Draw();
-	c2->cd(12);
-	Setstyle(hZLaserR,29);hZLaserR->Draw();
-
-	c2->SaveAs(Form("./Root/%s_hist_Type%0.0d_D%0.0f_T%0.0f_Nrepeat%0.0d_Xfree%d_Thick%0.2f_NewGeo%d_.pdf",name.Data(),MCtype,D,T,Nrepeat,flag_xfree,Thick,flag_newGeo));
-
-
-	if(MCtype==2){
-
-		TCanvas *c5 = new TCanvas("c5","c5",800,600);
-		c5->Divide(3,3);
-		c5->cd(1);Setstyle( hTlaserVtot,29); hTlaserVtot->Draw("EP");
-		c5->cd(2);Setstyle(hTlaserV1,29);hTlaserV1->Draw("EP");
-		c5->cd(3);Setstyle(hTlaserV2,29);hTlaserV2->Draw("EP");
-		c5->cd(4);Setstyle(hTlaserV3,29);hTlaserV3->Draw("EP");
-
-		//TCanvas *c6 = new TCanvas("c6","c6",1000,1000);
-		//c6->Divide(3,2);
-		c5->cd(5);Setstyle(hDecayZ,29); hDecayZ->Draw("");
-		c5->cd(6);Setstyle(TEmission,29);TEmission->Draw("");
-		c5->cd(7);Setstyle(VEmission,29);VEmission->Draw("");
-		c5->cd(8);Setstyle(hTheta0_emission,29);hTheta0_emission->Draw("");
-		c5->cd(9);Setstyle(hTheta0,29);hTheta0->Draw("");
-
-	}
-
-}
-
-
-
-
-void DrawGeo(){
+void DrawAerogelGeo(){
 	//TBox *aerogel = new TBox(-2,-7.05,0.0,-5.15);
 	TBox *aerogel = new TBox(-2,-15,0.0,20);
 	//TBox *aerogel = new TBox(-0.5,-8.3,0.0,-7.7);
@@ -469,10 +361,7 @@ void SetTreeBranch(TTree * tree){
 	tree->Branch("DecayPositronMomtY",&DecayPositronMomtY,"DecayPositronMomtY/D");
 	tree->Branch("DecayPositronMomtZ",&DecayPositronMomtZ,"DecayPositronMomtZ/D");
 
-
-
 	///////////////////
-
 
 	tree->Branch("LaserX",&LaserX,"LaserX/D");
 	tree->Branch("LaserY",&LaserY,"LaserY/D");
@@ -552,14 +441,6 @@ void InitialTreeVar(){
 	//DiffusionVertexZ->clear();
 	//DiffusionVertexT->clear();
 
-	//(5,0);
-	//(5,0);
-	//(5,0);
-	//(5,0);
-
-
-
-
 	// laser region/decay information
 	LaserX = -1;
 	LaserY = -1;
@@ -567,8 +448,6 @@ void InitialTreeVar(){
 	LaserYp = -1;
 	LaserZ = -1;
 	LaserE = -1;
-
-
 
 	// Mesh plane information
 
