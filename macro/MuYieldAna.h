@@ -1,5 +1,8 @@
+#include <vector>
+#include "/Users/zhangce/WorkArea/CZhang/CZhangNew.h"
+
 double TBeam;// = -1;
-double decayT;// = -1;
+double DecayT;// = -1;
 double X0;// = -1;
 double Y0;// = -1;
 double Z0;// = -1;
@@ -23,6 +26,23 @@ double theta_sf;// = -1;
 double phi_sf;// = -1;
 
 double t0;// = -1;// is not the initial t, but the total time spent inside aerogel
+double DiffusionT;// = -1;// is not the initial t, but the total time spent inside aerogel
+
+
+std::vector<Double_t>* DiffusionVertexX = 0;// = new std::vector<double>;//(5,0);
+std::vector<Double_t>* DiffusionVertexY = 0;// = new std::vector<double>;//(5,0);
+std::vector<Double_t>* DiffusionVertexZ = 0;// = new std::vector<double>;//(5,0);
+std::vector<Double_t>* DiffusionVertexT = 0;// = new std::vector<double>;//(5,0);
+
+
+double SpinX;
+double SpinY;
+double SpinZ;
+
+double DecayPositronMomtX;
+double DecayPositronMomtY;
+double DecayPositronMomtZ;
+
 
 // laser region/decay information
 double LaserX;// = -1;
@@ -57,8 +77,19 @@ double DriftY;
 double DriftZ;
 //double DriftD = 500;// mm
 
-TTree *tree = (TTree*)f2->Get("tree");
 
+double XXp,Xp2,X2;
+double YYp,Yp2,Y2;
+double BetaGamma;
+
+int nbinT = 1e2;
+double Tstep = 1e-7;
+
+
+void setTree(TTree* tree){
+
+tree->SetBranchAddress("TBeam",&TBeam);//,"TBeam/D");
+tree->SetBranchAddress("DecayT",&DecayT);//,"DecayT/D");
 tree->SetBranchAddress("X_sf",&X_sf);// = -1;
 tree->SetBranchAddress("Y_sf",&Y_sf);// = -1;
 tree->SetBranchAddress("Z_sf",&Z_sf);// = -1;
@@ -69,6 +100,7 @@ tree->SetBranchAddress("theta_sf",&theta_sf);// = -1;
 tree->SetBranchAddress("phi_sf",&phi_sf);// = -1;
 
 tree->SetBranchAddress("t0",&t0);// = -1;// is not the initial t, but the total time spent inside aerogel
+tree->SetBranchAddress("DiffusionT",&DiffusionT);// = -1;// is not the initial t, but the total time spent inside aerogel
 
 // laser region/decay information
 tree->SetBranchAddress("LaserX",&LaserX);// = -1;
@@ -78,6 +110,27 @@ tree->SetBranchAddress("LaserZ",&LaserZ);// = -1;
 tree->SetBranchAddress("DecayX",&DecayX);// = -1;
 tree->SetBranchAddress("DecayY",&DecayY);// = -1;
 tree->SetBranchAddress("DecayZ",&DecayZ);// = -1;
+tree->SetBranchAddress("DecayT",&DecayT);// = -1;
+
+
+tree->SetBranchAddress("DiffusionVertexX", &DiffusionVertexX);//, "DiffusionVertexX/D");// std::vector<double> DiffusionVertexX;
+tree->SetBranchAddress("DiffusionVertexY", &DiffusionVertexY);//, "DiffusionVertexY/D");// std::vector<double> DiffusionVertexY;
+tree->SetBranchAddress("DiffusionVertexZ", &DiffusionVertexZ);//, "DiffusionVertexZ/D");// std::vector<double> DiffusionVertexZ;
+tree->SetBranchAddress("DiffusionVertexT", &DiffusionVertexT);//, "DiffusionVertexT/D");// std::vector<double> DiffusionVertexT;
+
+//tree->SetBranchAddress("DecayX",&DecayX);//,"DecayX/D");
+//tree->SetBranchAddress("DecayY",&DecayY);//,"DecayY/D");
+//tree->SetBranchAddress("DecayZ",&DecayZ);//,"DecayZ/D");
+
+tree->SetBranchAddress("SpinX",&SpinX);//,"SpinX/D");
+tree->SetBranchAddress("SpinY",&SpinY);//,"SpinY/D");
+tree->SetBranchAddress("SpinZ",&SpinZ);//,"SpinZ/D");
+
+tree->SetBranchAddress("DecayPositronMomtX",&DecayPositronMomtX);//,"DecayPositronMomtX/D");
+tree->SetBranchAddress("DecayPositronMomtY",&DecayPositronMomtY);//,"DecayPositronMomtY/D");
+tree->SetBranchAddress("DecayPositronMomtZ",&DecayPositronMomtZ);//,"DecayPositronMomtZ/D");
+
+
 
 // Mesh plane information
 
@@ -102,6 +155,8 @@ tree->SetBranchAddress("DriftX",&DriftX);
 tree->SetBranchAddress("DriftY",&DriftY);
 tree->SetBranchAddress("DriftZ",&DriftZ);
 
+}
+
 
 TH1D* hMeshEk = new TH1D("hMeshEk","hMeshEk;MeV",100,0.07e-3,0.20e-3);
 TH1D* hMeshT = new TH1D("hMeshT","hMeshT;s",100,20e-9,34e-9);
@@ -123,11 +178,11 @@ TH1D* hDriftX = new TH1D("hDriftX","hDriftX;mm",200,-150,150);
 TH1D* hDriftY = new TH1D("hDriftY","hDriftY;mm",200,-40,40);
 TH1D* hDriftZ = new TH1D("hDriftZ","hDriftZ;mm",200,-100,600);
 
-TH2D* EmissionX;
-TH2D* EmissionY;
+//TH2D* EmissionX;
+//TH2D* EmissionY;
 //if(flag_Newgeo==0){
-	EmissionX = new TH2D("EmissionX","EmissionX;X;X'",240,-120,120,320,0.16,0.16); // mm
-	EmissionY = new TH2D("EmissionY","EmissionY;Y;Y'",500,-25,25,320,0.16,0.16); // mm
+TH2D* EmissionX = new TH2D("EmissionX","EmissionX;X;X'",240,-120,120,320,0.16,0.16); // mm
+TH2D* EmissionY = new TH2D("EmissionY","EmissionY;Y;Y'",500,-25,25,320,0.16,0.16); // mm
 //}
 
 //TH2D* CorrMeshTE = new TH2D("CorrMeshTE","CorrMeshTE;T(s);Ek(MeV)",100,20e-9,34e-9,100,0.07e-3,0.20e-3);
@@ -145,6 +200,15 @@ TH1D* hBetaGamma = new TH1D("hBetaGamma","hBetaGamma",100,0.0012,0.0019);
 //TH1D* hBetaGamma = new TH1D("hBetaGamma","hBetaGamma",100,0.0015,0.0045);
 
 
+TH2D *hZT2D = new TH2D("Z-T-2D","Z-T-2D; t(us);Z (mm)",nbinT,0e-9,nbinT*Tstep,1000,1,10);
+
+TH2D *hZY2D = new TH2D("Z-Y-2D","Z-Y-2D; Z(mm);Y (mm)",1000,-40,40,1000,-40,40);
+TH2D *hZX2D = new TH2D("Z-X-2D","Z-X-2D; Z(mm);X (mm)",1000,-40,40,1000,-40,40);
+TH2D *hXY2D = new TH2D("X-Y-2D","X-Y-2D; X(mm);Y (mm)",1000,-40,40,1000,-40,40);
+
+//TH3D *hZXT3D = new TH3D("ZX-T-3D","ZX-T-3D; t(us); z (mm); x (mm)",nbinT,0e-9,nbinT*Tstep,100,-40,40,100,-40,40);
+TH3D *hXYT3D = new TH3D("ZX-T-3D","ZX-T-3D; t(us); x (mm); y (mm)",nbinT,0e-9,nbinT*Tstep,100,-40,40,100,-40,40);
+TH3D *hZXY3D = new TH3D("ZXY-3D","ZXY-3D;   z(mm); x (mm); y (mm)",100,-1,10,100,-40,40,100,-40,40);
 
 //if(flag_Newgeo==1){
 //	EmissionX = new TH2D("EmissionZ","EmissionZ;Z;Z'",240,-120,120,320,0.16,0.16); // mm
@@ -155,6 +219,7 @@ TH1D* hBetaGamma = new TH1D("hBetaGamma","hBetaGamma",100,0.0012,0.0019);
 //TGraph * EmissionX = new TGraph();
 //TGraph * EmissionY = new TGraph();
 
-double XXp,Xp2,X2;
-double YYp,Yp2,Y2;
-double BetaGamma;
+
+void Emittance(TTree* tree);
+void MuYieldInVacuum(TTree * tree, TCanvas *);
+

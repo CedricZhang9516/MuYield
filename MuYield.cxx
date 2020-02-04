@@ -156,9 +156,9 @@ void MuYield(
 		);
 
 
-		DecayX = X_sf + VX_sf * (DecayT - t0);
-		DecayY = Y_sf + VY_sf * (DecayT - t0);
-		DecayZ = Z_sf + VZ_sf * (DecayT - t0);
+		DecayX = X_sf + VX_sf * (DecayT - DiffusionT);
+		DecayY = Y_sf + VY_sf * (DecayT - DiffusionT);
+		DecayZ = Z_sf + VZ_sf * (DecayT - DiffusionT);
 
 
 		//if(flag_newGeo == 0 && Z_sf<0){continue;}

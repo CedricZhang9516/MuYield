@@ -3,12 +3,150 @@
 
 void MuYieldAna(){
 
-	const char * filename ="./Root/PulseE0824_tree_Type1_D87000_T322_Nrepeat280000_Xfree1_Thick2.00_NewGeo1_.root";
+	//const char * filename ="./Root/PulseE0824_tree_Type1_D87000_T322_Nrepeat280000_Xfree1_Thick2.00_NewGeo1_.root";
+	TString filename ="../Root/Dev_200202_surface_tree_Type2_D87000_T322_Nrepeat20000_Xfree1_Thick7.12_NewGeo0";
+
+	SetPalette();
+	//SetOptStat();
+
+	TCanvas * c = NewTCanvas("c","c",1000,1000,1,1);
+	c->cd(1);
+
+	TFile * f = new TFile( (filename + ".root").Data() );
+	TTree * tree = (TTree*) f-> Get("tree");
+
+	int Nentries = tree->GetEntries();
+
+	setTree(tree);
+
+
+
+	//c6->Divide(1,3);
+
+	//////// Draw the tack of one of the events
+/*
+	tree->GetEntry(1);
+	TGraph * g = new TGraph();
+	for(int i = 0; i<DiffusionVertexX->size() ;i++)g->SetPoint(i,DiffusionVertexZ->at(i),DiffusionVertexY->at(i));
+	g->Draw("APL*");
+*/
+
+
+	//////// Draw The TRIUMF result in each regions
+/*
+	TH1F * hDecayT = TreeToTH1F(tree,"DecayT * 1e6",100,0,10,
+		"DecayZ>10 && DecayZ<20 && sqrt(pow(DecayPositronMomtX,2) + pow(DecayPositronMomtY,2) + pow(DecayPositronMomtZ,2)) > 30 && DecayPositronMomtX>10");
+	hDecayT->SetTitle("DecayT, P > 30 Mev, Px > 10 MeV, 10 mm to 20 mm; T [us]; N");
+ 	hDecayT->Draw("");
+*/
+
+	//////// Draw Mu yield dynamics in vacuum
+
+	MuYieldInVacuum(tree, c);
+/*
+	c->cd(1);
+ 	hZT2D->Draw("colz");
+ 	c->cd(2);
+ 	hZY2D->Draw("colz");
+ 	c->cd(3);
+ 	hZX2D->Draw("colz");
+ 	c->cd(4);
+ 	hXY2D->Draw("colz");
+*/
+ 	//c->cd(5);
+ 	//hZXT3D->Draw("LEGO");
+ 	//c->cd(6);
+ 	//hZXY3D->Draw("lego2");
+
+
+}
+
+void MuYieldInVacuum(TTree * tree, TCanvas * c = new TCanvas("c_intrnl","c_intrnl",1000,1000))
+//void MuYieldInVacuum(TTree * tree)
+{
+
+
+	int Nentries = tree->GetEntries();
+
+	double x, y, z, vx, vy, vz, t;
+
+
+
+	for(int i = 0; i<Nentries; i++){
+	//for(int i = 0; i<9; i++){
+
+		tree->GetEntry(i);
+
+		double delT = DecayT - DiffusionT;
+		//double delT = DecayT - t0;
+
+		t = DiffusionT;
+		x = X_sf;
+		y = Y_sf;
+		z = Z_sf;
+		vx = VX_sf;
+		vy = VY_sf;
+		vz = VZ_sf;
+
+		//double flag = 0;
+
+		for(int j = 0; j < nbinT; j++){
+
+			if(Tstep*j >= delT)break;
+
+			x = x + vx * (Tstep);
+			y = y + vy * (Tstep);
+			z = z + vz * (Tstep);
+			t = t + Tstep;
+
+			hZT2D->Fill(TBeam + t, z);
+			hZY2D->Fill(z, y);
+			hZX2D->Fill(z, x);
+			hXY2D->Fill(x, y);
+			hXYT3D->Fill(t, x, y);
+			hZXY3D->Fill(z, x, y);
+
+			/// STRICTLY, IT SHOULD BE TBEAM+T. IN TRIUMF CASE, TBEAM = 0
+/*
+			if(fabs(y)<=20 && Tstep*i <= delT)
+			{
+				if( (MCtype == 1 || MCtype == 3) && flag_xfree == 0 && fabs(x)>20)continue;
+				if( z >= 1 && z <= 6) {hTlaserR->Fill(TBeam + t);}
+				if( z >= (-6-Thick) && z <= (-1-Thick)) {hTlaserL->Fill(TBeam + t);}
+			}
+*/
+
+			//hXY2D->Draw("colz");
+			//hZXY3D->Draw("lego2");
+			hXYT3D->Draw("lego2");
+
+			c->Modified();
+			c->Update();
+			//c_intrnl->SaveAs(Form("./png/%i.png",i));
+			gSystem->ProcessEvents();
+			//gSystem->Sleep(100);
+			//if( gSystem->ProcessEvents()) break;
+
+		}
+	}
+
+
+
+}
+
+
+
+
+void Emittance(TTree* tree){
 
 	int Nentries = tree->GetEntries();
 
 	for(int i = 0; i<Nentries; i++){
+
 		tree->GetEntry(i);
+
+
+	///////////////// Calculate the emittance /////////////
 
 		XXp = MeshX * MeshXp;
 		hXXp->Fill(XXp);
@@ -67,7 +205,7 @@ void MuYieldAna(){
 	EmissionX->Draw("colz");
 	c5->cd(2);
 	EmissionY->Draw("colz");
-	c5->SaveAs(Pngname);
+	//c5->SaveAs(Pngname);
 
 	TCanvas *c4 = new TCanvas("c4","c4",900,600);
 	c4->Divide(3,4);
@@ -119,16 +257,16 @@ void MuYieldAna(){
 	tree->Draw("MeshVZ");
 	SetXTitleTreeDraw("mm/s");
 	//hMeshVZ->Draw();
-	c4->SaveAs(Pdfname);
+	//c4->SaveAs(Pdfname);
 
 
 	TCanvas *c3 = new TCanvas("c3","c3",1000,1000);
 	c3->Divide(3,4);
 	//c3->cd(1);hDriftT->Draw();
-	c3->cd(1);tree->Draw("DriftT_ab","decayT>=(DriftT_ab-TBeam)");//hDriftT_ab->Draw();
-	c3->cd(2);tree->Draw("DriftX","decayT>=(DriftT_ab-TBeam)");//hDriftX->Draw();
-	c3->cd(3);tree->Draw("DriftY","decayT>=(DriftT_ab-TBeam)");//hDriftY->Draw();
-	c3->cd(4);tree->Draw("DriftZ","decayT>=(DriftT_ab-TBeam)");//hDriftZ->Draw();
+	c3->cd(1);tree->Draw("DriftT_ab","DecayT>=(DriftT_ab-TBeam)");//hDriftT_ab->Draw();
+	c3->cd(2);tree->Draw("DriftX","DecayT>=(DriftT_ab-TBeam)");//hDriftX->Draw();
+	c3->cd(3);tree->Draw("DriftY","DecayT>=(DriftT_ab-TBeam)");//hDriftY->Draw();
+	c3->cd(4);tree->Draw("DriftZ","DecayT>=(DriftT_ab-TBeam)");//hDriftZ->Draw();
 	c3->cd(5);//tree->Draw("CorrMeshTE");
 	CorrMeshTE->Draw("colz");
 
@@ -144,50 +282,16 @@ void MuYieldAna(){
 	c3->cd(11);hY2->Draw();
 	c3->cd(12);hBetaGamma->Draw();
 
-	c3->SaveAs("./Root/Geo1_PulseE.pdf");
+	//c3->SaveAs("./Root/Geo1_PulseE.pdf");
 
 }
 
 
 
-void FillTZ()
-{
-
-	double delT = DecayT - t0;
-
-	t = t0;
-
-	x = X_sf;
-	y = Y_sf;
-	z = Z_sf;
-	vx = VX_sf;
-	vy = VY_sf;
-	vz = VZ_sf;
-
-	//double flag = 0;
-
-	for(int i =0; i < nbinT; i++){
-
-		if(Tstep*i >= delT)break;
-
-		x = x + vx * (Tstep);
-		y = y + vy * (Tstep);
-		z = z + vz * (Tstep);
-		t = t + Tstep;
-
-		hZT2D->Fill(TBeam + t, z);
-
-		if(fabs(y)<=20 && Tstep*i <= delT)
-		{
-			if( (MCtype == 1 || MCtype == 3) && flag_xfree == 0 && fabs(x)>20)continue;
-			if( z >= 1 && z <= 6) {hTlaserR->Fill(TBeam + t);}
-			if( z >= (-6-Thick) && z <= (-1-Thick)) {hTlaserL->Fill(TBeam + t);}
-		}
-	}
-}
 
 
 
+/*
 void ShootLaser(double distance, double x_, double y_, double z_, double vx_, double vy_ ,double vz_)
 {
 	x = x_;
@@ -241,7 +345,7 @@ void ShootLaser(double distance, double x_, double y_, double z_, double vx_, do
 	DriftY = MeshY + MeshVY * t;
 
 }
-
+*/
 /*
 void DrawHistPlot(){
 

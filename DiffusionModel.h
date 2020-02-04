@@ -59,7 +59,8 @@ void DiffusionModel(
 		y = y + vy * (L/vel0);
 		z = z + vz * (L/vel0);
 
-		if( (z <= 0 && z >= -Thick) || (z <= -9 && z >= -11) || (z <= 9 && z >= 7) )//(z <= 14.12 && z >= 7) )//(z <= -9 && z >= -11) || (z <= 9 && z >= 7) )
+		//if( (z <= 0 && z >= -Thick) || (z <= -9 && z >= -11) || (z <= 9 && z >= 7) )//(z <= 14.12 && z >= 7) )//(z <= -9 && z >= -11) || (z <= 9 && z >= 7) )
+		if( GeometryFunction(x, y, z) && t < DecayT)//(z <= 14.12 && z >= 7) )//(z <= -9 && z >= -11) || (z <= 9 && z >= 7) )
 		{
 
 			tempX = TMath::ACos(-1 + 2 * ((double)rand()/(RAND_MAX)) );
@@ -72,6 +73,7 @@ void DiffusionModel(
 			vy = vel0 * sin(theta) * sin(phi);
 			vz = vel0 * cos(theta);
 		}
+
 		N++;
 
 		DiffusionVertexX->push_back(x);

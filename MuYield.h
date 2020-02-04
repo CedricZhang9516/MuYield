@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include <array>
 #include <time.h>
+#include <vector>
 
 bool InsideLaserRegion(double, double, double);
 bool InsideAerogel(double x, double y, double z);
@@ -105,10 +106,10 @@ double t0;// = -1;// is not the initial t, but the total time spent inside aerog
 double DiffusionT;
 
 
-std::vector<double>* DiffusionVertexX;// = new std::vector<double>;//(5,0);
-std::vector<double>* DiffusionVertexY;// = new std::vector<double>;//(5,0);
-std::vector<double>* DiffusionVertexZ;// = new std::vector<double>;//(5,0);
-std::vector<double>* DiffusionVertexT;// = new std::vector<double>;//(5,0);
+std::vector<Double_t>* DiffusionVertexX;// = new std::vector<double>;//(5,0);
+std::vector<Double_t>* DiffusionVertexY;// = new std::vector<double>;//(5,0);
+std::vector<Double_t>* DiffusionVertexZ;// = new std::vector<double>;//(5,0);
+std::vector<Double_t>* DiffusionVertexT;// = new std::vector<double>;//(5,0);
 
 
 double DecayX;// = -1;
@@ -275,10 +276,18 @@ void SetTreeBranch(TTree * tree){
 	tree->Branch("phi_sf",&phi_sf,"phi_sf/D");
 
 	//double DiffusionT;
-	tree->Branch("DiffusionVertexX", DiffusionVertexX, "DiffusionVertexX/D");// std::vector<double> DiffusionVertexX;
-	tree->Branch("DiffusionVertexY", DiffusionVertexY, "DiffusionVertexY/D");// std::vector<double> DiffusionVertexY;
-	tree->Branch("DiffusionVertexZ", DiffusionVertexZ, "DiffusionVertexZ/D");// std::vector<double> DiffusionVertexZ;
-	tree->Branch("DiffusionVertexT", DiffusionVertexT, "DiffusionVertexT/D");// std::vector<double> DiffusionVertexT;
+	//tree->Branch("DiffusionVertexX", DiffusionVertexX,  "DiffusionVertexX/D");// std::vector<double> DiffusionVertexX;
+	//tree->Branch("DiffusionVertexY", DiffusionVertexY, "DiffusionVertexY/D");// std::vector<double> DiffusionVertexY;
+	//tree->Branch("DiffusionVertexZ", DiffusionVertexZ, "DiffusionVertexZ/D");// std::vector<double> DiffusionVertexZ;
+	//tree->Branch("DiffusionVertexT", DiffusionVertexT, "DiffusionVertexT/D");// std::vector<double> DiffusionVertexT;
+
+
+	tree->Branch("DiffusionVertexX", "vector<Double_t>", &DiffusionVertexX);//  "DiffusionVertexX/D");// std::vector<double> DiffusionVertexX;
+	tree->Branch("DiffusionVertexY", "vector<Double_t>", &DiffusionVertexY);// "DiffusionVertexY/D");// std::vector<double> DiffusionVertexY;
+	tree->Branch("DiffusionVertexZ", "vector<Double_t>", &DiffusionVertexZ);// "DiffusionVertexZ/D");// std::vector<double> DiffusionVertexZ;
+	tree->Branch("DiffusionVertexT", "vector<Double_t>", &DiffusionVertexT);// "DiffusionVertexT/D");// std::vector<double> DiffusionVertexT;
+
+
 
 	tree->Branch("DecayX",&DecayX,"DecayX/D");
 	tree->Branch("DecayY",&DecayY,"DecayY/D");
