@@ -4,7 +4,7 @@
 void MuYieldAna(){
 
 	//const char * filename ="./Root/PulseE0824_tree_Type1_D87000_T322_Nrepeat280000_Xfree1_Thick2.00_NewGeo1_.root";
-	TString filename ="../Root/Dev_200202_surface_tree_Type2_D87000_T322_Nrepeat20000_Xfree1_Thick7.12_NewGeo0";
+	TString filename ="../Root/TRIUMF_Reproduce_200204_tree_Type2_D87000_T322_Nrepeat20000_Xfree1_Thick7.12_NewGeo0";
 
 	SetPalette();
 	//SetOptStat();

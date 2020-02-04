@@ -3,7 +3,7 @@
 #include "DiffusionModel.h"
 
 void MuYield(
-	TString name_ = "Dev_200202_surface",
+	TString name_ = "TRIUMF_Reproduce_200204",
 	int MCtype_ = 2,
 	int Nrepeat_ = 2e4,//8.4e5,//2e6,//8.4e5,//1e6,//2.8e5,//1e6,//2.8e4,
 	int flag_xfree_ = 1,
@@ -52,7 +52,7 @@ void MuYield(
 
 	////////////////////////////////////////
 
-	cout<<Form("Main Monte Carlo Simulation:\n%s_MCType_%0.0d_D_%0.0f_T_%0.0f_Nrepeat_%0.0d_flag_xfree_%d_thick_%0.2f_NewGeo_%d",
+	cout<<Form("Main Monte Carlo Simulation:\n%s_tree_Type%0.0d_D%0.0f_T%0.0f_Nrepeat%0.0d_Xfree%d_Thick%0.2f_NewGeo%d",
 		name.Data(),MCtype,D,T,Nrepeat,flag_xfree,Thick,flag_newGeo)<<endl;
 
 	Nemission = 0;
@@ -164,7 +164,7 @@ void MuYield(
 		//if(flag_newGeo == 0 && Z_sf<0){continue;}
 
 
-		if(flag_newGeo == 0 && Z_sf>-Thick){
+		if(flag_newGeo == 0 && Z_sf>=-0){
 			Nemission++;
 			tree->Fill();
 			continue;
