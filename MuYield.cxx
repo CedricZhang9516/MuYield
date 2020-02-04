@@ -3,7 +3,7 @@
 #include "DiffusionModel.h"
 
 void MuYield(
-	TString name_ = "Dev_200202",
+	TString name_ = "Dev_200202_surface",
 	int MCtype_ = 2,
 	int Nrepeat_ = 2e4,//8.4e5,//2e6,//8.4e5,//1e6,//2.8e5,//1e6,//2.8e4,
 	int flag_xfree_ = 1,
@@ -164,13 +164,17 @@ void MuYield(
 		//if(flag_newGeo == 0 && Z_sf<0){continue;}
 
 
-		if(flag_newGeo == 0 && Z_sf>-Thick){tree->Fill();}
+		if(flag_newGeo == 0 && Z_sf>-Thick){
+			Nemission++;
+			tree->Fill();
+			continue;
+		}
 		else continue;
 
 		/////////////////// Here the Mu successfully get emitted out of the aerogel
 
-		Nemission++;
-		tree->Fill();
+
+		//tree->Fill();
 
 	}
 
