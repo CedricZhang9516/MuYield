@@ -281,11 +281,13 @@ void InitializingXYZ0(int index_m){
 		Y0 = y_dec;
 		Z0 = z_dec;
 
-		if(Y0 < 20 && Y0 > 12) Z0 = Z0 + Thick;
-		//if(Y0 < 12 && Y0 > 4)
-		if(Y0 < 4 && Y0 > -4) Z0 = Z0 + Thick;
-		//if(Y0 < -4 && Y0 > -12)
-		if(Y0 < -12 && Y0 > -20) Z0 = Z0 + Thick;
+		if(Y0 < 32 && Y0 > 24)Z0 = Z0 + Thick;
+		//if(Y0 < 20 && Y0 > 12) Z0 = Z0 + Thick;
+		if(Y0 < 12 && Y0 > 4)Z0 = Z0 + Thick;
+		//if(Y0 < 4 && Y0 > -4) Z0 = Z0 + Thick;
+		if(Y0 < -4 && Y0 > -12)Z0 = Z0 + Thick;
+		//if(Y0 < -12 && Y0 > -20) Z0 = Z0 + Thick;
+		if(Y0 < -24 && Y0 > -32)Z0 = Z0 + Thick;
 	}
 
 
@@ -304,7 +306,7 @@ bool InsideAerogel(double x, double y, double z){
 
 		if(x>25 || x<-25)return false;
 
-		if( z>0 && z<Thick){
+		if( z<0 && z>-Thick){
 			if(y < 20 && y > 12) return true;
 			if(y < 4 && y > -4) return true;
 			if(y < -12 && y > -20) return true;
@@ -313,6 +315,8 @@ bool InsideAerogel(double x, double y, double z){
 		if( z<0 && z>-Thick){
 			if(y < 12 && y > 4)return true;
 			if(y < -4 && y > -12)return true;
+			if(y < 32 && y > 24)return true;
+			if(y < -24 && y > -32)return true;
 		}
 
 		return false;

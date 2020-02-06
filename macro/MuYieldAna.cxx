@@ -8,10 +8,13 @@ void MuYieldAna(){
 
 	//TString filename = "../Root/TDR_Reproduce_200204_tree_Type3_D87000_T322_Nrepeat200000_Xfree1_Thick7.12_NewGeo0";
 	//TString filename = "../Root/TRIUMF_Reproduce_200204_tree_Type2_D87000_T322_Nrepeat200000_Xfree1_Thick7.12_NewGeo0";
-	TString filename = "../Root/NewGeo_200206_HLINE_tree_Type5_D87000_T322_Nrepeat3231566_Xfree1_Thick7.12_NewGeo1";
+	//TString filename = "../Root/NewGeo_200206_HLINE_tree_Type5_D87000_T322_Nrepeat3231566_Xfree1_Thick7.12_NewGeo1";
+	TString filename = "../Root/HLINENEWGEO_200206_tree_Type5_D87000_T322_Nrepeat3231566_Xfree1_Thick7.12_NewGeo1";
+
+	gROOT->ProcessLine(Form(".!mkdir %s",filename.Data()));
 
 	SetPalette();
-	//SetOptStat();
+	SetOptStat();
 
 	TCanvas * c = NewTCanvas("c","c",1000,1000,1,1);
 	c->cd(1);
@@ -48,6 +51,8 @@ void MuYieldAna(){
 
 	MuYieldInVacuum(tree, c);
 	hZY2D->Draw("colz");
+
+	SaveTCanvas(c,(filename+"/"+hZY2D->GetName()).Data());
 
 	// Draw other 2D and 3D plots
 /*
@@ -134,7 +139,7 @@ void MuYieldInVacuum(TTree * tree, TCanvas * c = new TCanvas("c_intrnl","c_intrn
 			t = t + Tstep;
 
 			hZT2D->Fill(TBeam + t, z);
-			//hZY2D->Fill(z, y);
+			hZY2D->Fill(z, y);
 			hZX2D->Fill(z, x);
 			hXY2D->Fill(x, y);
 			hXYT3D->Fill(t, x, y);
