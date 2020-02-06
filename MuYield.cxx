@@ -2,23 +2,32 @@
 #include "MyMuonDecay.h"
 #include "DiffusionModel.h"
 
-void MuYield(
-	TString name_ = "TRIUMF_Reproduce_200204",
-	int MCtype_ = 2,
-	int Nrepeat_ = 2e4,//8.4e5,//2e6,//8.4e5,//1e6,//2.8e5,//1e6,//2.8e4,
-	int flag_xfree_ = 1,
-	int flag_newGeo_ = 0,
-	double Thick_ = 7.12)
-{
-	cout<<"Initialize..."<<endl;
+//void MuYield(
+int main(int argc, char **argv){
 
+	if(argc < 2){cout<<"Error, input the run name as first arg"<<endl; return 1;}
+
+	name = argv[1];//"TRIUMF_Reproduce_200204";
+
+	if(argc < 3){
+		MCtype = 4;
+		Nrepeat = 2e4;//8.4e5,//2e6,//8.4e5,//1e6,//2.8e5,//1e6,//2.8e4,
+	}
+	if(argc< 5){
+		flag_xfree = 1;
+		flag_newGeo = 0;
+		Thick = 7.12;
+	}
+//{
+	cout<<"Initialize..."<<endl;
+/*
 	name = name_;
 	MCtype = MCtype_;
 	flag_xfree = flag_xfree_;
 	flag_newGeo = flag_newGeo_;
 	Nrepeat = Nrepeat_;
 	Thick = Thick_;
-
+*/
 	N_DiffusionTrack = -1;
 	flag_DiffusionTrack = 0;
 
@@ -29,28 +38,47 @@ void MuYield(
 	// 1: My own MC
 	// 2: TRIUMF
 	// 3: H-line file input
+	// 4: S-line (S2) file input
+
 	//flag = 0: no x limit, otherwise = 1;
-
-
-	treefile = new TFile(Form("./Root/%s_tree_Type%0.0d_D%0.0f_T%0.0f_Nrepeat%0.0d_Xfree%d_Thick%0.2f_NewGeo%d.root",
-		name.Data(),MCtype,D,T,Nrepeat,flag_xfree,Thick,flag_newGeo), "recreate");
-	tree = new TTree("tree","MuYield event");
-	SetTreeBranch(tree);
 
 
 	//////Read from hline file to generate actual simulation
 	// H-line
-	double x_dec, y_dec, z_dec, Nentries;
-	TFile *hlinefile = new TFile("./Root/hline_ATH475_BEAMG-2EDM_output_1e6_gendat_afterfit_SEPON_sum.root");
-	TTree * Thlinefile = (TTree*) hlinefile->Get("101");
-	Thlinefile->SetBranchAddress("x_dec", &x_dec);
-	Thlinefile->SetBranchAddress("y_dec", &y_dec);
-	Thlinefile->SetBranchAddress("z_dec", &z_dec);
-	Nentries = Thlinefile->GetEntries();
+	double x_dec, y_dec, z_dec, t_dec, Nentries;
 
-	if(MCtype == 3) Nrepeat = Nentries;
+	TFile * InputFile;
+	TTree * InputTree;
+
+	if(MCtype == 3){
+		InputFile = new TFile("./Root/hline_ATH475_BEAMG-2EDM_output_1e6_gendat_afterfit_SEPON_sum.root");
+		InputTree = (TTree*) InputFile->Get("101");
+		InputTree->SetBranchAddress("x_dec", &x_dec);
+		InputTree->SetBranchAddress("y_dec", &y_dec);
+		InputTree->SetBranchAddress("z_dec", &z_dec);
+		Nentries = InputTree->GetEntries();
+	}
+
+	if(MCtype == 4){
+		InputFile = new TFile("/Users/zhangce/WorkArea/Archive/OldGitResBackup/MuYieldLaser/Root/SimBeamStop_191202_tot.root");
+		InputTree = (TTree*) InputFile->Get("position");
+		InputTree->SetBranchAddress("x", &x_dec);
+		InputTree->SetBranchAddress("y", &y_dec);
+		InputTree->SetBranchAddress("z", &z_dec);
+		InputTree->SetBranchAddress("glbt_gen", &t_dec);
+		Nentries = InputTree->GetEntries();
+
+	}
+
+
+	Nrepeat = Nentries;
+
 
 	////////////////////////////////////////
+	treefile = new TFile(Form("./Root/%s_tree_Type%0.0d_D%0.0f_T%0.0f_Nrepeat%0.0d_Xfree%d_Thick%0.2f_NewGeo%d.root",
+		name.Data(),MCtype,D,T,Nrepeat,flag_xfree,Thick,flag_newGeo), "recreate");
+	tree = new TTree("tree","MuYield event");
+	SetTreeBranch(tree);
 
 	cout<<Form("Main Monte Carlo Simulation:\n%s_tree_Type%0.0d_D%0.0f_T%0.0f_Nrepeat%0.0d_Xfree%d_Thick%0.2f_NewGeo%d",
 		name.Data(),MCtype,D,T,Nrepeat,flag_xfree,Thick,flag_newGeo)<<endl;
@@ -58,7 +86,6 @@ void MuYield(
 	Nemission = 0;
 	NLaserR = 0;
 	NLaserL = 0;
-
 
 	//histfile->cd();
 
@@ -70,18 +97,28 @@ void MuYield(
 
 		// Initializing the XYZ0
 		if(MCtype == 3){
-			Thlinefile->GetEntry(index_m);
+			InputTree->GetEntry(index_m);
 			if (z_dec > 0 || z_dec < -Thick) continue;
 			X0 = x_dec;
 			Y0 = y_dec;
 			Z0 = z_dec;
 		}
-		else InitializingXYZ0(  );
-		if( fabs(Y0)>20)continue;
+		else if(MCtype == 4){
+			InputTree->GetEntry(index_m);
+			if (z_dec > 0 || z_dec < -Thick) continue;
+			if (x_dec*x_dec+y_dec*y_dec>39*39)continue;
+			X0 = x_dec;
+			Y0 = y_dec;
+			Z0 = z_dec;
+		}
+		else InitializingXYZ0();
+
+		if( flag_newGeo == 0 && fabs(Y0)>20)continue;
 
 		/// Generate the time structure
 
 		if(MCtype == 2) TBeam = 0;
+		else if(MCtype == 4) TBeam = t_dec;
 		else{
 			TBeam = GenerateUniform(0.0e-6,0.2e-6);
 			if( ((double) rand() / (RAND_MAX))<=0.5 )TBeam = TBeam + 0.6e-6;
@@ -240,17 +277,7 @@ bool InsideAerogel(double x, double y, double z){
 
 }
 
-bool InsideLaserRegion(double x, double y, double z){ // t = t0 + tbeam
-	if( (DecayT + TBeam) < tLaser) return false;
-	if( (t0 + TBeam) > tLaser)return false;
 
-	if( flag_xfree == 0 && (fabs(x)>20 || fabs(y)>20) )return false;
-	if( flag_xfree == 1 && fabs(y)>20 )return false;
-
-	if( z <= 6 && z>= 1)return true;
-	if( z >= (-6-Thick) && z <= (-1-Thick) && flag_newGeo == 1)return true;
-	return false;
-}
 
 
 
