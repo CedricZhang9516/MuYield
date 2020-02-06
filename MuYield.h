@@ -6,7 +6,7 @@
 bool InsideLaserRegion(double, double, double);
 bool InsideAerogel(double x, double y, double z);
 
-void InitializingXYZ0();
+void InitializingXYZ0(int index);
 
 TString name;
 
@@ -15,6 +15,10 @@ int flag_xfree;// = 0;
 int flag_newGeo;// = 0;
 int Nrepeat;// = 1e5;
 double Thick;// = 7.12;
+
+TFile * InputFile;
+TTree * InputTree;
+double x_dec, y_dec, z_dec, t_dec, Nentries;
 
 double D = 87000;// diffussion coefficient mm^2/s
 double T = 322;

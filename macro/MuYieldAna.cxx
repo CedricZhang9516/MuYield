@@ -4,7 +4,11 @@
 void MuYieldAna(){
 
 	//const char * filename ="./Root/PulseE0824_tree_Type1_D87000_T322_Nrepeat280000_Xfree1_Thick2.00_NewGeo1_.root";
-	TString filename ="../Root/TRIUMF_Reproduce_200204_tree_Type2_D87000_T322_Nrepeat20000_Xfree1_Thick7.12_NewGeo0";
+	//TString filename ="../Root/TRIUMF_Reproduce_200204_tree_Type2_D87000_T322_Nrepeat20000_Xfree1_Thick7.12_NewGeo0";
+
+	//TString filename = "../Root/TDR_Reproduce_200204_tree_Type3_D87000_T322_Nrepeat200000_Xfree1_Thick7.12_NewGeo0";
+	//TString filename = "../Root/TRIUMF_Reproduce_200204_tree_Type2_D87000_T322_Nrepeat200000_Xfree1_Thick7.12_NewGeo0";
+	TString filename = "../Root/NewGeo_200206_HLINE_tree_Type5_D87000_T322_Nrepeat3231566_Xfree1_Thick7.12_NewGeo1";
 
 	SetPalette();
 	//SetOptStat();
@@ -17,7 +21,7 @@ void MuYieldAna(){
 
 	int Nentries = tree->GetEntries();
 
-	setTree(tree);
+	InitTree(tree);
 
 
 
@@ -43,6 +47,9 @@ void MuYieldAna(){
 	//////// Draw Mu yield dynamics in vacuum
 
 	MuYieldInVacuum(tree, c);
+	hZY2D->Draw("colz");
+
+	// Draw other 2D and 3D plots
 /*
 	c->cd(1);
  	hZT2D->Draw("colz");
@@ -52,14 +59,38 @@ void MuYieldAna(){
  	hZX2D->Draw("colz");
  	c->cd(4);
  	hXY2D->Draw("colz");
+ 	c->cd(5);
+ 	hZXT3D->Draw("LEGO");
+ 	c->cd(6);
+ 	hZXY3D->Draw("lego2");
 */
- 	//c->cd(5);
- 	//hZXT3D->Draw("LEGO");
- 	//c->cd(6);
- 	//hZXY3D->Draw("lego2");
+
+ 	//////////////// TRIUMF region count
+
+ 	//TRIUMFVacuumRegion(tree);
+
+	//////////// PlayGround
+
+	//tree->Draw("Z0");
 
 
 }
+
+
+void TRIUMFVacuumRegion(TTree * tree, TCanvas * c = NewTCanvas("c_intrnl","c_intrnl",1000,1000,2,2) )
+{
+	c->cd(1);
+	tree->Draw("DecayT","DecayZ<40 && DecayZ>-8");
+	c->cd(2);
+	tree->Draw("DecayT","DecayZ<20 && DecayZ>10");
+	c->cd(3);
+	tree->Draw("DecayT","DecayZ<30 && DecayZ>20");
+	c->cd(4);
+	tree->Draw("DecayT","DecayZ<40 && DecayZ>30");
+
+
+}
+
 
 void MuYieldInVacuum(TTree * tree, TCanvas * c = new TCanvas("c_intrnl","c_intrnl",1000,1000))
 //void MuYieldInVacuum(TTree * tree)
@@ -80,13 +111,16 @@ void MuYieldInVacuum(TTree * tree, TCanvas * c = new TCanvas("c_intrnl","c_intrn
 		double delT = DecayT - DiffusionT;
 		//double delT = DecayT - t0;
 
-		t = DiffusionT;
+		t = DiffusionT + TBeam;
+
 		x = X_sf;
 		y = Y_sf;
 		z = Z_sf;
 		vx = VX_sf;
 		vy = VY_sf;
 		vz = VZ_sf;
+
+		hZY2D->Fill(Z_sf, Y_sf);
 
 		//double flag = 0;
 
@@ -100,7 +134,7 @@ void MuYieldInVacuum(TTree * tree, TCanvas * c = new TCanvas("c_intrnl","c_intrn
 			t = t + Tstep;
 
 			hZT2D->Fill(TBeam + t, z);
-			hZY2D->Fill(z, y);
+			//hZY2D->Fill(z, y);
 			hZX2D->Fill(z, x);
 			hXY2D->Fill(x, y);
 			hXYT3D->Fill(t, x, y);
@@ -117,16 +151,17 @@ void MuYieldInVacuum(TTree * tree, TCanvas * c = new TCanvas("c_intrnl","c_intrn
 */
 
 			//hXY2D->Draw("colz");
+			//hZY2D->Draw("colz");
 			//hZXY3D->Draw("lego2");
-			hXYT3D->Draw("lego2");
-
+			//hXYT3D->Draw("lego2");
+/*
 			c->Modified();
 			c->Update();
 			//c_intrnl->SaveAs(Form("./png/%i.png",i));
 			gSystem->ProcessEvents();
 			//gSystem->Sleep(100);
 			//if( gSystem->ProcessEvents()) break;
-
+*/
 		}
 	}
 
@@ -134,8 +169,19 @@ void MuYieldInVacuum(TTree * tree, TCanvas * c = new TCanvas("c_intrnl","c_intrn
 
 }
 
+/*
+bool InsideLaserRegion(double x, double y, double z){ // t = t0 + tbeam
+	if( (DecayT + TBeam) < tLaser) return false;
+	if( (t0 + TBeam) > tLaser)return false;
 
+	if( flag_xfree == 0 && (fabs(x)>20 || fabs(y)>20) )return false;
+	if( flag_xfree == 1 && fabs(y)>20 )return false;
 
+	if( z <= 6 && z>= 1)return true;
+	if( z >= (-6-Thick) && z <= (-1-Thick) && flag_newGeo == 1)return true;
+	return false;
+}
+*/
 
 void Emittance(TTree* tree){
 

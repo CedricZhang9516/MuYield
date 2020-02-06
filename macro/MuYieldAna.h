@@ -86,7 +86,7 @@ int nbinT = 1e2;
 double Tstep = 1e-7;
 
 
-void setTree(TTree* tree){
+void InitTree(TTree* tree){
 
 tree->SetBranchAddress("TBeam",&TBeam);//,"TBeam/D");
 tree->SetBranchAddress("DecayT",&DecayT);//,"DecayT/D");
@@ -202,7 +202,7 @@ TH1D* hBetaGamma = new TH1D("hBetaGamma","hBetaGamma",100,0.0012,0.0019);
 
 TH2D *hZT2D = new TH2D("Z-T-2D","Z-T-2D; t(us);Z (mm)",nbinT,0e-9,nbinT*Tstep,1000,1,10);
 
-TH2D *hZY2D = new TH2D("Z-Y-2D","Z-Y-2D; Z(mm);Y (mm)",1000,-40,40,1000,-40,40);
+TH2D *hZY2D = new TH2D("Z-Y-2D","Z-Y-2D; Z(mm);Y (mm)",100,-10,10,100,-40,40);
 TH2D *hZX2D = new TH2D("Z-X-2D","Z-X-2D; Z(mm);X (mm)",1000,-40,40,1000,-40,40);
 TH2D *hXY2D = new TH2D("X-Y-2D","X-Y-2D; X(mm);Y (mm)",1000,-40,40,1000,-40,40);
 
@@ -222,4 +222,5 @@ TH3D *hZXY3D = new TH3D("ZXY-3D","ZXY-3D;   z(mm); x (mm); y (mm)",100,-1,10,100
 
 void Emittance(TTree* tree);
 void MuYieldInVacuum(TTree * tree, TCanvas *);
+void TRIUMFVacuumRegion(TTree * tree, TCanvas * c = NewTCanvas("c_intrnl","c_intrnl",1000,1000,2,2));
 
