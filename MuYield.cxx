@@ -9,30 +9,28 @@ int main(int argc, char **argv){
 
 	name = argv[1];//"TRIUMF_Reproduce_200204";
 
-	if(argc < 3){
-		MCtype = 4;
-		Nrepeat = 2e4;//8.4e5,//2e6,//8.4e5,//1e6,//2.8e5,//1e6,//2.8e4,
-	}
-	if(argc< 5){
+	if(argc > 2) MCtype = argv[2];// 4;
+	if(argc > 3) Nrepeat = argv[3];// 2e4;//8.4e5,//2e6,//8.4e5,//1e6,//2.8e5,//1e6,//2.8e4,
+	if(argc > 4) flag_xfree = argv[4];//1;
+	if(argc > 5) flag_newGeo = argv[5];// 0;
+	else {
+		MCtype = 3;
+		Nrepeat = 1e5;
 		flag_xfree = 1;
 		flag_newGeo = 0;
-		Thick = 7.12;
 	}
-//{
-	cout<<"Initialize..."<<endl;
-/*
-	name = name_;
-	MCtype = MCtype_;
-	flag_xfree = flag_xfree_;
-	flag_newGeo = flag_newGeo_;
-	Nrepeat = Nrepeat_;
-	Thick = Thick_;
-*/
+
+	Thick = 7.12;
+
+	//if(flag_newGeo == 1) Thick = 2;
+	if(flag_newGeo == 0) Thick = 7.12;
+
 	N_DiffusionTrack = -1;
 	flag_DiffusionTrack = 0;
 
-	if(flag_newGeo == 1) Thick = 2;
-	if(flag_newGeo == 0) Thick = 7.12;
+//{
+	cout<<"Initialize..."<<endl;
+
 
 	//MCtype:
 	// 1: My own MC
@@ -44,7 +42,8 @@ int main(int argc, char **argv){
 
 
 	//////Read from hline file to generate actual simulation
-	// H-line
+
+	// H-line and S-line
 	double x_dec, y_dec, z_dec, t_dec, Nentries;
 
 	TFile * InputFile;
