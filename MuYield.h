@@ -1,7 +1,7 @@
 #ifndef _MuYield
 #define _MuYield
 #include "/Users/zhangce/WorkArea/CZhang/CZhangNew.h"
-
+//#include "../CZhang/CZhangNew.h"
 
 //bool InsideLaserRegion(double, double, double);
 //bool InsideAerogel(double x, double y, double z);

@@ -1,6 +1,7 @@
 #include "macro_MuYieldAna.h"
 #include "macro_InsideLaserRegion.h"
 #include "/Users/zhangce/WorkArea/CZhang/CZhangNew.h"
+//#include "../CZhang/CZhangNew.h"
 
 
 #define YieldTime
@@ -24,9 +25,9 @@ void macro_MuYieldAna(){
 	//XY20, TDR, G.Marshal's graph
 	//TString filename = "../Root/TDR_200206_XY20limit_tree_Type3_D87000_T322_Nrepeat3231566_Xfree1_Thick7.12_NewGeo1";
 	//For the comparison, TDR
-	//TString filename = "../Root/TDR_200206_X50Y28limit_tree_Type3_D87000_T322_Nrepeat3231566_Xfree0_Thick7.12_NewGeo0";
+	TString filename = "../Root/TDR_200206_X50Y28limit_tree_Type3_D87000_T322_Nrepeat3231566_Xfree0_Thick7.12_NewGeo0";
 	//For the comparison, TDR 300 mm
-	TString filename = "../Root/TDR_200207_XY300_Reproduce_tree_Type3_D87000_T322_Nrepeat3231566_H_line1_Thick7.12_NewGeo0";
+	//TString filename = "../Root/TDR_200207_XY300_Reproduce_tree_Type3_D87000_T322_Nrepeat3231566_H_line1_Thick7.12_NewGeo0";
 
 
 
@@ -84,7 +85,7 @@ void macro_MuYieldAna(){
 	c1->cd(3);
 	hXY2D_sf->Draw("colz");
 
-	SaveTCanvas(c1,(filename+"/"+hZY2D_sf->GetName()).Data());
+	SaveTCanvas(c1,(filename+"/"+hZY2D_sf->GetName()+"noXlimit_compareTDR").Data());
 
 
 #ifdef YieldTime
@@ -99,7 +100,7 @@ void macro_MuYieldAna(){
 	c2->cd(4);
 	hT->Draw();
 
-	SaveTCanvas(c2,(filename+"/"+hZY2D->GetName()).Data());
+	SaveTCanvas(c2,(filename+"/"+hZY2D->GetName()+"noXlimit_compareTDR").Data());
 
 #endif
 
@@ -198,7 +199,8 @@ void MuYieldInVacuum(TTree * tree, TCanvas * c = new TCanvas("c_intrnl","c_intrn
 			hXYT3D->Fill(t, x, y);
 			hZXY3D->Fill(z, x, y);
 
-			if(InsideLaserRegionTDR(x,y,z))hT->Fill(t);
+			//if(InsideLaserRegionTDR(x,y,z))hT->Fill(t);
+			if(InsideLaserRegionTDRnoXlimit(x,y,z))hT->Fill(t);
 			//if(InsideLaserRegionNewGeo(x,y,z))hT->Fill(t);
 			//if(InsideLaserRegionNewGeo_4mm(x,y,z))hT->Fill(t);
 			//if(InsideLaserRegionNewGeo_yannis(x,y,z))hT->Fill(t);

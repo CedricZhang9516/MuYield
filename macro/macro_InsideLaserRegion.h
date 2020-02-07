@@ -7,7 +7,7 @@ bool InsideLaserRegionTDR(double x, double y, double z){ // t = t0 + tbeam
 	//if( z >= (-6-Thick) && z <= (-1-Thick) && flag_newGeo == 1)return true;
 	return false;
 }
-bool InsideLaserRegion(double x, double y, double z){ // t = t0 + tbeam
+bool InsideLaserRegionTDRnoXlimit(double x, double y, double z){ // t = t0 + tbeam
 
 	//if( (fabs(x)>20 || fabs(y)>20) )return false;
 
