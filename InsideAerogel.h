@@ -128,10 +128,10 @@ bool InsideAerogel(double x, double y, double z){
 		//if(x>25 || x<-25)return false;
 
 		if( z<0 && z>-Thick){
-			//if(y < 20 && y > -20) return true;
-			if(y < 150 && y > -150) return true;
-			//if(x < 20 && x > -20) return true;
-			if(x < 150 && x > -150) return true;
+			if(y < 28 && y > -28) return true;
+			//if(y < 150 && y > -150) return true;
+			if(x < 50 && x > -50) return true;
+			//if(x < 150 && x > -150) return true;
 		}
 
 		return false;
