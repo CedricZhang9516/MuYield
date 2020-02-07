@@ -25,7 +25,8 @@ void macro_MuYieldAna(){
 	//XY20, TDR, G.Marshal's graph
 	//TString filename = "../Root/TDR_200206_XY20limit_tree_Type3_D87000_T322_Nrepeat3231566_Xfree1_Thick7.12_NewGeo1";
 	//For the comparison, TDR
-	TString filename = "../Root/TDR_200206_X50Y28limit_tree_Type3_D87000_T322_Nrepeat3231566_Xfree0_Thick7.12_NewGeo0";
+	//TString filename = "../Root/TDR_200206_X50Y28limit_tree_Type3_D87000_T322_Nrepeat3231566_Xfree0_Thick7.12_NewGeo0";
+	TString filename = "../Root/TDR_200207_X50Y28limit_tree_Type3_D87000_T322_Nrepeat3231566_H_line1_Thick7.12_NewGeo0";
 	//For the comparison, TDR 300 mm
 	//TString filename = "../Root/TDR_200207_XY300_Reproduce_tree_Type3_D87000_T322_Nrepeat3231566_H_line1_Thick7.12_NewGeo0";
 
