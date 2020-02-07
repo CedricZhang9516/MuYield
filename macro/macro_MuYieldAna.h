@@ -82,8 +82,8 @@ double XXp,Xp2,X2;
 double YYp,Yp2,Y2;
 double BetaGamma;
 
-int nbinT = 1e2;
-double Tstep = 1e-7;
+int nbinT = 8000;
+double Tstep = 1e-9;
 
 
 void InitTree(TTree* tree){
@@ -199,16 +199,29 @@ TH1D* hY2 = new TH1D("hY2","hY2",100,0,1e4);
 TH1D* hBetaGamma = new TH1D("hBetaGamma","hBetaGamma",100,0.0012,0.0019);
 //TH1D* hBetaGamma = new TH1D("hBetaGamma","hBetaGamma",100,0.0015,0.0045);
 
+TH1D* hT = new TH1D("hT","hT",nbinT,0,nbinT*Tstep);
+
 
 TH2D *hZT2D = new TH2D("Z-T-2D","Z-T-2D; t(us);Z (mm)",nbinT,0e-9,nbinT*Tstep,1000,1,10);
 
-TH2D *hZY2D = new TH2D("Z-Y-2D","Z-Y-2D; Z(mm);Y (mm)",100,-10,10,100,-40,40);
+//TH2D *hZY2D = new TH2D("Z-Y-2D","Z-Y-2D; Z(mm);Y (mm)",100,-10,10,100,-40,40);
+TH2D *hZY2D = new TH2D("Z-Y-2D","Z-Y-2D; Z(mm);Y (mm)",100,-40,40,100,-40,40);
 TH2D *hZX2D = new TH2D("Z-X-2D","Z-X-2D; Z(mm);X (mm)",1000,-40,40,1000,-40,40);
 TH2D *hXY2D = new TH2D("X-Y-2D","X-Y-2D; X(mm);Y (mm)",1000,-40,40,1000,-40,40);
 
-//TH3D *hZXT3D = new TH3D("ZX-T-3D","ZX-T-3D; t(us); z (mm); x (mm)",nbinT,0e-9,nbinT*Tstep,100,-40,40,100,-40,40);
 TH3D *hXYT3D = new TH3D("ZX-T-3D","ZX-T-3D; t(us); x (mm); y (mm)",nbinT,0e-9,nbinT*Tstep,100,-40,40,100,-40,40);
 TH3D *hZXY3D = new TH3D("ZXY-3D","ZXY-3D;   z(mm); x (mm); y (mm)",100,-1,10,100,-40,40,100,-40,40);
+
+
+TH2D *hZT2D_sf = new TH2D("Z-T-2D_sf","Z-T-2D_sf; t(us);Z (mm)",nbinT,0e-9,nbinT*Tstep,1000,1,10);
+
+//TH2D *hZY2D_sf = new TH2D("Z-Y-2D_sf","Z-Y-2D_sf; Z(mm);Y (mm)",100,-10,10,100,-40,40);
+TH2D *hZY2D_sf = new TH2D("Z-Y-2D_sf","Z-Y-2D_sf; Z(mm);Y (mm)",100,-40,40,100,-40,40);
+TH2D *hZX2D_sf = new TH2D("Z-X-2D_sf","Z-X-2D_sf; Z(mm);X (mm)",1000,-40,40,1000,-40,40);
+TH2D *hXY2D_sf = new TH2D("X-Y-2D_sf","X-Y-2D_sf; X(mm);Y (mm)",1000,-40,40,1000,-40,40);
+
+TH3D *hXYT3D_sf = new TH3D("ZX-T-3D_sf","ZX-T-3D_sf; t(us); x (mm); y (mm)",nbinT,0e-9,nbinT*Tstep,100,-40,40,100,-40,40);
+TH3D *hZXY3D_sf = new TH3D("ZXY-3D_sf","ZXY-3D_sf;   z(mm); x (mm); y (mm)",100,-1,10,100,-40,40,100,-40,40);
 
 //if(flag_Newgeo==1){
 //	EmissionX = new TH2D("EmissionZ","EmissionZ;Z;Z'",240,-120,120,320,0.16,0.16); // mm
@@ -223,4 +236,10 @@ TH3D *hZXY3D = new TH3D("ZXY-3D","ZXY-3D;   z(mm); x (mm); y (mm)",100,-1,10,100
 void Emittance(TTree* tree);
 void MuYieldInVacuum(TTree * tree, TCanvas *);
 void TRIUMFVacuumRegion(TTree * tree, TCanvas * c = NewTCanvas("c_intrnl","c_intrnl",1000,1000,2,2));
-
+/*
+bool InsideLaserRegion(double x, double y, double z);//{ // t = t0 + tbeam
+bool InsideLaserRegionNewGeo(double x, double y, double z);//{ // t = t0 + tbeam
+bool InsideLaserRegionNewGeo_4mm(double x, double y, double z);//{ // t = t0 + tbeam
+bool InsideLaserRegionNewGeo_yannis(double x, double y, double z);//{ // t = t0 + tbeam
+bool InsideLaserRegionNewGeo_7_4mm(double x, double y, double z);//{ // t = t0 + tbeam
+*/

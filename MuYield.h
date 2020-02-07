@@ -3,18 +3,20 @@
 #include "/Users/zhangce/WorkArea/CZhang/CZhangNew.h"
 
 
-bool InsideLaserRegion(double, double, double);
-bool InsideAerogel(double x, double y, double z);
+//bool InsideLaserRegion(double, double, double);
+//bool InsideAerogel(double x, double y, double z);
 
-void InitializingXYZ0(int index);
+//void InitializingXYZ0(int index);
 
 TString name;
 
-int MCtype;// = 1;
-int flag_xfree;// = 0;
-int flag_newGeo;// = 0;
-int Nrepeat;// = 1e5;
-double Thick;// = 7.12;
+int MCtype = 1;
+int flag_xfree = 0; ///// NOT USED NOW
+int flag_newGeo = 0; ///// NOT USED NOW
+int Nrepeat = 1e5;
+double Thick = 7.12;
+int H_line = 0;
+int S_line = 0;
 
 TFile * InputFile;
 TTree * InputTree;

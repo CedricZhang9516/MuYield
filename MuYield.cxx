@@ -1,34 +1,27 @@
 #include "MuYield.h"
 #include "MyMuonDecay.h"
 #include "DiffusionModel.h"
+#include "InsideAerogel.h"
 
 //void MuYield(
 int main(int argc, char **argv){
 
 	if(argc < 2){cout<<"Error, input the run name as first arg"<<endl; return 1;}
 
-	name = argv[1];//"TRIUMF_Reproduce_200204";
+	name = argv[1];
 
-	if(argc > 2) MCtype = stoi(argv[2]);// 4;
-	if(argc > 3) Nrepeat = stoi(argv[3]);// 2e4;//8.4e5,//2e6,//8.4e5,//1e6,//2.8e5,//1e6,//2.8e4,
-	if(argc > 4) flag_xfree = stoi(argv[4]);//1;
-	if(argc > 5) flag_newGeo = stoi(argv[5]);// 0;
-	else {
-		MCtype = 5;
+	if(argc == 2 ){
+		MCtype = 3;
 		Nrepeat = 1e5;
-		flag_xfree = 1;
-		flag_newGeo = 1;
 	}
+	if(argc == 3) MCtype = stoi(argv[2]);// 4;
+	if(argc == 4) Nrepeat = stoi(argv[3]);//
 
-	Thick = 7.12;
+	H_line = 1;
+	S_line = 0;
 
-	//if(flag_newGeo == 1) Thick = 2;
-	if(flag_newGeo == 0) Thick = 7.12;
+	if(MCtype>=5)flag_newGeo=1;
 
-	N_DiffusionTrack = -1;
-	flag_DiffusionTrack = 0;
-
-//{
 	cout<<"Initialize..."<<endl;
 
 
@@ -37,16 +30,18 @@ int main(int argc, char **argv){
 	// 2: TRIUMF
 	// 3: H-line file input
 	// 4: S-line (S2) file input
-	// 5: New Geo
+	// 5: New Geo 8 mm
+	// 6: New Geo 4 mm
+	// 7: Yannis
+	// 8: 15-4 mm
 
-	//flag = 0: no x limit, otherwise = 1;
 
 
 	//////Read from hline file to generate actual simulation
 
 	// H-line and S-line
 
-	if(MCtype == 3 || MCtype == 5){
+	if(H_line){//MCtype == 3 || MCtype == 5 || MCtype == 6 || MCtype == 7 || MCtype == 8){
 		InputFile = new TFile("./Root/hline_ATH475_BEAMG-2EDM_output_1e6_gendat_afterfit_SEPON_sum.root");
 		InputTree = (TTree*) InputFile->Get("101");
 		InputTree->SetBranchAddress("x_dec", &x_dec);
@@ -55,7 +50,7 @@ int main(int argc, char **argv){
 		Nentries = InputTree->GetEntries();
 	}
 
-	if(MCtype == 4){
+	if(S_line){//MCtype == 4){
 		InputFile = new TFile("/Users/zhangce/WorkArea/Archive/OldGitResBackup/MuYieldLaser/Root/SimBeamStop_191202_tot.root");
 		InputTree = (TTree*) InputFile->Get("position");
 		InputTree->SetBranchAddress("x", &x_dec);
@@ -71,13 +66,13 @@ int main(int argc, char **argv){
 
 
 	////////////////////////////////////////
-	treefile = new TFile(Form("./Root/%s_tree_Type%0.0d_D%0.0f_T%0.0f_Nrepeat%0.0d_Xfree%d_Thick%0.2f_NewGeo%d.root",
-		name.Data(),MCtype,D,T,Nrepeat,flag_xfree,Thick,flag_newGeo), "recreate");
+	treefile = new TFile(Form("./Root/%s_tree_Type%0.0d_D%0.0f_T%0.0f_Nrepeat%0.0d_H_line%d_Thick%0.2f_NewGeo%d.root",
+		name.Data(),MCtype,D,T,Nrepeat,H_line,Thick,flag_newGeo), "recreate");
 	tree = new TTree("tree","MuYield event");
 	SetTreeBranch(tree);
 
-	cout<<Form("Main Monte Carlo Simulation:\n%s_tree_Type%0.0d_D%0.0f_T%0.0f_Nrepeat%0.0d_Xfree%d_Thick%0.2f_NewGeo%d",
-		name.Data(),MCtype,D,T,Nrepeat,flag_xfree,Thick,flag_newGeo)<<endl;
+	cout<<Form("Main Monte Carlo Simulation:\n%s_tree_Type%0.0d_D%0.0f_T%0.0f_Nrepeat%0.0d_H_line%d_Thick%0.2f_NewGeo%d",
+		name.Data(),MCtype,D,T,Nrepeat,H_line,Thick,flag_newGeo)<<endl;
 
 	Nemission = 0;
 	NLaserR = 0;
@@ -92,22 +87,13 @@ int main(int argc, char **argv){
 
 		InitialTreeVar();
 
+		////////////////////// Initializing the XYZ0 /////////////////////
 
-		////////////////////// Initializing the XYZ0
 		InitializingXYZ0( index_m );
 
-		if(MCtype == 3){
-			if (z_dec > 0 || z_dec < -Thick) continue;
-			if (flag_newGeo == 0 && fabs(Y0)>20)continue;
-		}
-		if(MCtype == 4){
-			if (z_dec > 0 || z_dec < -Thick) continue;
-			if (x_dec*x_dec+y_dec*y_dec>39*39)continue;
-		}
-		if(MCtype == 5 && !InsideAerogel(X0,Y0,Z0) ) continue;
+		if(!InsideAerogel(X0,Y0,Z0) ) continue;
+
 		//////////////////////
-
-
 
 		/// Generate the time structure
 		if(MCtype == 2) TBeam = 0;
@@ -182,7 +168,7 @@ int main(int argc, char **argv){
 
 
 		DiffusionModel(
-			InsideAerogel//void (*GeometryFunction)(double, double, double),
+			InsideAerogel
 		);
 
 
@@ -201,13 +187,12 @@ int main(int argc, char **argv){
 		/////////////////// Here the Mu successfully get emitted out of the aerogel
 
 
+		//// This would save all the events, including the one ends inside the target
 		//tree->Fill();
 
 	}
 
-
-
-	///////// Draw the last event's tracks
+	///////// Debug, Draw the last event's tracks
 /*
 	TGraph * g = new TGraph();
 	for(int i = 0; i<DiffusionVertexX->size() ;i++)g->SetPoint(i,DiffusionVertexZ->at(i),DiffusionVertexY->at(i));
@@ -221,113 +206,10 @@ int main(int argc, char **argv){
 		<<"Nemission: "<<Nemission<<endl
 		<<"Tree Entries: "<<tree->GetEntries()<<endl;
 
-		//return ResultSP;
-}
-
-void InitializingXYZ0(int index_m){
-
-	//double* X0, double* Y0, double* Z0
-
-	//beam xy: uniformed or gaussian from tdr
-	//x0=((double) rand() / (RAND_MAX))*40;//0-20mm;index_m+xStep/2;
-	//y0=((double) rand() / (RAND_MAX))*40;//0-20mm;
-
-
-	/////// My own MC
-	if(MCtype == 1){
-
-		Z0 = - ((double) rand() / (RAND_MAX)) * Thick;    // z0=-0.0~-7.12mm
-		X0 = GenerateGaus(0,31.96);//
-		Y0 = GenerateGaus(0,14.36);//2mm
-		//y0 = GenerateHlineY(hY0tgt_hline);//only for test
-
-		///NEW GEOMETRY here!!!!
-		//tempZ = ((double) rand() / (RAND_MAX));
-		//if( tempZ <=(1.0/3) )Z0 = Z0 + (7+Thick) ;
-		//if( tempZ >=(2.0/3) )Z0 = Z0 - (7+Thick) ;
-	}
-
-	//if(flag_newGeo == 1 && fabs(Y0)>20)continue;
-
-	// for TRIUMF case z
-	if(MCtype == 2){
-		X0 = -5 + ((double) rand() / (RAND_MAX))*10;//0-20mm;index_m+xStep/2;
-		Y0 = -5 + ((double) rand() / (RAND_MAX))*10;//0-20mm;
-		Z0 = GenerateGaus(0,1.69);//2mm
-		if( Z0 > 0) Z0 = - Z0;
-	}
-
-	////// H-line
-	if(MCtype == 3){
-		InputTree->GetEntry(index_m);
-		X0 = x_dec;
-		Y0 = y_dec;
-		Z0 = z_dec;
-	}
-
-	///////// S-line
-	if(MCtype == 4){
-		InputTree->GetEntry(index_m);
-		X0 = x_dec;
-		Y0 = y_dec;
-		Z0 = z_dec;
-	}
-
-	// MCType = 5; New Geometry inspired by Uetake-san and Mibe-san
-
-	if(MCtype == 5){
-		InputTree->GetEntry(index_m);
-		X0 = x_dec;
-		Y0 = y_dec;
-		Z0 = z_dec;
-
-		if(Y0 < 32 && Y0 > 24)Z0 = Z0 + Thick;
-		//if(Y0 < 20 && Y0 > 12) Z0 = Z0 + Thick;
-		if(Y0 < 12 && Y0 > 4)Z0 = Z0 + Thick;
-		//if(Y0 < 4 && Y0 > -4) Z0 = Z0 + Thick;
-		if(Y0 < -4 && Y0 > -12)Z0 = Z0 + Thick;
-		//if(Y0 < -12 && Y0 > -20) Z0 = Z0 + Thick;
-		if(Y0 < -24 && Y0 > -32)Z0 = Z0 + Thick;
-	}
-
-
-
+	return 0;
 }
 
 
-bool InsideAerogel(double x, double y, double z){
-
-	if(MCtype <5){
-		if( ( z <= 0 && z >= -7.12 ) ) return true;
-		else return false;
-	}
-
-	if(MCtype == 5){
-
-		if(x>25 || x<-25)return false;
-
-		if( z<0 && z>-Thick){
-			if(y < 20 && y > 12) return true;
-			if(y < 4 && y > -4) return true;
-			if(y < -12 && y > -20) return true;
-		}
-
-		if( z<0 && z>-Thick){
-			if(y < 12 && y > 4)return true;
-			if(y < -4 && y > -12)return true;
-			if(y < 32 && y > 24)return true;
-			if(y < -24 && y > -32)return true;
-		}
-
-		return false;
-	}
-		//|| (z <= -9 && z >= -11)
-		//|| (z <= 9 && z >= 7) ) return true;
-	cout<<"Wrong MCtype!"<<endl;
-	return false;
-
-
-}
 
 
 

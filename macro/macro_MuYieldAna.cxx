@@ -1,23 +1,46 @@
-#include "MuYieldAna.h"
+#include "macro_MuYieldAna.h"
+#include "macro_InsideLaserRegion.h"
 #include "/Users/zhangce/WorkArea/CZhang/CZhangNew.h"
 
-void MuYieldAna(){
 
-	//const char * filename ="./Root/PulseE0824_tree_Type1_D87000_T322_Nrepeat280000_Xfree1_Thick2.00_NewGeo1_.root";
-	//TString filename ="../Root/TRIUMF_Reproduce_200204_tree_Type2_D87000_T322_Nrepeat20000_Xfree1_Thick7.12_NewGeo0";
+#define YieldTime
+//#define TrackTime
 
+void macro_MuYieldAna(){
+
+
+	/// Reproduce
 	//TString filename = "../Root/TDR_Reproduce_200204_tree_Type3_D87000_T322_Nrepeat200000_Xfree1_Thick7.12_NewGeo0";
 	//TString filename = "../Root/TRIUMF_Reproduce_200204_tree_Type2_D87000_T322_Nrepeat200000_Xfree1_Thick7.12_NewGeo0";
-	//TString filename = "../Root/NewGeo_200206_HLINE_tree_Type5_D87000_T322_Nrepeat3231566_Xfree1_Thick7.12_NewGeo1";
-	TString filename = "../Root/HLINENEWGEO_200206_tree_Type5_D87000_T322_Nrepeat3231566_Xfree1_Thick7.12_NewGeo1";
+
+	/// 8 mm new Geo result 5
+	//TString filename = "../Root/HLINENEWGEO_200206_tree_Type5_D87000_T322_Nrepeat3231566_Xfree1_Thick7.12_NewGeo1";
+	/// 4 mm new Geo result 6
+	//TString filename = "../Root/HLINENEWGEO_200206_4mm_tree_Type6_D87000_T322_Nrepeat3231566_Xfree1_Thick7.12_NewGeo1";
+	/// Yannis new Geo result 7
+	//TString filename = "../Root/HLINENEWGEO_200206_Yannis_tree_Type7_D87000_T322_Nrepeat3231566_Xfree0_Thick7.12_NewGeo0";
+	/// 7-4mm new Geo result 8
+	//TString filename = "../Root/HLINENEWGEO_200206_7-4mm_tree_Type8_D87000_T322_Nrepeat3231566_Xfree1_Thick7.12_NewGeo1";
+	//XY20, TDR, G.Marshal's graph
+	//TString filename = "../Root/TDR_200206_XY20limit_tree_Type3_D87000_T322_Nrepeat3231566_Xfree1_Thick7.12_NewGeo1";
+	//For the comparison, TDR
+	//TString filename = "../Root/TDR_200206_X50Y28limit_tree_Type3_D87000_T322_Nrepeat3231566_Xfree0_Thick7.12_NewGeo0";
+	//For the comparison, TDR 300 mm
+	TString filename = "../Root/TDR_200207_XY300_Reproduce_tree_Type3_D87000_T322_Nrepeat3231566_H_line1_Thick7.12_NewGeo0";
+
+
+
 
 	gROOT->ProcessLine(Form(".!mkdir %s",filename.Data()));
 
 	SetPalette();
 	SetOptStat();
 
-	TCanvas * c = NewTCanvas("c","c",1000,1000,1,1);
-	c->cd(1);
+	TCanvas * c1 = NewTCanvas("c1","c1",1000,1000,3,2);
+	TCanvas * c2 = NewTCanvas("c2","c2",1000,1000,3,2);
+	//int NCanvas = 0;
+
+
 
 	TFile * f = new TFile( (filename + ".root").Data() );
 	TTree * tree = (TTree*) f-> Get("tree");
@@ -28,15 +51,16 @@ void MuYieldAna(){
 
 
 
-	//c6->Divide(1,3);
 
 	//////// Draw the tack of one of the events
-/*
+#ifdef TrackTime
+
 	tree->GetEntry(1);
 	TGraph * g = new TGraph();
 	for(int i = 0; i<DiffusionVertexX->size() ;i++)g->SetPoint(i,DiffusionVertexZ->at(i),DiffusionVertexY->at(i));
 	g->Draw("APL*");
-*/
+
+#endif
 
 
 	//////// Draw The TRIUMF result in each regions
@@ -49,10 +73,36 @@ void MuYieldAna(){
 
 	//////// Draw Mu yield dynamics in vacuum
 
-	MuYieldInVacuum(tree, c);
-	hZY2D->Draw("colz");
+	MuYieldInVacuum(tree, c1);
 
-	SaveTCanvas(c,(filename+"/"+hZY2D->GetName()).Data());
+	c1->cd(1);
+	hZY2D_sf->Draw("colz");
+
+	c1->cd(2);
+	hZX2D_sf->Draw("colz");
+
+	c1->cd(3);
+	hXY2D_sf->Draw("colz");
+
+	SaveTCanvas(c1,(filename+"/"+hZY2D_sf->GetName()).Data());
+
+
+#ifdef YieldTime
+
+	c2->cd(1);
+	hZY2D->Draw("colz");
+	c2->cd(2);
+	hZX2D->Draw("colz");
+	c2->cd(3);
+	hXY2D->Draw("colz");
+
+	c2->cd(4);
+	hT->Draw();
+
+	SaveTCanvas(c2,(filename+"/"+hZY2D->GetName()).Data());
+
+#endif
+
 
 	// Draw other 2D and 3D plots
 /*
@@ -113,6 +163,8 @@ void MuYieldInVacuum(TTree * tree, TCanvas * c = new TCanvas("c_intrnl","c_intrn
 
 		tree->GetEntry(i);
 
+		cout<<i<<"/"<<Nentries<<"\r"<<flush;
+
 		double delT = DecayT - DiffusionT;
 		//double delT = DecayT - t0;
 
@@ -125,10 +177,11 @@ void MuYieldInVacuum(TTree * tree, TCanvas * c = new TCanvas("c_intrnl","c_intrn
 		vy = VY_sf;
 		vz = VZ_sf;
 
-		hZY2D->Fill(Z_sf, Y_sf);
+		hZY2D_sf->Fill(Z_sf, Y_sf);
+		hZX2D_sf->Fill(Z_sf, X_sf);
+		hXY2D_sf->Fill(X_sf, Y_sf);
 
-		//double flag = 0;
-
+#ifdef YieldTime
 		for(int j = 0; j < nbinT; j++){
 
 			if(Tstep*j >= delT)break;
@@ -138,55 +191,44 @@ void MuYieldInVacuum(TTree * tree, TCanvas * c = new TCanvas("c_intrnl","c_intrn
 			z = z + vz * (Tstep);
 			t = t + Tstep;
 
-			hZT2D->Fill(TBeam + t, z);
+			hZT2D->Fill(t, z);
 			hZY2D->Fill(z, y);
 			hZX2D->Fill(z, x);
 			hXY2D->Fill(x, y);
 			hXYT3D->Fill(t, x, y);
 			hZXY3D->Fill(z, x, y);
 
-			/// STRICTLY, IT SHOULD BE TBEAM+T. IN TRIUMF CASE, TBEAM = 0
-/*
-			if(fabs(y)<=20 && Tstep*i <= delT)
-			{
-				if( (MCtype == 1 || MCtype == 3) && flag_xfree == 0 && fabs(x)>20)continue;
-				if( z >= 1 && z <= 6) {hTlaserR->Fill(TBeam + t);}
-				if( z >= (-6-Thick) && z <= (-1-Thick)) {hTlaserL->Fill(TBeam + t);}
-			}
-*/
+			if(InsideLaserRegionTDR(x,y,z))hT->Fill(t);
+			//if(InsideLaserRegionNewGeo(x,y,z))hT->Fill(t);
+			//if(InsideLaserRegionNewGeo_4mm(x,y,z))hT->Fill(t);
+			//if(InsideLaserRegionNewGeo_yannis(x,y,z))hT->Fill(t);
+			//if(InsideLaserRegionNewGeo_7_4mm(x,y,z))hT->Fill(t)
 
+#ifdef TrackTime
 			//hXY2D->Draw("colz");
-			//hZY2D->Draw("colz");
+			hZY2D->Draw("colz");
 			//hZXY3D->Draw("lego2");
 			//hXYT3D->Draw("lego2");
-/*
+
 			c->Modified();
 			c->Update();
-			//c_intrnl->SaveAs(Form("./png/%i.png",i));
 			gSystem->ProcessEvents();
+#endif
 			//gSystem->Sleep(100);
 			//if( gSystem->ProcessEvents()) break;
-*/
+			//c_intrnl->SaveAs(Form("./png/%i.png",i));
+
+
 		}
+#endif
+
 	}
 
 
 
 }
 
-/*
-bool InsideLaserRegion(double x, double y, double z){ // t = t0 + tbeam
-	if( (DecayT + TBeam) < tLaser) return false;
-	if( (t0 + TBeam) > tLaser)return false;
 
-	if( flag_xfree == 0 && (fabs(x)>20 || fabs(y)>20) )return false;
-	if( flag_xfree == 1 && fabs(y)>20 )return false;
-
-	if( z <= 6 && z>= 1)return true;
-	if( z >= (-6-Thick) && z <= (-1-Thick) && flag_newGeo == 1)return true;
-	return false;
-}
-*/
 
 void Emittance(TTree* tree){
 

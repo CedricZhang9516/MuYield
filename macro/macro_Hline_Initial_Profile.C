@@ -1,13 +1,13 @@
 #include "/Users/zhangce/WorkArea/CZhang/CZhangNew.h"
 
-void macro_Hline_Initial(){
+void macro_Hline_Initial_Profile(){
 
 	TString filename = "../Root/hline_ATH475_BEAMG-2EDM_output_1e6_gendat_afterfit_SEPON_sum";
 
 	SetPalette();
 	SetOptStat();
 
-	TCanvas * c = NewTCanvas("c","c",600,600,2,2);
+	TCanvas * c = NewTCanvas("c","c",1500,1500,2,2);
 
 	TFile * f = new TFile( (filename + ".root").Data() );
 	TTree * tree = (TTree*) f-> Get("101");
@@ -31,13 +31,12 @@ void macro_Hline_Initial(){
 	hDecayXY->Draw("colz");
 
 	TBox * b = new TBox(-25,-20,25,20);
-	//b->SetFillStyle(3003);
-	b->SetFillColorAlpha(10,0.0);
+	b->SetFillColorAlpha(10,0.5);
 	b->SetLineStyle(1);
 	b->SetLineColor(2);
 	b->SetLineWidth(10);
 	b->Draw();
 
-	SaveTCanvas(c,"H-line_initial_Profile");
+	SaveTCanvas(c,"H-line_initial_Profile_50_40");
 
 }

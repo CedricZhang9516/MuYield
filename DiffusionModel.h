@@ -37,10 +37,7 @@ void DiffusionModel(
 	double L = 0;
 	int N = 0; // only for debug
 
-	//double tempX, tempY;
 
-	//static double ResultDiff[9];
-	//static double DiffusionTrak[2];
 
 	do{
 
@@ -59,8 +56,7 @@ void DiffusionModel(
 		y = y + vy * (L/vel0);
 		z = z + vz * (L/vel0);
 
-		//if( (z <= 0 && z >= -Thick) || (z <= -9 && z >= -11) || (z <= 9 && z >= 7) )//(z <= 14.12 && z >= 7) )//(z <= -9 && z >= -11) || (z <= 9 && z >= 7) )
-		if( GeometryFunction(x, y, z) && t < DecayT)//(z <= 14.12 && z >= 7) )//(z <= -9 && z >= -11) || (z <= 9 && z >= 7) )
+		if( GeometryFunction(x, y, z) && t < DecayT)
 		{
 
 			tempX = TMath::ACos(-1 + 2 * ((double)rand()/(RAND_MAX)) );
@@ -85,12 +81,7 @@ void DiffusionModel(
 
 	}while(GeometryFunction(x,y,z) && t < DecayT);
 
-/*
-		(z <= 0 && z >= -Thick && t<DecayT)
-		|| (z <= -9 && z >= -11 && t<DecayT)
-		|| (z <= 9 && z >= 7 && t<DecayT)
-		);
-*/
+
 	if( MCtype != 2 && (fabs(y)>130 || fabs(x)>130) ) t = 100000;
 
 	double Nhits = N;
