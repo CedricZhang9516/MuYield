@@ -15,19 +15,19 @@ void macro_MuYieldAna(){
 	//TString filename = "../Root/TRIUMF_Reproduce_200204_tree_Type2_D87000_T322_Nrepeat200000_Xfree1_Thick7.12_NewGeo0";
 
 	/// 8 mm new Geo result 5
-	//TString filename = "../Root/HLINENEWGEO_200206_tree_Type5_D87000_T322_Nrepeat3231566_Xfree1_Thick7.12_NewGeo1";
+	TString filename = "../Root/HLINENEWGEO_200206_tree_Type5_D87000_T322_Nrepeat3231566_Xfree1_Thick7.12_NewGeo1";
 	/// 4 mm new Geo result 6
 	//TString filename = "../Root/HLINENEWGEO_200206_4mm_tree_Type6_D87000_T322_Nrepeat3231566_Xfree1_Thick7.12_NewGeo1";
 	/// Yannis new Geo result 7
 	//TString filename = "../Root/HLINENEWGEO_200206_Yannis_tree_Type7_D87000_T322_Nrepeat3231566_Xfree0_Thick7.12_NewGeo0";
 	/// 7-4mm new Geo result 8
 	//TString filename = "../Root/HLINENEWGEO_200206_7-4mm_tree_Type8_D87000_T322_Nrepeat3231566_Xfree1_Thick7.12_NewGeo1";
-	//XY20, TDR, G.Marshal's graph
+
+	//XY20, TDR
 	//TString filename = "../Root/TDR_200206_XY20limit_tree_Type3_D87000_T322_Nrepeat3231566_Xfree1_Thick7.12_NewGeo1";
 	//For the comparison, TDR
-	//TString filename = "../Root/TDR_200206_X50Y28limit_tree_Type3_D87000_T322_Nrepeat3231566_Xfree0_Thick7.12_NewGeo0";
-	TString filename = "../Root/TDR_200207_X50Y28limit_tree_Type3_D87000_T322_Nrepeat3231566_H_line1_Thick7.12_NewGeo0";
-	//For the comparison, TDR 300 mm
+	//TString filename = "../Root/TDR_200207_X50Y28limit_tree_Type3_D87000_T322_Nrepeat3231566_H_line1_Thick7.12_NewGeo0";
+	//For the comparison, TDR 300 mm, G.Marshal's graph
 	//TString filename = "../Root/TDR_200207_XY300_Reproduce_tree_Type3_D87000_T322_Nrepeat3231566_H_line1_Thick7.12_NewGeo0";
 
 
@@ -39,7 +39,7 @@ void macro_MuYieldAna(){
 	SetOptStat();
 
 	TCanvas * c1 = NewTCanvas("c1","c1",1000,1000,3,2);
-	TCanvas * c2 = NewTCanvas("c2","c2",1000,1000,3,2);
+	TCanvas * c2 = NewTCanvas("c2","c2",1200,400,4,1);
 	//int NCanvas = 0;
 
 
@@ -86,7 +86,10 @@ void macro_MuYieldAna(){
 	c1->cd(3);
 	hXY2D_sf->Draw("colz");
 
-	SaveTCanvas(c1,(filename+"/"+hZY2D_sf->GetName()+"noXlimit_compareTDR").Data());
+	c1->cd(4);
+	//hZXY3D_sf->Draw("lego2");
+
+	//SaveTCanvas(c1,(filename+"/"+hZY2D_sf->GetName()+"").Data());
 
 
 #ifdef YieldTime
@@ -100,8 +103,10 @@ void macro_MuYieldAna(){
 
 	c2->cd(4);
 	hT->Draw();
+	cout<<"Maximum Yield in the laser region "<<hT->GetMaximum()<<endl;
+		//<<hT->Ge endl;
 
-	SaveTCanvas(c2,(filename+"/"+hZY2D->GetName()+"noXlimit_compareTDR").Data());
+	SaveTCanvas(c2,(filename+"/"+hZY2D->GetName()+"LaserRegion_200207_3").Data());
 
 #endif
 
@@ -183,6 +188,8 @@ void MuYieldInVacuum(TTree * tree, TCanvas * c = new TCanvas("c_intrnl","c_intrn
 		hZX2D_sf->Fill(Z_sf, X_sf);
 		hXY2D_sf->Fill(X_sf, Y_sf);
 
+		hZXY3D_sf->Fill(Z_sf, X_sf, Y_sf);
+
 #ifdef YieldTime
 		for(int j = 0; j < nbinT; j++){
 
@@ -201,11 +208,11 @@ void MuYieldInVacuum(TTree * tree, TCanvas * c = new TCanvas("c_intrnl","c_intrn
 			hZXY3D->Fill(z, x, y);
 
 			//if(InsideLaserRegionTDR(x,y,z))hT->Fill(t);
-			if(InsideLaserRegionTDRnoXlimit(x,y,z))hT->Fill(t);
-			//if(InsideLaserRegionNewGeo(x,y,z))hT->Fill(t);
+			//if(InsideLaserRegionTDRnoXlimit(x,y,z))hT->Fill(t);
+			if(InsideLaserRegionNewGeo_8mm(x,y,z))hT->Fill(t);
 			//if(InsideLaserRegionNewGeo_4mm(x,y,z))hT->Fill(t);
 			//if(InsideLaserRegionNewGeo_yannis(x,y,z))hT->Fill(t);
-			//if(InsideLaserRegionNewGeo_7_4mm(x,y,z))hT->Fill(t)
+			//if(InsideLaserRegionNewGeo_7_4mm(x,y,z))hT->Fill(t);
 
 #ifdef TrackTime
 			//hXY2D->Draw("colz");

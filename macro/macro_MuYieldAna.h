@@ -206,9 +206,9 @@ TH1D* hT = new TH1D("hT","hT",nbinT,0,nbinT*Tstep);
 TH2D *hZT2D = new TH2D("Z-T-2D","Z-T-2D; t(us);Z (mm)",nbinT,0e-9,nbinT*Tstep,1000,1,10);
 
 //TH2D *hZY2D = new TH2D("Z-Y-2D","Z-Y-2D; Z(mm);Y (mm)",100,-10,10,100,-40,40);
-TH2D *hZY2D = new TH2D("Z-Y-2D","Z-Y-2D; Z(mm);Y (mm)",100,-40,40,100,-40,40);
-TH2D *hZX2D = new TH2D("Z-X-2D","Z-X-2D; Z(mm);X (mm)",1000,-40,40,1000,-40,40);
-TH2D *hXY2D = new TH2D("X-Y-2D","X-Y-2D; X(mm);Y (mm)",1000,-40,40,1000,-40,40);
+TH2D *hZY2D = new TH2D("Z-Y-2D","Z-Y-2D; Z(mm);Y (mm)",500,-40,40,500,-40,40);
+TH2D *hZX2D = new TH2D("Z-X-2D","Z-X-2D; Z(mm);X (mm)",500,-40,40,500,-40,40);
+TH2D *hXY2D = new TH2D("X-Y-2D","X-Y-2D; X(mm);Y (mm)",500,-40,40,500,-40,40);
 
 TH3D *hXYT3D = new TH3D("ZX-T-3D","ZX-T-3D; t(us); x (mm); y (mm)",nbinT,0e-9,nbinT*Tstep,100,-40,40,100,-40,40);
 TH3D *hZXY3D = new TH3D("ZXY-3D","ZXY-3D;   z(mm); x (mm); y (mm)",100,-1,10,100,-40,40,100,-40,40);
@@ -217,9 +217,9 @@ TH3D *hZXY3D = new TH3D("ZXY-3D","ZXY-3D;   z(mm); x (mm); y (mm)",100,-1,10,100
 TH2D *hZT2D_sf = new TH2D("Z-T-2D_sf","Z-T-2D_sf; t(us);Z (mm)",nbinT,0e-9,nbinT*Tstep,1000,1,10);
 
 //TH2D *hZY2D_sf = new TH2D("Z-Y-2D_sf","Z-Y-2D_sf; Z(mm);Y (mm)",100,-10,10,100,-40,40);
-TH2D *hZY2D_sf = new TH2D("Z-Y-2D_sf","Z-Y-2D_sf; Z(mm);Y (mm)",100,-40,40,100,-40,40);
-TH2D *hZX2D_sf = new TH2D("Z-X-2D_sf","Z-X-2D_sf; Z(mm);X (mm)",1000,-40,40,1000,-40,40);
-TH2D *hXY2D_sf = new TH2D("X-Y-2D_sf","X-Y-2D_sf; X(mm);Y (mm)",1000,-40,40,1000,-40,40);
+TH2D *hZY2D_sf = new TH2D("Z-Y-2D_sf","Z-Y-2D_sf; Z(mm);Y (mm)",500,-10,40,500,-40,40);
+TH2D *hZX2D_sf = new TH2D("Z-X-2D_sf","Z-X-2D_sf; Z(mm);X (mm)",500,-40,40,500,-40,40);
+TH2D *hXY2D_sf = new TH2D("X-Y-2D_sf","X-Y-2D_sf; X(mm);Y (mm)",500,-40,40,500,-40,40);
 
 TH3D *hXYT3D_sf = new TH3D("ZX-T-3D_sf","ZX-T-3D_sf; t(us); x (mm); y (mm)",nbinT,0e-9,nbinT*Tstep,100,-40,40,100,-40,40);
 TH3D *hZXY3D_sf = new TH3D("ZXY-3D_sf","ZXY-3D_sf;   z(mm); x (mm); y (mm)",100,-1,10,100,-40,40,100,-40,40);
@@ -232,6 +232,7 @@ TH3D *hZXY3D_sf = new TH3D("ZXY-3D_sf","ZXY-3D_sf;   z(mm); x (mm); y (mm)",100,
 
 //TGraph * EmissionX = new TGraph();
 //TGraph * EmissionY = new TGraph();
+//TGraph * gZXY3D_sf = new TGraph();
 
 
 void Emittance(TTree* tree);
