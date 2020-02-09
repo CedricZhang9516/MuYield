@@ -6,5 +6,4 @@
 MuYield
 Root/*
 *.png
-macro/H-line_initial_Profile.C
-macro/H-line_initial_Profile_50_40.C
+macro/H-line_initialProfile/*
