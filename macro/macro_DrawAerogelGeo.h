@@ -1,4 +1,9 @@
-void DrawAerogelGeo(){
+TCanvas* macro_DrawAerogelGeo(std::vector<Double_t>* DiffusionVertexX,
+	std::vector<Double_t>* DiffusionVertexY,
+	std::vector<Double_t>* DiffusionVertexZ){
+
+	TCanvas *c6 = new TCanvas("c6","c6",800,600);
+
 	//TBox *aerogel = new TBox(-2,-7.05,0.0,-5.15);
 	TBox *aerogel = new TBox(-2,-15,0.0,20);
 	//TBox *aerogel = new TBox(-0.5,-8.3,0.0,-7.7);
@@ -13,6 +18,9 @@ void DrawAerogelGeo(){
 	LaserRegion2->SetFillStyle(3004);
 	LaserRegion2->SetFillColor(3);
 
+	TGraph * DiffusionTrack = new TGraph();
+
+	for(int i = 0; i<DiffusionVertexX->size() ;i++)DiffusionTrack->SetPoint(i,DiffusionVertexZ->at(i),DiffusionVertexY->at(i));
 
 	DiffusionTrack->GetXaxis()->SetRangeUser(-2.0,11.0);
 	//DiffusionTrack->GetYaxis()->SetRangeUser(-7.05,-5.15);
@@ -20,7 +28,7 @@ void DrawAerogelGeo(){
 	DiffusionTrack->GetYaxis()->SetRangeUser(-15,35);
 	DiffusionTrack->GetXaxis()->SetLimits(-11,11);
 
-	TCanvas *c6 = new TCanvas("c6","c6",800,600);
+
 	DiffusionTrack->SetMarkerStyle(20);
 	DiffusionTrack->SetMarkerSize(0.4);
 	DiffusionTrack->SetMarkerColor(2);
@@ -28,8 +36,11 @@ void DrawAerogelGeo(){
 
 
 	DiffusionTrack->Draw("ALP");
+
 	LaserRegion->Draw();
 	LaserRegion2->Draw();
 	aerogel->Draw();
+
+	return c6;
 
 }

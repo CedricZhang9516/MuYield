@@ -11,7 +11,7 @@ int main(int argc, char **argv){
 	name = argv[1];
 
 	if(argc == 2 ){
-		MCtype = 9;
+		MCtype = 7;
 		Nrepeat = 1e5;
 	}
 	if(argc == 3) MCtype = stoi(argv[2]);// 4;

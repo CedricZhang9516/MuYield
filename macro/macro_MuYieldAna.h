@@ -200,7 +200,8 @@ TH1D* hY2 = new TH1D("hY2","hY2",100,0,1e4);
 TH1D* hBetaGamma = new TH1D("hBetaGamma","hBetaGamma",100,0.0012,0.0019);
 //TH1D* hBetaGamma = new TH1D("hBetaGamma","hBetaGamma",100,0.0015,0.0045);
 
-TH1D* hT = new TH1D("hT","hT",nbinT,0,nbinT*Tstep);
+TH1D* hT = new TH1D("hT","hT;T[s];N",nbinT,0,nbinT*Tstep);
+TH1D* hT_sf = new TH1D("hT_sf","hT_sf;T[s];N",nbinT,0,nbinT*Tstep);
 
 
 TH2D *hZT2D = new TH2D("Z-T-2D","Z-T-2D; t(us);Z (mm)",nbinT,0e-9,nbinT*Tstep,1000,1,10);

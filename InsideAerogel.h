@@ -103,7 +103,7 @@ void InitializingXYZ0(int index_m){
 		Y0 = y_dec;
 		Z0 = z_dec;
 
-		if(Y0 < 30 && Y0 > 22)Z0 = Z0 + Thick;
+		if(Y0 < 30 && Y0 > 26)Z0 = Z0 + Thick;
 		if(Y0 < 22 && Y0 > 18)Z0 = Z0 + Thick;
 		if(Y0 < 14 && Y0 > 10)Z0 = Z0 + Thick;
 		//if(Y0 < 10 && Y0 > 6) Z0 = Z0 + Thick;
@@ -113,7 +113,7 @@ void InitializingXYZ0(int index_m){
 		//if(Y0 < -12 && Y0 > -20) Z0 = Z0 + Thick;
 		if(Y0 < -10 && Y0 > -14)Z0 = Z0 + Thick;
 		if(Y0 < -18 && Y0 > -22)Z0 = Z0 + Thick;
-		if(Y0 < -22 && Y0 > -30)Z0 = Z0 + Thick;
+		if(Y0 < -26 && Y0 > -30)Z0 = Z0 + Thick;
 	}
 
 	if(MCtype == 9){
@@ -132,6 +132,25 @@ void InitializingXYZ0(int index_m){
 	}
 
 
+	if(MCtype == 10){
+		InputTree->GetEntry(index_m);
+		X0 = x_dec;
+		Y0 = y_dec;
+		Z0 = z_dec;
+
+		if(Y0 < 26 && Y0 > 22)Z0 = Z0 + Thick;
+		if(Y0 < 18 && Y0 > 14)Z0 = Z0 + Thick;
+		if(Y0 < 10 && Y0 > 6) Z0 = Z0 + Thick;
+		//if(Y0 < 6 && Y0 > 2)Z0 = Z0 + Thick;
+		if(Y0 < 2 && Y0 > -2) Z0 = Z0 + Thick;
+		//if(Y0 < -2 && Y0 > -6)Z0 = Z0 + Thick;
+		if(Y0 < -6 && Y0 > -10) Z0 = Z0 + Thick;
+		if(Y0 < -14 && Y0 > -18)Z0 = Z0 + Thick;
+		if(Y0 < -22 && Y0 > -26)Z0 = Z0 + Thick;
+		//if(Y0 < -22 && Y0 > -30)Z0 = Z0 + Thick;
+	}
+
+
 
 
 
@@ -146,6 +165,7 @@ bool InsideAerogel(double x, double y, double z){
 
 		if( z<0 && z>-Thick){
 			if(y < 28 && y > -28 && x < 25 && x > -25) return true;
+			//if(y < 28 && y > -28) return true;
 			//if(y < 150 && y > -150) return true;
 			//if(x < 50 && x > -50) return true;
 			//if(x < 150 && x > -150) return true;
@@ -209,7 +229,7 @@ bool InsideAerogel(double x, double y, double z){
 
 	if(MCtype == 7){ ///Yannis
 
- 		if(x>25 || x<-25)return false;
+ 		//if(x>25 || x<-25)return false;
 
  		if( z<0 && z>-Thick && y < 4 && y > -4) return true;
 
@@ -264,7 +284,7 @@ bool InsideAerogel(double x, double y, double z){
 
 	if(MCtype == 9){
 
-		if(x>25 || x<-25)return false;
+		//if(x>25 || x<-25)return false;
 
 		if( z>0 && z<Thick){
 			if(y < 20 && y > 12) return true;
@@ -274,6 +294,36 @@ bool InsideAerogel(double x, double y, double z){
 		if( z<0 && z>-Thick){
 			if(y < 12 && y > 4)return true;
 			if(y < -4 && y > -12)return true;
+		}
+
+		return false;
+	}
+
+	if(MCtype == 10){
+
+		if(x>25 || x<-25)return false;
+
+		if( z>0 && z<Thick){
+			if(y < 26 && y > 22) return true;
+			if(y < 18 && y > 14) return true;
+			if(y < 10 && y > 6) return true;
+			if(y < 2 && y > -2) return true;
+			if(y < -6 && y > -10) return true;
+			if(y < -14 && y > -18) return true;
+			if(y < -22 && y > -26) return true;
+		}
+
+		if( z<0 && z>-Thick){
+
+			//if(y < 30 && y > 26)return true;
+			if(y < 22 && y > 18)return true;
+			if(y < 14 && y > 10)return true;
+			if(y < 6 && y > 2)return true;
+			if(y < -2 && y > -6)return true;
+			if(y < -10 && y > -14)return true;
+			if(y < -18 && y > -22)return true;
+			//if(y < -26 && y > -30)return true;
+
 		}
 
 		return false;
