@@ -1,16 +1,20 @@
 #include "/Users/zhangce/WorkArea/CZhang/CZhangNew.h"
 
-void macro_Hline_Initial_Profile(){
+void macro_Hline_Stopping_Profile(){
 
-	TString filename = "../Root/hline_ATH475_BEAMG-2EDM_output_1e6_gendat_afterfit_SEPON_sum";
+	TString filename = "../Root/hline_ATH475_BEAMG-2EDM_output_1e6_gendat_afterfit_SEPON_sum"; TString treename="101";
+	//TString filename = "../Root/hline_SimBeamStop";
+	TString filename = "../Root/hline_SimBeamStop_Mibe"; TString treename = "position";
 
 	SetPalette();
-	SetOptStat();
+	//SetOptStat();
 
 	TCanvas * c = NewTCanvas("c","c",1500,1500,2,2);
 
 	TFile * f = new TFile( (filename + ".root").Data() );
-	TTree * tree = (TTree*) f-> Get("101");
+	TTree * tree = (TTree*) f-> Get(treename.Data());
+
+	//TTree * tree = (TTree*) f-> Get("position");
 
 	c->cd(1);
 	TH1F * hDecayZ = TreeToTH1F(tree,"z_dec",100,-10,2,
@@ -43,10 +47,6 @@ void macro_Hline_Initial_Profile(){
 	//SaveTCanvas(c,"H-line_initial_Profile_50_40");
 
 
-
-
-
-
 	TCanvas * c2 = NewTCanvas("c2","c2",500,500,1,1);
 
 	TH2F * hDecayYZ = TreeToTH2F(tree,"y_dec:z_dec",
@@ -57,7 +57,8 @@ void macro_Hline_Initial_Profile(){
 	hDecayYZ->SetTitle("H-line-Stopping_YZ;Z[mm];Y[mm]");
 	hDecayYZ->Draw("colz");
 
-	SaveTCanvas(c2,"H-line_initial_Profile_2_ZY");
+	//SaveTCanvas(c2,"H-line_initial_Profile_2_ZY");
+	SaveTCanvas(c2,"H-line_initial_Profile_2_MySim_Mibe");
 
 /*
 	TH3F * hDecayXYZ = new TH3F("hDecayXYZ","hDecayXYZ;Z[mm];X[mm];Y[mm]",20,-10,2,100,-50,50,80,-40,40);
