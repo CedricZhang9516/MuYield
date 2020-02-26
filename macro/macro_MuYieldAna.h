@@ -83,8 +83,8 @@ double XXp,Xp2,X2;
 double YYp,Yp2,Y2;
 double BetaGamma;
 
-int nbinT = 8000;
-double Tstep = 1e-9;
+int nbinT = 8000; /// 8 us
+double Tstep = 1e-9; /// 1 ns
 
 
 void InitTree(TTree* tree){
@@ -237,7 +237,8 @@ TH3D *hZXY3D_sf = new TH3D("ZXY-3D_sf","ZXY-3D_sf;   z(mm); x (mm); y (mm)",100,
 
 
 void Emittance(TTree* tree);
-void MuYieldInVacuum(TTree * tree, TCanvas *);
+void MuYieldAsEvent(TTree * tree, TCanvas * c = new TCanvas("c_intrnl","c_intrnl",1000,1000));
+void MuYieldAsTime(TTree * tree, TCanvas * c = new TCanvas("c_intrnl","c_intrnl",1000,1000));
 void TRIUMFVacuumRegion(TTree * tree, TCanvas * c = NewTCanvas("c_intrnl","c_intrnl",1000,1000,2,2));
 /*
 bool InsideLaserRegion(double x, double y, double z);//{ // t = t0 + tbeam

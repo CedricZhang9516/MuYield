@@ -47,7 +47,6 @@ int main(int argc, char **argv){
 		InputTree->SetBranchAddress("x_dec", &x_dec);
 		InputTree->SetBranchAddress("y_dec", &y_dec);
 		InputTree->SetBranchAddress("z_dec", &z_dec);
-		Nentries = InputTree->GetEntries();
 	}
 
 	if(S_line){//MCtype == 4){
@@ -57,11 +56,9 @@ int main(int argc, char **argv){
 		InputTree->SetBranchAddress("y", &y_dec);
 		InputTree->SetBranchAddress("z", &z_dec);
 		InputTree->SetBranchAddress("glbt_gen", &t_dec);
-		Nentries = InputTree->GetEntries();
-
 	}
 
-
+	Nentries = InputTree->GetEntries();
 	Nrepeat = Nentries;
 
 
@@ -187,7 +184,7 @@ int main(int argc, char **argv){
 		/////////////////// Here the Mu successfully get emitted out of the aerogel
 
 
-		//// This would save all the events, including the one ends inside the target
+		//// This will save all the events, including the one ends inside the target
 		//tree->Fill();
 
 	}
