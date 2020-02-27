@@ -85,7 +85,7 @@ double BetaGamma;
 
 int nbinT = 8000; /// 8 us
 double Tstep = 1e-9; /// 1 ns
-
+double lasertime = -1;
 
 void InitTree(TTree* tree){
 
