@@ -11,16 +11,16 @@ int main(int argc, char **argv){
 	name = argv[1];
 
 	if(argc == 2 ){
-		MCtype = 9;
+		MCtype = 7;
 		Nrepeat = 1e5;
 	}
-	if(argc == 3) MCtype = stoi(argv[2]);//4;
+	if(argc == 3) MCtype = stoi(argv[2]);// 4;
 	if(argc == 4) Nrepeat = stoi(argv[3]);//
 
 	H_line = 1;
 	S_line = 0;
 
-
+	if(MCtype>=5)flag_newGeo=1;
 
 	cout<<"Initialize..."<<endl;
 
@@ -42,21 +42,11 @@ int main(int argc, char **argv){
 	// H-line and S-line
 
 	if(H_line){//MCtype == 3 || MCtype == 5 || MCtype == 6 || MCtype == 7 || MCtype == 8){
-
 		InputFile = new TFile("./Root/hline_ATH475_BEAMG-2EDM_output_1e6_gendat_afterfit_SEPON_sum.root");
 		InputTree = (TTree*) InputFile->Get("101");
 		InputTree->SetBranchAddress("x_dec", &x_dec);
 		InputTree->SetBranchAddress("y_dec", &y_dec);
 		InputTree->SetBranchAddress("z_dec", &z_dec);
-
-		/*
-		InputFile = new TFile("./Root/hline_SimBeamStop_GM_7.12mm.root");
-		InputTree = (TTree*) InputFile->Get("position");
-		InputTree->SetBranchAddress("x", &x_dec);
-		InputTree->SetBranchAddress("y", &y_dec);
-		InputTree->SetBranchAddress("z", &z_dec);
-		*/
-
 	}
 
 	if(S_line){//MCtype == 4){
@@ -99,7 +89,7 @@ int main(int argc, char **argv){
 		InitializingXYZ0( index_m );
 
 		if(!InsideAerogel(X0,Y0,Z0) ) continue;
-		//Nemission++;
+
 		//////////////////////
 
 		/// Generate the time structure
@@ -173,7 +163,6 @@ int main(int argc, char **argv){
 		DiffusionVertexZ = new std::vector<double>;
 		DiffusionVertexT = new std::vector<double>;
 
-		Index_M = index_m;
 
 		DiffusionModel(
 			InsideAerogel
@@ -187,9 +176,8 @@ int main(int argc, char **argv){
 
 		//if(flag_newGeo == 0 && Z_sf<0){continue;}
 
-		//cout<<DecayT<<" "<<DiffusionT<<endl;
+
 		if(DecayT > DiffusionT){
-			//cout<<__LINE__<<endl;
 			Nemission++;
 			tree->Fill();
 		}

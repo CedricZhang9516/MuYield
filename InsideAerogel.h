@@ -57,8 +57,6 @@ void InitializingXYZ0(int index_m){
 		Y0 = y_dec;
 		Z0 = z_dec;
 
-		//cout<<X0<<" "<<Y0<<" "<<Z0<<endl;
-
 		if(Y0 < 28 && Y0 > 20)Z0 = Z0 + Thick;
 		//if(Y0 < 20 && Y0 > 12) Z0 = Z0 + Thick;
 		if(Y0 < 12 && Y0 > 4)Z0 = Z0 + Thick;
@@ -66,7 +64,6 @@ void InitializingXYZ0(int index_m){
 		if(Y0 < -4 && Y0 > -12)Z0 = Z0 + Thick;
 		//if(Y0 < -12 && Y0 > -20) Z0 = Z0 + Thick;
 		if(Y0 < -20 && Y0 > -28)Z0 = Z0 + Thick;
-		//cout<<X0<<" "<<Y0<<" "<<Z0<<endl;
 	}
 
 
@@ -153,21 +150,6 @@ void InitializingXYZ0(int index_m){
 		//if(Y0 < -22 && Y0 > -30)Z0 = Z0 + Thick;
 	}
 
-	if(MCtype == 11){
-		InputTree->GetEntry(index_m);
-		X0 = x_dec;
-		Y0 = y_dec;
-		Z0 = z_dec;
-
-		if(Y0 < 28 && Y0 > 20)Z0 = Z0 + Thick;
-		//if(Y0 < 20 && Y0 > 12) Z0 = Z0 + Thick;
-		if(Y0 < 12 && Y0 > 4)Z0 = Z0 + Thick;
-		//if(Y0 < 4 && Y0 > -4) Z0 = Z0 + Thick;
-		if(Y0 < -4 && Y0 > -12)Z0 = Z0 + Thick;
-		//if(Y0 < -12 && Y0 > -20) Z0 = Z0 + Thick;
-		if(Y0 < -20 && Y0 > -28)Z0 = Z0 + Thick;
-	}
-
 
 
 
@@ -203,7 +185,7 @@ bool InsideAerogel(double x, double y, double z){
 
 	if(MCtype == 5){
 
-		//if(x>25 || x<-25)return false;
+		if(x>25 || x<-25)return false;
 
 		if( z<0 && z>-Thick){
 			if(y < 20 && y > 12) return true;

@@ -83,11 +83,11 @@ void DiffusionModel(
 	}while(GeometryFunction(x,y,z) && t < DecayT);
 
 
-	//if( MCtype != 2 && (fabs(y)>130 || fabs(x)>130) ) t = 100000;
+	if( MCtype != 2 && (fabs(y)>130 || fabs(x)>130) ) t = 100000;
 
 	double Nhits = N;
 
-	if(t>DecayT){cout<<Index_M<<" "<<DecayT<<endl; t = DecayT;}// t - L/vel0;
+	if(t>DecayT) t = DecayT;// t - L/vel0;
 
 
 	DiffusionT = t;
