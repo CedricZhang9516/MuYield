@@ -8,7 +8,7 @@
 #define YieldTime // Calculate the # of Mu inside the laser region as the function of time
 //#define Track     /// draw the track inside the aerogel for single event
 //#define TrackTime
-#define TrackEventTime
+//#define TrackEventTime
 
 void macro_MuYieldAna(){
 
@@ -52,11 +52,11 @@ void macro_MuYieldAna(){
 	gROOT->ProcessLine(Form(".!mkdir %s",filename.Data()));
 
 	SetPalette();
-	//SetOptStat();
+	SetOptStat();
 
-	TCanvas * c0 = NewTCanvas("c0","c0",800,800,3,3);
-	TCanvas * c1 = NewTCanvas("c1","c1",1200,500,4,1);
-	TCanvas * c2 = NewTCanvas("c2","c2",1200,400,4,1);
+	TCanvas * c0 = NewTCanvas("c0","c0",800,800,1,1);
+	TCanvas * c1 = NewTCanvas("c1","c1",1000,1000,3,3);
+	TCanvas * c2 = NewTCanvas("c2","c2",1000,1000,3,3);
 	//int NCanvas = 0;
 
 
@@ -100,11 +100,17 @@ void macro_MuYieldAna(){
 	//////// Draw Mu yield dynamics in vacuum
 	///////// THIS TWO FUNCTIONS SHOULD NOT BE USED SIMUTANEOUSLY
 
+	lasertime = 13; // if comment it, the laser will not be shot
+
 	//MuYieldAsTime(tree);
 
-	//MuYieldAsEvent(tree);
+	MuYieldAsEvent(tree,c0);
 
 /*
+	/////////////////
+	// Yield on the surface
+	/////////////////
+
 	c1->cd(1);
 	hZY2D_sf->Draw("colz");
 
@@ -116,24 +122,29 @@ void macro_MuYieldAna(){
 
 	c1->cd(4);
 	hT_sf->Draw("");
+*/
+
+	/////////////////
+	// Total yield or the laser time yield
+	/////////////////
 
 	c2->cd(1);
-	hZY2D->Draw("colz");
-	c2->cd(2);
-	hZX2D->Draw("colz");
-	c2->cd(3);
-	hXY2D->Draw("colz");
-
-	c2->cd(4);
 	hT->Draw();
-	cout<<"Maximum Yield in the laser region "<<hT->GetMaximum()<<" in the bin "<<hT->GetMaximumBin()<<endl;
+	cout<<"Maximum Yield in the laser region "
+		<<hT->GetMaximum()
+		<<" in the bin "
+		<<hT->GetMaximumBin()
+		<<endl;
 
-*/
+	c2->cd(2);
+	hZY2D->Draw("colz");
+	c2->cd(3);
+	hZX2D->Draw("colz");
+	c2->cd(4);
+	hXY2D->Draw("colz");
 
 	//SaveTCanvas(c1,(filename+"/"+hZY2D_sf->GetName()+"").Data());
 	//SaveTCanvas(c2,(filename+"/"+hZY2D->GetName()+"LaserRegion_200209_3").Data());
-
-
 
 	/////////////////
 	///// Draw other 2D and 3D plots
@@ -165,10 +176,17 @@ void macro_MuYieldAna(){
 	////////////
 
 	int iCvs = 1;
-	c0->cd(iCvs++);
-	tree->Draw("DiffusionT");
-	c0->cd(iCvs++);
-	tree->Draw("Z0","Z_sf>-1");
+	//c0->cd(iCvs++);
+	//tree->Draw("DiffusionT");
+	//c0->cd(iCvs++);
+	c0->cd();
+/*
+	TH1F* hDecayZ0 = TreeToTH1F(tree,"Z0",200,-10,2,
+		"Z_sf>-1");
+	hDecayZ0->SetTitle("H-line-Stopping_Z0;Z[mm];N");
+	SaveTH1(hDecayZ0,"H-line_initial_Profile_GM_z0");
+*/
+	hT->Draw();
 
 
 }
@@ -192,7 +210,9 @@ void MuYieldAsTime(TTree * tree, TCanvas * c = new TCanvas("c_intrnl","c_intrnl"
 //void MuYieldInVacuum(TTree * tree)
 {
 	nbinT = 80; /// 8 us
-	Tstep = 1e-7; /// 0.1 us
+	Tstep = 1e-7; /// 0.01 us
+
+	c->Divide(3,2);
 
 	int Nentries = tree->GetEntries();
 
@@ -200,7 +220,8 @@ void MuYieldAsTime(TTree * tree, TCanvas * c = new TCanvas("c_intrnl","c_intrnl"
 
 
 
-	for(int j = 0; j < nbinT; j++){
+	//for(int j = lasertime; j < nbinT; j++){
+	for(int j = 13; j < nbinT; j++){
 
 		cout<<j<<"/"<<nbinT<<"\r"<<flush;
 
@@ -215,14 +236,15 @@ void MuYieldAsTime(TTree * tree, TCanvas * c = new TCanvas("c_intrnl","c_intrnl"
 
 			tree->GetEntry(i);
 
-			double delT = DecayT - DiffusionT;
+			if( (Tstep*j <= (DiffusionT+TBeam)) || (Tstep*j >= (DecayT+TBeam) ))continue;
 
-			if(Tstep*j >= delT)continue;
+			double delT = (Tstep) * j - (DiffusionT+TBeam);
 
-			t = DiffusionT + TBeam + Tstep*j;
-			x = X_sf + VX_sf * (Tstep) * j;
-			y = Y_sf + VY_sf * (Tstep) * j;
-			z = Z_sf + VZ_sf * (Tstep) * j;
+			t = Tstep*j;
+			//cout<<t<<endl;
+			x = X_sf + VX_sf * delT;
+			y = Y_sf + VY_sf * delT;
+			z = Z_sf + VZ_sf * delT;
 
 
 			/// TBeam + DecayT is the total time muon went through
@@ -240,20 +262,33 @@ void MuYieldAsTime(TTree * tree, TCanvas * c = new TCanvas("c_intrnl","c_intrnl"
 			hXYT3D->Fill(t, x, y);
 			hZXY3D->Fill(z, x, y);
 
-			if(InsideLaserRegionTDR(x,y,z))hT->Fill(t);
+			if(InsideLaserRegionTDRnoXlimit(x,y,z))hT->Fill(t);
 
 		} // loop of all the events
 
-		if( j>=1 && j % 1 == 0){
+
+		if( j == lasertime+0 ) break;
+
+		if( j>=0 && j % 1 == 0){
+			c->cd(1);
+			hT->Draw("");
+			c->cd(2);
 			hZY2D->Draw("colz");
-			//hZT2D->Draw("colz");
+			c->cd(3);
+			hZT2D->Draw("colz");
+			c->cd(4);
+			hZX2D->Draw("colz");
+			c->cd(5);
+			hXY2D->Draw("colz");
 			//hZXY3D->Draw("lego2");
 			//hXYT3D->Draw("lego2");
 			c->Modified();
 			c->Update();
 			//gSystem->Sleep(100);
+			c->SaveAs(Form("MuYieldAsTime_%.3f_us.png",j*0.1));
 			if( gSystem->ProcessEvents()) break;
 		}
+
 
 	} // loop of all the time from 0 to 8 us, step 1 ns
 
@@ -313,8 +348,8 @@ void MuYieldAsEvent(TTree * tree, TCanvas * c = new TCanvas("c_intrnl","c_intrnl
 			hXYT3D->Fill(t, x, y);
 			hZXY3D->Fill(z, x, y);
 
-			if(InsideLaserRegionTDR(x,y,z))hT->Fill(t);
-			//if(InsideLaserRegionTDRnoXlimit(x,y,z))hT->Fill(t);
+			//if(InsideLaserRegionTDR(x,y,z))hT->Fill(t);
+			if(InsideLaserRegionTDRnoXlimit(x,y,z))hT->Fill(t);
 			//if(InsideLaserRegionNewGeo_8mm(x,y,z))hT->Fill(t);
 			//if(InsideLaserRegionNewGeo_4mm(x,y,z))hT->Fill(t);
 			//if(InsideLaserRegionNewGeo_yannis(x,y,z))hT->Fill(t);

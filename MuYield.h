@@ -24,8 +24,11 @@ double x_dec, y_dec, z_dec, t_dec, Nentries;
 
 double D = 87000;// diffussion coefficient mm^2/s
 double T = 322;
-double light = 299792458; // m/s
-double massMu = 106.16/light/light; // MeV/c2
+
+double Index_M = 0;
+//double light = 299792458; // m/s
+//double massMu = 106.16/light/light; // MeV/c2
+
 double lifeMu = 2.2e-6; //s
 double k = 8.62e-11 ; //Boltzmann constant, MeV/K
 double PI = 3.1415926;
