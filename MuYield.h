@@ -10,7 +10,7 @@
 
 TString name;
 
-int MCtype = 1;
+int MCtype = 3;
 int flag_xfree = 0; ///// NOT USED NOW
 int flag_newGeo = 0; ///// NOT USED NOW
 int Nrepeat = 1e5;

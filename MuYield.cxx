@@ -11,7 +11,7 @@ int main(int argc, char **argv){
 	name = argv[1];
 
 	if(argc == 2 ){
-		MCtype = 9;
+		MCtype = 3;
 		Nrepeat = 1e5;
 	}
 	if(argc == 3) MCtype = stoi(argv[2]);//4;
@@ -86,6 +86,8 @@ int main(int argc, char **argv){
 	NLaserL = 0;
 
 	//histfile->cd();
+
+	//cout<<"MCtype: "<<MCtype<<endl;
 
 	for(int index_m=0; index_m < Nrepeat; index_m++){
 
@@ -174,7 +176,13 @@ int main(int argc, char **argv){
 		DiffusionVertexT = new std::vector<double>;
 
 		Index_M = index_m;
-
+/*
+		cout<<"DecayT "<<DecayT<<" s"
+			<<"mfp "<<Lmfp<<" mm"
+			<<"vel0_avrg "<<vel0_avrg<<" mm/s"
+			<<"vel0 "<<vel0<<" mm/s"
+			<<endl;
+*/
 		DiffusionModel(
 			InsideAerogel
 		);
@@ -192,6 +200,7 @@ int main(int argc, char **argv){
 			//cout<<__LINE__<<endl;
 			Nemission++;
 			tree->Fill();
+			continue;
 		}
 		/////////////////// Here the Mu successfully get emitted out of the aerogel
 

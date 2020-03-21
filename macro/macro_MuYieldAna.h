@@ -207,9 +207,9 @@ TH1D* hT_sf = new TH1D("hT_sf","hT_sf;T[s];N",nbinT,0,nbinT*Tstep);
 TH2D *hZT2D = new TH2D("Z-T-2D","Z-T-2D; t(us);Z (mm)",nbinT,0e-9,nbinT*Tstep,1000,1,10);
 
 //TH2D *hZY2D = new TH2D("Z-Y-2D","Z-Y-2D; Z(mm);Y (mm)",100,-10,10,100,-40,40);
-TH2D *hZY2D = new TH2D("Z-Y-2D","Z-Y-2D; Z(mm);Y (mm)",500,-40,40,500,-40,40);
-TH2D *hZX2D = new TH2D("Z-X-2D","Z-X-2D; Z(mm);X (mm)",500,-40,40,500,-40,40);
-TH2D *hXY2D = new TH2D("X-Y-2D","X-Y-2D; X(mm);Y (mm)",500,-40,40,500,-40,40);
+TH2D *hZY2D = new TH2D("Z-Y-2D","Z-Y-2D; Z(mm);Y (mm)",100,0,20,60,-30,30);
+TH2D *hZX2D = new TH2D("Z-X-2D","Z-X-2D; Z(mm);X (mm)",100,-40,40,100,-40,40);
+TH2D *hXY2D = new TH2D("X-Y-2D","X-Y-2D; X(mm);Y (mm)",100,-80,80,60,-30,30);
 
 TH3D *hXYT3D = new TH3D("ZX-T-3D","ZX-T-3D; t(us); x (mm); y (mm)",nbinT,0e-9,nbinT*Tstep,100,-40,40,100,-40,40);
 TH3D *hZXY3D = new TH3D("ZXY-3D","ZXY-3D;   z(mm); x (mm); y (mm)",100,-1,10,100,-40,40,100,-40,40);

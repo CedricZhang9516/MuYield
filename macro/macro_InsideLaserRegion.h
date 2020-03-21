@@ -170,3 +170,78 @@ bool InsideLaserRegionNewGeo_7_4mmSHIFTED(double x, double y, double z){ // t = 
 
 }
 
+bool InsideLaserRegionNewGeo_8mm_10mmthick(double x, double y, double z){ // t = t0 + tbeam
+
+	double Thick = 10;
+
+	//if( z>0 && z<Thick){
+	//if( z>=1 && z<=6){ /// _1.png
+	if( z>=1 && z<=(Thick+1)){  /// _3.png
+
+
+		if(y < 19 && y > 13) return true;
+		if(y < 3 && y > -3) return true;
+		if(y < -13 && y > -19) return true;
+
+		//if(y < 20 && y > 12) return true;
+		//if(y < 4 && y > -4) return true;
+		//if(y < -12 && y > -20) return true;
+
+	}
+
+	if( z>=(Thick+1) && z <=(Thick+6) )return true;  //// _2.png
+
+	return false;
+
+}
+
+
+bool InsideLaserRegionNewGeo_8mm_14mmthick(double x, double y, double z){ // t = t0 + tbeam
+
+	double Thick = 14;
+
+	//if( z>0 && z<Thick){
+	//if( z>=1 && z<=6){ /// _1.png
+	if( z>=1 && z<=(Thick+1)){  /// _3.png
+
+
+		if(y < 19 && y > 13) return true;
+		if(y < 3 && y > -3) return true;
+		if(y < -13 && y > -19) return true;
+
+		//if(y < 20 && y > 12) return true;
+		//if(y < 4 && y > -4) return true;
+		//if(y < -12 && y > -20) return true;
+
+	}
+
+	if( z>=(Thick+1) && z <=(Thick+6) )return true;  //// _2.png
+
+	return false;
+
+}
+
+bool InsideLaserRegionNewGeo_8mm_12mmthick(double x, double y, double z){ // t = t0 + tbeam
+
+	double Thick = 12;
+
+	//if( z>0 && z<Thick){
+	//if( z>=1 && z<=6){ /// _1.png
+	if( z>=1 && z<=(Thick+1)){  /// _3.png
+
+
+		if(y < 19 && y > 13) return true;
+		if(y < 3 && y > -3) return true;
+		if(y < -13 && y > -19) return true;
+
+		//if(y < 20 && y > 12) return true;
+		//if(y < 4 && y > -4) return true;
+		//if(y < -12 && y > -20) return true;
+
+	}
+
+	if( z>=(Thick+1) && z <=(Thick+6) )return true;  //// _2.png
+
+	return false;
+
+}

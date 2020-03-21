@@ -1,4 +1,5 @@
-#include "/Users/zhangce/WorkArea/CZhang/CZhang.cxx"
+//#include "/Users/zhangce/WorkArea/CZhang/CZhang.cxx"
+#include "/Users/zhangce/WorkArea/CZhang/CZhangNew.h"
 //#include "../CZhang/CZhang.cxx"
 
 

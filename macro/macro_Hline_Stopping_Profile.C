@@ -4,10 +4,10 @@ void macro_Hline_Stopping_Profile(){
 
 	//TString filename = "../Root/hline_ATH475_BEAMG-2EDM_output_1e6_gendat_afterfit_SEPON_sum"; TString treename="101";
 	//TString filename = "../Root/hline_SimBeamStop";
-	TString filename = "../Root/hline_SimBeamStop_GM"; TString treename = "position";
+	TString filename = "../Root/hline_SimBeamStop_GM_7.12mm"; TString treename = "position";
 
 	SetPalette();
-	//SetOptStat();
+	SetOptStat("0000");
 
 	TFile * f = new TFile( (filename + ".root").Data() );
 	TTree * tree = (TTree*) f-> Get(treename.Data());
@@ -101,6 +101,62 @@ void macro_Hline_Stopping_Profile(){
 		"z<=0 && z>=-0.12");
 	hDecayXY->SetTitle("XY_density_0_0.06mm;X[mm];Y[mm]");
 	hDecayXY->Draw("colz");
+
+
+
+
+	hDecayZ = new TH1F("z","H-line-Stopping_Z;Z[mm];N",300,-10,8);
+
+	hDecayYZ = new TH2F("yz","H-line-Stopping_YZ;Z[mm];Y[mm]",
+		300,-10,8,
+		100,-50,50);
+	//hDecayYZ->SetTitle("");
+
+
+	double x_dec, y_dec, z_dec;
+
+	tree->SetBranchAddress("x", &x_dec);
+	tree->SetBranchAddress("y", &y_dec);
+	tree->SetBranchAddress("z", &z_dec);
+
+	int Nentries = tree->GetEntries();
+
+	for(int index_m=0; index_m < Nentries; index_m++){
+
+		tree->GetEntry(index_m);
+
+		if (!(z_dec<10 && z_dec>-8))continue;
+
+		double X0 = x_dec;
+		double Y0 = y_dec;
+		double Z0 = z_dec;
+
+		//cout<<X0<<" "<<Y0<<" "<<Z0<<endl;
+		double Thick = 7.12;
+/*
+		if(Y0 < 28 && Y0 > 20)Z0 = Z0 + Thick;
+		//if(Y0 < 20 && Y0 > 12) Z0 = Z0 + Thick;
+		if(Y0 < 12 && Y0 > 4)Z0 = Z0 + Thick;
+		//if(Y0 < 4 && Y0 > -4) Z0 = Z0 + Thick;
+		if(Y0 < -4 && Y0 > -12)Z0 = Z0 + Thick;
+		//if(Y0 < -12 && Y0 > -20) Z0 = Z0 + Thick;
+		if(Y0 < -20 && Y0 > -28)Z0 = Z0 + Thick;
+		//cout<<X0<<" "<<Y0<<" "<<Z0<<endl;
+*/
+		hDecayZ->Fill(Z0);
+		hDecayYZ->Fill(Z0,Y0);
+
+
+	}
+
+	TCanvas * c3 = NewTCanvas("c3","c3",1000,500,2,1);
+	TH1Style(hDecayZ,"H-line-Stopping_Z;Z[mm];N");
+	c3->cd(1);hDecayZ->Draw();
+	c3->cd(2);hDecayYZ->Draw("colz");
+
+
+
+
 
 
 	//SaveTH2(hDecayXY,"H-line_initial_Profile_GM_xy");

@@ -1,4 +1,5 @@
-#include "/Users/zhangce/WorkArea/CZhang/CZhang.cxx"
+//#include "/Users/zhangce/WorkArea/CZhang/CZhang.cxx"
+#include "/Users/zhangce/WorkArea/CZhang/CZhangNew.h"
 //#include "../CZhang/CZhang.cxx"
 #include "TPoint.h"
 #include "MuYield.h"
@@ -52,12 +53,15 @@ void DiffusionModel(
 
 		L = tempX;
 
+		//cout<<"L "<<L<<endl;
+		//cout<<"vel0 "<<vel0<<"mm/s"<<endl;
+
 		t = t + L/vel0;
 		x = x + vx * (L/vel0);
 		y = y + vy * (L/vel0);
 		z = z + vz * (L/vel0);
 
-		if( GeometryFunction(x, y, z) && t < DecayT)
+		if( GeometryFunction(x, y, z) && (t < DecayT))
 		{
 
 			tempX = TMath::ACos(-1 + 2 * ((double)rand()/(RAND_MAX)) );
@@ -79,15 +83,22 @@ void DiffusionModel(
 		DiffusionVertexT->push_back(t);
 
 		//cout<<DiffusionVertexX->size()<<endl;
+		//cout<<"t "<<t<<" DecayT:"<<DecayT<<endl;
 
-	}while(GeometryFunction(x,y,z) && t < DecayT);
+
+	}while(GeometryFunction(x,y,z) && (t < DecayT));
 
 
 	//if( MCtype != 2 && (fabs(y)>130 || fabs(x)>130) ) t = 100000;
 
 	double Nhits = N;
 
-	if(t>DecayT){cout<<Index_M<<" "<<DecayT<<endl; t = DecayT;}// t - L/vel0;
+	//if(N!=1)cout<<"event "<<Index_M<<" N in the diffusion "<<N<<endl;
+
+	if(t>DecayT){
+		//cout<<Index_M<<" "<<DecayT<<endl;
+		t = DecayT;
+	}// t - L/vel0;
 
 
 	DiffusionT = t;
