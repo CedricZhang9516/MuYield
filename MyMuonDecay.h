@@ -1,6 +1,6 @@
 //#include "/Users/zhangce/WorkArea/CZhang/CZhang.cxx"
-#include "/Users/zhangce/WorkArea/CZhang/CZhangNew.h"
-//#include "../CZhang/CZhang.cxx"
+//#include "/Users/zhangce/WorkArea/CZhang/CZhangNew.h"
+#include "../CZhang/CZhangNew.h"
 
 
 double EMASS = 0.510998950;//daughtermass[0]; MeV/c2
