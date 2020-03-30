@@ -1,11 +1,11 @@
 #include "MuYield.h"
 
-void InitializingXYZ0(int index_m){
+void InitializingXYZ0(int index){
 
 	//double* X0, double* Y0, double* Z0
 
 	//beam xy: uniformed or gaussian from tdr
-	//x0=((double) rand() / (RAND_MAX))*40;//0-20mm;index_m+xStep/2;
+	//x0=((double) rand() / (RAND_MAX))*40;//0-20mm;index+xStep/2;
 	//y0=((double) rand() / (RAND_MAX))*40;//0-20mm;
 
 
@@ -27,7 +27,7 @@ void InitializingXYZ0(int index_m){
 
 	// for TRIUMF case z
 	if(MCtype == 2){
-		X0 = -5 + ((double) rand() / (RAND_MAX))*10;//0-20mm;index_m+xStep/2;
+		X0 = -5 + ((double) rand() / (RAND_MAX))*10;//0-20mm;index+xStep/2;
 		Y0 = -5 + ((double) rand() / (RAND_MAX))*10;//0-20mm;
 		Z0 = GenerateGaus(0,1.69);//2mm
 		if( Z0 > 0) Z0 = - Z0;
@@ -35,7 +35,7 @@ void InitializingXYZ0(int index_m){
 
 	////// H-line
 	if(MCtype == 3){
-		InputTree->GetEntry(index_m);
+		InputTree->GetEntry(index);
 		X0 = x_dec;
 		Y0 = y_dec;
 		Z0 = z_dec;
@@ -43,7 +43,7 @@ void InitializingXYZ0(int index_m){
 
 	///////// S-line
 	if(MCtype == 4){
-		InputTree->GetEntry(index_m);
+		InputTree->GetEntry(index);
 		X0 = x_dec;
 		Y0 = y_dec;
 		Z0 = z_dec;
@@ -52,7 +52,7 @@ void InitializingXYZ0(int index_m){
 	// MCType = 5; New Geometry inspired by Uetake-san and Mibe-san
 
 	if(MCtype == 5){
-		InputTree->GetEntry(index_m);
+		InputTree->GetEntry(index);
 		X0 = x_dec;
 		Y0 = y_dec;
 		Z0 = z_dec;
@@ -71,7 +71,7 @@ void InitializingXYZ0(int index_m){
 
 
 	if(MCtype == 6){
-		InputTree->GetEntry(index_m);
+		InputTree->GetEntry(index);
 		X0 = x_dec;
 		Y0 = y_dec;
 		Z0 = z_dec;
@@ -86,7 +86,7 @@ void InitializingXYZ0(int index_m){
 	}
 
 	if(MCtype == 7){ //Yannis
- 		InputTree->GetEntry(index_m);
+ 		InputTree->GetEntry(index);
 		X0 = x_dec;
 		Y0 = y_dec;
 		Z0 = z_dec;
@@ -101,7 +101,7 @@ void InitializingXYZ0(int index_m){
 	}
 
 	if(MCtype == 8){
-		InputTree->GetEntry(index_m);
+		InputTree->GetEntry(index);
 		X0 = x_dec;
 		Y0 = y_dec;
 		Z0 = z_dec;
@@ -120,7 +120,7 @@ void InitializingXYZ0(int index_m){
 	}
 
 	if(MCtype == 9){
-		InputTree->GetEntry(index_m);
+		InputTree->GetEntry(index);
 		X0 = x_dec;
 		Y0 = y_dec;
 		Z0 = z_dec;
@@ -136,7 +136,7 @@ void InitializingXYZ0(int index_m){
 
 
 	if(MCtype == 10){
-		InputTree->GetEntry(index_m);
+		InputTree->GetEntry(index);
 		X0 = x_dec;
 		Y0 = y_dec;
 		Z0 = z_dec;
@@ -154,7 +154,7 @@ void InitializingXYZ0(int index_m){
 	}
 
 	if(MCtype == 11){
-		InputTree->GetEntry(index_m);
+		InputTree->GetEntry(index);
 		X0 = x_dec;
 		Y0 = y_dec;
 		Z0 = z_dec;
@@ -168,8 +168,23 @@ void InitializingXYZ0(int index_m){
 		if(Y0 < -20 && Y0 > -28)Z0 = Z0 + Thick;
 	}
 
+	if(MCtype == 12){
 
+		double interval = 10;
 
+		InputTree->GetEntry(index);
+		X0 = x_dec;
+		Y0 = y_dec;
+		Z0 = z_dec;
+
+		if(Z0 < 28 && Z0 > 20)Z0 = Z0 + Thick + interval;
+		//if(Z0 < 20 && Z0 > 12) Z0 = Z0 + Thick;
+		if(Z0 < 12 && Z0 > 4)Z0 = Z0 + Thick + interval;
+		//if(Z0 < 4 && Z0 > -4) Z0 = Z0 + Thick;
+		if(Z0 < -4 && Z0 > -12)Z0 = Z0 + Thick + interval;
+		//if(Z0 < -12 && Z0 > -20) Z0 = Z0 + Thick;
+		if(Z0 < -20 && Z0 > -28)Z0 = Z0 + Thick + interval;
+	}
 
 
 }
@@ -344,6 +359,24 @@ bool InsideAerogel(double x, double y, double z){
 			//if(y < -26 && y > -30)return true;
 
 		}
+
+		return false;
+	}
+
+
+	if(MCtype == 12){
+
+		//double interval = 10;
+
+		//InputTree->GetEntry(index_m);
+
+		if(z < 28 && z > 20)return true;
+		//if(z < 20 && z > 12) z = z + Thick;
+		if(z < 12 && z > 4)return true;
+		//if(z < 4 && z > -4) return true;
+		if(z < -4 && z > -12)return true;
+		//if(z < -12 && z > -20) return true;
+		if(z < -20 && z > -28)return true;
 
 		return false;
 	}
