@@ -370,13 +370,13 @@ bool InsideAerogel(double x, double y, double z){
 
 		//InputTree->GetEntry(index_m);
 
-		if(z < 28 && z > 20)return true;
-		//if(z < 20 && z > 12) z = z + Thick;
-		if(z < 12 && z > 4)return true;
-		//if(z < 4 && z > -4) return true;
-		if(z < -4 && z > -12)return true;
-		//if(z < -12 && z > -20) return true;
-		if(z < -20 && z > -28)return true;
+		if(y < 28 && y > 20)return true;
+		//if(y < 20 && y > 12) y = y + Thick;
+		if(y < 12 && y > 4)return true;
+		//if(y < 4 && y > -4) return true;
+		if(y < -4 && y > -12)return true;
+		//if(y < -12 && y > -20) return true;
+		if(y < -20 && y > -28)return true;
 
 		return false;
 	}
