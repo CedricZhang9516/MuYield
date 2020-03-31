@@ -376,6 +376,7 @@ bool InsideAerogel(double x, double y, double z){
 		//if(y < 4 && y > -4) return true;
 		if(y < -4 && y > -12)return true;
 		//if(y < -12 && y > -20) return true;
+
 		if(y < -20 && y > -28)return true;
 
 		return false;
