@@ -14,7 +14,8 @@ int MCtype = 3;
 int flag_xfree = 0; ///// NOT USED NOW
 int flag_newGeo = 0; ///// NOT USED NOW
 int Nrepeat = 1e5;
-double Thick = 7.12;
+//double Thick = 7.12;
+double Thick = 8;
 int H_line = 0;
 int S_line = 0;
 

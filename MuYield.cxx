@@ -11,7 +11,7 @@ int main(int argc, char **argv){
 	name = argv[1];
 
 	if(argc == 2 ){
-		MCtype = 3;
+		MCtype = 12;
 		Nrepeat = 1e5;
 	}
 	if(argc == 3) MCtype = stoi(argv[2]);//4;
@@ -19,7 +19,6 @@ int main(int argc, char **argv){
 
 	H_line = 1;
 	S_line = 0;
-
 
 
 	cout<<"Initialize..."<<endl;
@@ -43,19 +42,20 @@ int main(int argc, char **argv){
 
 	if(H_line){//MCtype == 3 || MCtype == 5 || MCtype == 6 || MCtype == 7 || MCtype == 8){
 
+		/*
 		InputFile = new TFile("./Root/hline_ATH475_BEAMG-2EDM_output_1e6_gendat_afterfit_SEPON_sum.root");
 		InputTree = (TTree*) InputFile->Get("101");
 		InputTree->SetBranchAddress("x_dec", &x_dec);
 		InputTree->SetBranchAddress("y_dec", &y_dec);
 		InputTree->SetBranchAddress("z_dec", &z_dec);
+		*/
 
-		/*
-		InputFile = new TFile("./Root/hline_SimBeamStop_GM_7.12mm.root");
+		InputFile = new TFile("./Root/SimBeamStop_25mm_DG360.root");
 		InputTree = (TTree*) InputFile->Get("position");
 		InputTree->SetBranchAddress("x", &x_dec);
 		InputTree->SetBranchAddress("y", &y_dec);
 		InputTree->SetBranchAddress("z", &z_dec);
-		*/
+
 
 	}
 
