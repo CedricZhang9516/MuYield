@@ -11,7 +11,7 @@ int main(int argc, char **argv){
 	name = argv[1];
 
 	if(argc == 2 ){
-		MCtype = 12;
+		MCtype = 3006;
 		Nrepeat = 1e5;
 	}
 	if(argc == 3) MCtype = stoi(argv[2]);//4;
@@ -50,7 +50,11 @@ int main(int argc, char **argv){
 		InputTree->SetBranchAddress("z_dec", &z_dec);
 		*/
 
-		InputFile = new TFile("./Root/SimBeamStop_25mm_DG360.root");
+		//InputFile = new TFile("./Root/SimBeamStop_25mm_DG360.root");
+		//InputFile = new TFile("./Root/hline_SimBeamStop_GM_7.12mm.root");
+		//InputFile = new TFile("./Root/hline_SimBeamStop_14mm_DG390.root");
+		//InputFile = new TFile("./Root/hline_SimBeamStop_25mm_DG360.root");
+		InputFile = new TFile("./Root/hline_SimBeamStop_14mm_25mm_tot.root");
 		InputTree = (TTree*) InputFile->Get("position");
 		InputTree->SetBranchAddress("x", &x_dec);
 		InputTree->SetBranchAddress("y", &y_dec);
@@ -84,6 +88,7 @@ int main(int argc, char **argv){
 	Nemission = 0;
 	NLaserR = 0;
 	NLaserL = 0;
+	Nstopping = 0;
 
 	//histfile->cd();
 
@@ -102,6 +107,9 @@ int main(int argc, char **argv){
 
 		if(!InsideAerogel(X0,Y0,Z0) ) continue;
 		//Nemission++;
+		Nstopping++;
+		// the continue command only for counting of total stopping instantly
+		continue;
 		//////////////////////
 
 		/// Generate the time structure
@@ -221,6 +229,7 @@ int main(int argc, char **argv){
 	treefile->cd();
 	treefile->Write();
 	cout<<"Total Nrepeat: "<<Nrepeat<<endl
+		<<"Total Nstopping: "<<Nstopping<<endl
 		<<"Nemission: "<<Nemission<<endl
 		<<"Tree Entries: "<<tree->GetEntries()<<endl;
 

@@ -2,12 +2,12 @@
 
 void macro_Hline_Stopping_Profile(){
 
-	//TString filename = "../Root/hline_ATH475_BEAMG-2EDM_output_1e6_gendat_afterfit_SEPON_sum"; TString treename="101";
+	TString filename = "../Root/hline_ATH475_BEAMG-2EDM_output_1e6_gendat_afterfit_SEPON_sum"; TString treename="101";
 	//TString filename = "../Root/hline_SimBeamStop";
-	TString filename = "../Root/hline_SimBeamStop_GM_7.12mm"; TString treename = "position";
+	//TString filename = "../Root/hline_SimBeamStop_GM_7.12mm"; TString treename = "position";
 
 	SetPalette();
-	SetOptStat("0000");
+	//SetOptStat("0000");
 
 	TFile * f = new TFile( (filename + ".root").Data() );
 	TTree * tree = (TTree*) f-> Get(treename.Data());

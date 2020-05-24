@@ -1,12 +1,12 @@
 #include "macro_MuYieldAna.h"
 #include "macro_InsideLaserRegion.h"
 #include "macro_DrawAerogelGeo.h"
-//#include "/Users/zhangce/WorkArea/CZhang/CZhangNew.h"
-#include "../CZhang/CZhangNew.h"
+#include "/Users/zhangce/WorkArea/CZhang/CZhangNew.h"
+//#include "../../CZhang/CZhangNew.h"
 
 
-//#define YieldTime // Calculate the # of Mu inside the laser region as the function of time
-#define Track     /// draw the track inside the aerogel for single event
+#define YieldTime // Calculate the # of Mu inside the laser region as the function of time
+//#define Track     /// draw the track inside the aerogel for single event
 //#define TrackTime
 //#define TrackEventTime
 
@@ -49,15 +49,37 @@ void macro_MuYieldAna(){
 
 	//TString filename = "../Root/GM_test_7.12_tree_Type5_D87000_T322_Nrepeat3231566_H_line1_Thick7.12_NewGeo1";
 	//TString filename = "../Root/GM_10_tree_Type5_D87000_T322_Nrepeat1805626_H_line1_Thick10.00_NewGeo1";
-	TString filename =
 	//"../Root/GM_12_tree_Type5_D87000_T322_Nrepeat2050996_H_line1_Thick12.00_NewGeo1";
-	"../Root/200321_type3_hline_repro_tree_Type3_D87000_T322_Nrepeat3231566_H_line1_Thick7.12_NewGeo0";
+	//"../Root/200321_type3_hline_repro_tree_Type3_D87000_T322_Nrepeat3231566_H_line1_Thick7.12_NewGeo0";
 
 	//TString filename = "../Root/GM_14_tree_Type5_D87000_T322_Nrepeat2150294_H_line1_Thick14.00_NewGeo1";
 	//// XY50 above, for test
 
+	TString filename =
 
+	// 0420, Type 1001
+	//"../Root/1001_TDR_Fig_Reproduction/200420_TDR_Fig_X25Y28_singlePiece_tree_Type1001_D87000_T322_Nrepeat1352113_H_line1_Thick7.12_NewGeo0";
+	//"../Root/1001_TDR_Fig_Reproduction/TDR_200207_X50Y28limit_tree_Type3_D87000_T322_Nrepeat3231566_H_line1_Thick7.12_NewGeo0";
 
+	// 0420, Type 1002
+	//"../Root/1002_TDR_Xfree0.38Reproduction/200420_TDR_unlimited_X150Y150_singlePiece_tree_Type1002_D87000_T322_Nrepeat1352113_H_line1_Thick7.12_NewGeo0";
+	//"../Root/1002_TDR_Xfree0.38Reproduction/TDR_200207_XY300_Reproduce_tree_Type3_D87000_T322_Nrepeat3231566_H_line1_Thick7.12_NewGeo0";
+
+	//"../Root/2001_Multi-piece-3piece/200418_Mutipiece_tree_Type12_D87000_T322_Nrepeat3031781_H_line1_Thick8.00_NewGeo0";
+
+	//"../Root/3002_Multi-piece-3piece-horizontal-25mm/200420_HorizontalMulti_25mm_tree_Type3002_D87000_T322_Nrepeat3031781_H_line1_Thick25.00_NewGeo0";
+
+	//"../Root/3003_Multi-piece-horizontal-7.12mm-v/200420_HorizontalMulti_tree_Type3003_D87000_T322_Nrepeat1352113_H_line1_Thick7.12_NewGeo0";
+	//"../Root/3003_Multi-piece-horizontal-7.12mm-v/HLINENEWGEO_200209_SHIFTED8mm_Xfree_tree_Type9_D87000_T322_Nrepeat3231566_H_line1_Thick7.12_NewGeo1";
+
+	//"../Root/3004_Multi-piece-horizontal-14mm-v/200420_HorizontalMulti_14mm_tree_Type3004_D87000_T322_Nrepeat2150294_H_line1_Thick14.00_NewGeo0";
+	//"../Root/3004_Multi-piece-horizontal-14mm-v/GM_14_tree_Type5_D87000_T322_Nrepeat2150294_H_line1_Thick14.00_NewGeo1";
+
+	//"../Root/3005_Multi-piece-horizontal-25mm-v14mm/200420_HorizontalMulti_25mm-v-14mm_tree_Type3005_D87000_T322_Nrepeat5182075_H_line1_Thick25.00_NewGeo0";
+	//"../Root/3011/200421_HorizontalMulti_4mm_25mm-v-14mm_tree_Type3011_D87000_T322_Nrepeat5182075_H_line1_Thick25.00_NewGeo0";
+
+	//"../Root/3012/200421_HorizontalMulti_4mmShifted_25mm-v-14mm_tree_Type3012_D87000_T322_Nrepeat5182075_H_line1_Thick25.00_NewGeo0";
+	"../Root/3006/200421_HorizontalMulti_8mmShifted_25mm-v-14mm_tree_Type3006_D87000_T322_Nrepeat5182075_H_line1_Thick25.00_NewGeo0";
 
 	gROOT->ProcessLine(Form(".!mkdir %s",filename.Data()));
 
@@ -156,7 +178,7 @@ void macro_MuYieldAna(){
 	hXY2D->Draw("colz");
 
 	//SaveTCanvas(c1,(filename+"/"+hZY2D_sf->GetName()+"").Data());
-	//SaveTCanvas(c2,(filename+"/"+hZY2D->GetName()+"LaserRegion_200209_3").Data());
+	//SaveTCanvas(c2,(filename+"/"+hZY2D->GetName()+"LaserRegion").Data());
 
 	/////////////////
 	///// Draw other 2D and 3D plots
@@ -222,7 +244,7 @@ void MuYieldAsTime(TTree * tree, TCanvas * c = new TCanvas("c_intrnl","c_intrnl"
 //void MuYieldInVacuum(TTree * tree)
 {
 	nbinT = 80; /// 8 us
-	Tstep = 1e-7; /// 0.01 us
+	Tstep = 1e-7; /// 0.1 us
 
 	c = new TCanvas("c_intrnl","c_intrnl",1200,300);
 	c->Divide(4,1);
@@ -233,8 +255,8 @@ void MuYieldAsTime(TTree * tree, TCanvas * c = new TCanvas("c_intrnl","c_intrnl"
 
 
 
-	for(int j = lasertime; j < nbinT; j++){
-	//for(int j = 0; j < nbinT; j++){
+	//for(int j = lasertime; j < nbinT; j++){
+	for(int j = 0; j < nbinT; j++){
 
 		cout<<j<<"/"<<nbinT<<"\r"<<flush;
 
@@ -267,27 +289,39 @@ void MuYieldAsTime(TTree * tree, TCanvas * c = new TCanvas("c_intrnl","c_intrnl"
 			/// DecayT is the total time muon went through
 			//  from Mu formation to its decay.
 			//  but the exact Mu formation time for different muon event is different
-			//if(InsideLaserRegionTDRnoXlimit(x,y,z)){
+			//if(InsideLaserRegionTDR(x,y,z)){
+			if(InsideLaserRegionTDRnoXlimit(x,y,z)){
+
 			//if(InsideLaserRegionNewGeo_8mm(x,y,z)){
-			if(InsideLaserRegionNewGeo_8mm_12mmthick(x,y,z)){
-			hZT2D->Fill(t, z);
-			hZY2D->Fill(z, y);
-			hZX2D->Fill(z, x);
-			hXY2D->Fill(x, y);
-			hXYT3D->Fill(t, x, y);
-			hZXY3D->Fill(z, x, y);
+			//if(InsideLaserRegionNewGeo_8mm_12mmthick(x,y,z)){
+			//if(InsideLaserRegion_2001(x,y,z)){
+			//if(InsideLaserRegion_3003(x,y,z)){
+			//if(InsideLaserRegion_3004(x,y,z)){
+			//if(InsideLaserRegion_3002(x,y,z)){
+			//if(InsideLaserRegion_3011(x,y,z)){
+			//if(InsideLaserRegion_3012(x,y,z)){
+			//if(InsideLaserRegion_3006(x,y,z)){
+				hZT2D->Fill(t, z);
+				hZY2D->Fill(z, y);
+				hZX2D->Fill(z, x);
+				hXY2D->Fill(x, y);
+				hXYT3D->Fill(t, x, y);
+				hZXY3D->Fill(z, x, y);
+				hT->Fill(t);
 			}
 
+			//if(InsideLaserRegionTDR(x,y,z))hT->Fill(t);
 			//if(InsideLaserRegionTDRnoXlimit(x,y,z))hT->Fill(t);
 			//if(InsideLaserRegionNewGeo_8mm(x,y,z))hT->Fill(t);
-			if(InsideLaserRegionNewGeo_8mm_12mmthick(x,y,z))hT->Fill(t);
+			//if(InsideLaserRegionNewGeo_8mm_12mmthick(x,y,z))hT->Fill(t);
 			//if(InsideLaserRegionNewGeo_8mm_14mmthick(x,y,z))hT->Fill(t);
 
 
 		} // loop of all the events
 
 
-		if( j == lasertime+10 ) break;
+		/// Save the dynamic png
+		//if( j == lasertime+10 ) break;
 
 		if( j>=0 && j % 1 == 0){
 			c->cd(4);
@@ -308,6 +342,7 @@ void MuYieldAsTime(TTree * tree, TCanvas * c = new TCanvas("c_intrnl","c_intrnl"
 			c->SaveAs(Form("MuYieldAsTime_%.3f_us.png",j*0.1));
 			if( gSystem->ProcessEvents()) break;
 		}
+
 
 
 	} // loop of all the time from 0 to 8 us, step 1 ns
@@ -373,7 +408,7 @@ void MuYieldAsEvent(TTree * tree, TCanvas * c = new TCanvas("c_intrnl","c_intrnl
 			hZXY3D->Fill(z, x, y);
 
 			//if(InsideLaserRegionTDR(x,y,z))hT->Fill(t);
-			//if(InsideLaserRegionTDRnoXlimit(x,y,z))hT->Fill(t);
+			if(InsideLaserRegionTDRnoXlimit(x,y,z))hT->Fill(t);
 			//if(InsideLaserRegionNewGeo_8mm(x,y,z))hT->Fill(t);
 			//if(InsideLaserRegionNewGeo_4mm(x,y,z))hT->Fill(t);
 			//if(InsideLaserRegionNewGeo_yannis(x,y,z))hT->Fill(t);
@@ -383,8 +418,10 @@ void MuYieldAsEvent(TTree * tree, TCanvas * c = new TCanvas("c_intrnl","c_intrnl
 
 			//if(InsideLaserRegionNewGeo_8mm_10mmthick(x,y,z))hT->Fill(t);
 			//if(InsideLaserRegionNewGeo_8mm_14mmthick(x,y,z))hT->Fill(t);
-			if(InsideLaserRegionNewGeo_8mm_12mmthick(x,y,z))hT->Fill(t);
-
+			//if(InsideLaserRegionNewGeo_8mm_12mmthick(x,y,z))hT->Fill(t);
+			//if(InsideLaserRegion_3011(x,y,z))hT->Fill(t);
+			//if(InsideLaserRegion_3012(x,y,z))hT->Fill(t);
+			//if(InsideLaserRegion_3006(x,y,z))hT->Fill(t);
 
 #ifdef TrackTime
 			//hXY2D->Draw("colz");

@@ -1,4 +1,4 @@
-
+// Type 1001
 bool InsideLaserRegionTDR(double x, double y, double z){ // t = t0 + tbeam
 
 	//if( (fabs(x)>20 || fabs(y)>20) )return false;
@@ -7,6 +7,7 @@ bool InsideLaserRegionTDR(double x, double y, double z){ // t = t0 + tbeam
 	//if( z >= (-6-Thick) && z <= (-1-Thick) && flag_newGeo == 1)return true;
 	return false;
 }
+
 bool InsideLaserRegionTDRnoXlimit(double x, double y, double z){ // t = t0 + tbeam
 
 	//if( (fabs(x)>20 || fabs(y)>20) )return false;
@@ -15,6 +16,17 @@ bool InsideLaserRegionTDRnoXlimit(double x, double y, double z){ // t = t0 + tbe
 	//if( z >= (-6-Thick) && z <= (-1-Thick) && flag_newGeo == 1)return true;
 	return false;
 }
+
+bool InsideLaserRegion_2001(double x, double y, double z){ // t = t0 + tbeam
+
+
+	if( z <= 6 && z>= 1 && y<20 && y>-20 )return true;
+	if( z <= 21 && z>= 16 && y<20 && y>-20 )return true;
+
+	return false;
+}
+
+
 bool InsideLaserRegionNewGeo_8mm(double x, double y, double z){ // t = t0 + tbeam
 
 	double Thick = 7.12;
@@ -40,7 +52,29 @@ bool InsideLaserRegionNewGeo_8mm(double x, double y, double z){ // t = t0 + tbea
 
 }
 
+//3006
+bool InsideLaserRegion_3006(double x, double y, double z){ // t = t0 + tbeam
 
+	double Thick = 25;
+
+
+	if( z>=1 && z<=(Thick+1)){  /// _3.png
+
+		if(y < 19 && y > 13) return true;
+		if(y < 3 && y > -3) return true;
+		if(y < -13 && y > -19) return true;
+
+	}
+
+//	if( z>=(Thick+1) && z <=(Thick+6) )return true;  //// _2.png
+
+	return false;
+
+}
+
+
+
+// 3003
 bool InsideLaserRegionNewGeo_8mmSHIFTED(double x, double y, double z){ // t = t0 + tbeam
 
 	double Thick = 7.12;
@@ -53,7 +87,61 @@ bool InsideLaserRegionNewGeo_8mmSHIFTED(double x, double y, double z){ // t = t0
 
 	}
 
-	if( z>=(Thick+1) && z <=(Thick+6) )return true;  //// _2.png
+	//if( z>=(Thick+1) && z <=(Thick+6) )return true;  //// _2.png
+
+	return false;
+
+}
+
+bool InsideLaserRegion_3003(double x, double y, double z){ // t = t0 + tbeam
+
+	double Thick = 7.12;
+
+	if( z>=1 && z<=(Thick+1)){  /// _3.png
+		if(y < 11 && y > 5) return true;
+		if(y < -5 && y > -11) return true;
+	}
+
+	return false;
+
+}
+
+
+bool InsideLaserRegion_3004(double x, double y, double z){ // t = t0 + tbeam
+
+	double Thick = 14;
+
+	if( z>=1 && z<=(Thick+1)){  /// _3.png
+		if(y < 11 && y > 5) return true;
+		if(y < -5 && y > -11) return true;
+	}
+
+	return false;
+
+}
+
+
+bool InsideLaserRegion_3002(double x, double y, double z){ // t = t0 + tbeam
+
+	double Thick = 25;
+
+	if( z>=1 && z<=(Thick+1)){  /// _3.png
+		if(y < 11 && y > 5) return true;
+		if(y < -5 && y > -11) return true;
+	}
+
+	return false;
+
+}
+
+bool InsideLaserRegion_3005(double x, double y, double z){ // t = t0 + tbeam
+
+	double Thick = 25;
+
+	if( z>=1 && z<=(Thick+1)){  /// _3.png
+		if(y < 11 && y > 5) return true;
+		if(y < -5 && y > -11) return true;
+	}
 
 	return false;
 
@@ -83,6 +171,7 @@ bool InsideLaserRegionNewGeo_4mm(double x, double y, double z){ // t = t0 + tbea
 	return false;
 
 }
+
 
 
 bool InsideLaserRegionNewGeo_yannis(double x, double y, double z){ // t = t0 + tbeam
@@ -145,6 +234,30 @@ bool InsideLaserRegionNewGeo_7_4mm(double x, double y, double z){ // t = t0 + tb
 
 }
 
+bool InsideLaserRegion_3012(double x, double y, double z){ // t = t0 + tbeam
+
+	double Thick = 25;
+
+	//if( z>0 && z<Thick){
+	//if( z>=1 && z<=6){
+	if( z>=1 && z<=(Thick+1)){
+
+	//	if(y < 25 && y > 23) return true;
+		if(y < 17 && y > 15) return true;
+		if(y < 9 && y > 7) return true;
+		if(y < 1 && y > -1) return true;
+		if(y < -7 && y > -9) return true;
+		if(y < -15 && y > -17) return true;
+	//	if(y < -23 && y > -25) return true;
+
+	}
+
+	//if( z>=(Thick+1) && z <=(Thick+6) )return true;
+
+	return false;
+
+}
+
 
 bool InsideLaserRegionNewGeo_7_4mmSHIFTED(double x, double y, double z){ // t = t0 + tbeam
 
@@ -165,6 +278,24 @@ bool InsideLaserRegionNewGeo_7_4mmSHIFTED(double x, double y, double z){ // t = 
 	}
 
 	if( z>=(Thick+1) && z <=(Thick+6) )return true;
+
+	return false;
+
+}
+
+
+bool InsideLaserRegion_3011(double x, double y, double z){ // t = t0 + tbeam
+
+	double Thick = 25;
+
+	if( z>=1 && z<=(Thick+1)){
+
+		if(y < 13 && y > 11) return true;
+		if(y < 5 && y > 3) return true;
+		if(y < -3 && y > -5) return true;
+		if(y < -11 && y > -13) return true;
+
+	}
 
 	return false;
 
