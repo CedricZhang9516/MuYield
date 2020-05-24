@@ -11,7 +11,7 @@ int main(int argc, char **argv){
 	name = argv[1];
 
 	if(argc == 2 ){
-		MCtype = 3006;
+		MCtype = 1002;//3006;
 		Nrepeat = 1e5;
 	}
 	if(argc == 3) MCtype = stoi(argv[2]);//4;
@@ -54,7 +54,8 @@ int main(int argc, char **argv){
 		//InputFile = new TFile("./Root/hline_SimBeamStop_GM_7.12mm.root");
 		//InputFile = new TFile("./Root/hline_SimBeamStop_14mm_DG390.root");
 		//InputFile = new TFile("./Root/hline_SimBeamStop_25mm_DG360.root");
-		InputFile = new TFile("./Root/hline_SimBeamStop_14mm_25mm_tot.root");
+		//InputFile = new TFile("./Root/SimBeamStop_GM_14mm.root");
+		InputFile = new TFile("/home/had/zhangce/stopping/SimBeamStop_200523_H-line_DG475_TDR.root");
 		InputTree = (TTree*) InputFile->Get("position");
 		InputTree->SetBranchAddress("x", &x_dec);
 		InputTree->SetBranchAddress("y", &y_dec);
@@ -109,7 +110,7 @@ int main(int argc, char **argv){
 		//Nemission++;
 		Nstopping++;
 		// the continue command only for counting of total stopping instantly
-		continue;
+		//continue;
 		//////////////////////
 
 		/// Generate the time structure
@@ -203,7 +204,7 @@ int main(int argc, char **argv){
 
 		//if(flag_newGeo == 0 && Z_sf<0){continue;}
 
-		//cout<<DecayT<<" "<<DiffusionT<<endl;
+		cout<<DecayT<<" "<<DiffusionT<<endl;
 		if(DecayT > DiffusionT){
 			//cout<<__LINE__<<endl;
 			Nemission++;
