@@ -214,6 +214,7 @@ int main(int argc, char **argv){
 		if(DecayT > DiffusionT){
 			//cout<<__LINE__<<endl;
 			Nemission++;
+			MUONID = MuonID();
 			tree->Fill();
 			continue;
 		}

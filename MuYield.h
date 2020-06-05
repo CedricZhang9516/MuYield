@@ -2,6 +2,8 @@
 #define _MuYield
 //#include "/Users/zhangce/WorkArea/CZhang/CZhangNew.h"
 #include "../CZhang/CZhangNew.h"
+#include "MuonID.h"
+
 
 //bool InsideLaserRegion(double, double, double);
 //bool InsideAerogel(double x, double y, double z);
@@ -112,6 +114,8 @@ double phi_sf;// = -1;
 
 double t0;// = -1;// is not the initial t, but the total time spent inside aerogel
 double DiffusionT;
+
+double MUONID;
 
 
 std::vector<Double_t>* DiffusionVertexX;// = new std::vector<double>;//(5,0);
@@ -337,6 +341,7 @@ void SetTreeBranch(TTree * tree){
 	tree->Branch("DriftX",&DriftX,"DriftX/D");
 	tree->Branch("DriftY",&DriftY,"DriftY/D");
 	tree->Branch("DriftZ",&DriftZ,"DriftZ/D");
+	tree->Branch("MUONID",&MUONID,"MUONID/D");
 }
 
 
@@ -419,6 +424,7 @@ void InitialTreeVar(){
 	DriftX = -1;
 	DriftY = -1;
 	DriftZ = -1;
+	MUONID = -1;
 
 
 }
