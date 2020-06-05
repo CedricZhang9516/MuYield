@@ -51,11 +51,11 @@ int main(int argc, char **argv){
 		*/
 
 		//InputFile = new TFile("./Root/SimBeamStop_25mm_DG360.root");
-		//InputFile = new TFile("./Root/hline_SimBeamStop_GM_7.12mm.root");
+		InputFile = new TFile("./Root/hline_SimBeamStop_GM_7.12mm.root");
 		//InputFile = new TFile("./Root/hline_SimBeamStop_14mm_DG390.root");
 		//InputFile = new TFile("./Root/hline_SimBeamStop_25mm_DG360.root");
 		//InputFile = new TFile("./Root/SimBeamStop_GM_14mm.root");
-		InputFile = new TFile("/home/had/zhangce/stopping/SimBeamStop_200523_H-line_DG475_TDR.root");
+		//InputFile = new TFile("/home/had/zhangce/stopping/SimBeamStop_200523_H-line_DG475_TDR.root");
 		InputTree = (TTree*) InputFile->Get("position");
 		InputTree->SetBranchAddress("x", &x_dec);
 		InputTree->SetBranchAddress("y", &y_dec);
@@ -204,7 +204,7 @@ int main(int argc, char **argv){
 
 		//if(flag_newGeo == 0 && Z_sf<0){continue;}
 
-		cout<<DecayT<<" "<<DiffusionT<<endl;
+		//cout<<DecayT<<" "<<DiffusionT<<endl;
 		if(DecayT > DiffusionT){
 			//cout<<__LINE__<<endl;
 			Nemission++;

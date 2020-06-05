@@ -79,7 +79,9 @@ void macro_MuYieldAna(){
 	//"../Root/3011/200421_HorizontalMulti_4mm_25mm-v-14mm_tree_Type3011_D87000_T322_Nrepeat5182075_H_line1_Thick25.00_NewGeo0";
 
 	//"../Root/3012/200421_HorizontalMulti_4mmShifted_25mm-v-14mm_tree_Type3012_D87000_T322_Nrepeat5182075_H_line1_Thick25.00_NewGeo0";
-	"../Root/3006/200421_HorizontalMulti_8mmShifted_25mm-v-14mm_tree_Type3006_D87000_T322_Nrepeat5182075_H_line1_Thick25.00_NewGeo0";
+	//"../Root/3006/200421_HorizontalMulti_8mmShifted_25mm-v-14mm_tree_Type3006_D87000_T322_Nrepeat5182075_H_line1_Thick25.00_NewGeo0";
+
+	"../Root/200524_H-line_TDR_tree_Type1002_D87000_T322_Nrepeat6504_H_line1_Thick7.12_NewGeo0";
 
 	gROOT->ProcessLine(Form(".!mkdir %s",filename.Data()));
 
@@ -138,7 +140,7 @@ void macro_MuYieldAna(){
 
 	//MuYieldAsTime(tree);
 
-	//MuYieldAsEvent(tree,c0);
+	MuYieldAsEvent(tree,c0);
 
 
 	/////////////////
@@ -243,8 +245,8 @@ void TRIUMFVacuumRegion(TTree * tree, TCanvas * c = NewTCanvas("c_intrnl","c_int
 void MuYieldAsTime(TTree * tree, TCanvas * c = new TCanvas("c_intrnl","c_intrnl",300,1500))
 //void MuYieldInVacuum(TTree * tree)
 {
-	nbinT = 80; /// 8 us
-	Tstep = 1e-7; /// 0.1 us
+	nbinT = 800; /// 8 us
+	Tstep = 1e-8; /// 0.01 us
 
 	c = new TCanvas("c_intrnl","c_intrnl",1200,300);
 	c->Divide(4,1);

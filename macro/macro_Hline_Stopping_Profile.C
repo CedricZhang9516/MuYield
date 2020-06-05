@@ -2,9 +2,11 @@
 
 void macro_Hline_Stopping_Profile(){
 
-	TString filename = "../Root/hline_ATH475_BEAMG-2EDM_output_1e6_gendat_afterfit_SEPON_sum"; TString treename="101";
+	//TString filename =
+	//"../Root/hline_ATH475_BEAMG-2EDM_output_1e6_gendat_afterfit_SEPON_sum"; TString treename="101";
 	//TString filename = "../Root/hline_SimBeamStop";
 	//TString filename = "../Root/hline_SimBeamStop_GM_7.12mm"; TString treename = "position";
+	//TString filename = "../Root/200526_H-line_TDR_1010308_tree_Type1002_D87000_T322_Nrepeat1010308_H_line1_Thick7.12_NewGeo0"; TString treename = "tree";
 
 	SetPalette();
 	//SetOptStat("0000");
@@ -13,7 +15,7 @@ void macro_Hline_Stopping_Profile(){
 	TTree * tree = (TTree*) f-> Get(treename.Data());
 
 	//TTree * tree = (TTree*) f-> Get("position");
-
+	tree->Draw("z");
 
 	TH1F * hDecayZ = TreeToTH1F(tree,"z",100,-10,2,
 		"z<10 && z>-8");
