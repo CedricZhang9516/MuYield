@@ -12,7 +12,8 @@ bool InsideLaserRegionTDRnoXlimit(double x, double y, double z){ // t = t0 + tbe
 
 	//if( (fabs(x)>20 || fabs(y)>20) )return false;
 
-	if( z <= 6 && z>= 1 && y<20 && y>-20 )return true;
+	//if( z <= 6 && z>= 1 && y<20 && y>-20 )return true;
+	if( z <= 6 && z>= 1 )return true;
 	//if( z >= (-6-Thick) && z <= (-1-Thick) && flag_newGeo == 1)return true;
 	return false;
 }

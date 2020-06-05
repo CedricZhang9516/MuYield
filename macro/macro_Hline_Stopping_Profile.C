@@ -1,10 +1,11 @@
-#include "/Users/zhangce/WorkArea/CZhang/CZhangNew.h"
+#include "../../CZhang/CZhangNew.h"
 
 void macro_Hline_Stopping_Profile(){
 
-	TString filename = "../Root/hline_ATH475_BEAMG-2EDM_output_1e6_gendat_afterfit_SEPON_sum"; TString treename="101";
+	//TString filename = "../Root/hline_ATH475_BEAMG-2EDM_output_1e6_gendat_afterfit_SEPON_sum"; TString treename="101";
 	//TString filename = "../Root/hline_SimBeamStop";
 	//TString filename = "../Root/hline_SimBeamStop_GM_7.12mm"; TString treename = "position";
+	TString filename = "/home/had/zhangce/stopping/SimBeamStop_200526_H-line_DG475_3321746"; TString treename = "position";
 
 	SetPalette();
 	//SetOptStat("0000");

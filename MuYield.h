@@ -9,6 +9,7 @@
 //void InitializingXYZ0(int index);
 
 TString name;
+TString InputName;
 
 int MCtype = 3;
 int flag_xfree = 0; ///// NOT USED NOW
