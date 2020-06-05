@@ -17,6 +17,12 @@ int main(int argc, char **argv){
 	if(argc == 3) MCtype = stoi(argv[2]);//4;
 	if(argc == 4) Nrepeat = stoi(argv[3]);//
 
+	if(argc == 5){
+		MCtype = stoi(argv[2]);//3006;
+		Nrepeat = stoi(argv[3]);
+		InputName = argv[4];
+	}//
+
 	H_line = 1;
 	S_line = 0;
 
@@ -50,12 +56,12 @@ int main(int argc, char **argv){
 		InputTree->SetBranchAddress("z_dec", &z_dec);
 		*/
 
-		//InputFile = new TFile("./Root/SimBeamStop_25mm_DG360.root");
-		InputFile = new TFile("./Root/hline_SimBeamStop_GM_7.12mm.root");
-		//InputFile = new TFile("./Root/hline_SimBeamStop_14mm_DG390.root");
-		//InputFile = new TFile("./Root/hline_SimBeamStop_25mm_DG360.root");
-		//InputFile = new TFile("./Root/SimBeamStop_GM_14mm.root");
-		//InputFile = new TFile("/home/had/zhangce/stopping/SimBeamStop_200523_H-line_DG475_TDR.root");
+
+		//InputFile = new TFile("/home/had/zhangce/stopping/SimBeamStop_200526_H-line_DG475_3321746.root");
+		//InputFile = new TFile("/home/had/zhangce/stopping/SimBeamStop_200526_H-line_DG475_3326844.root");
+		InputFile = new TFile(InputName.Data());
+
+
 		InputTree = (TTree*) InputFile->Get("position");
 		InputTree->SetBranchAddress("x", &x_dec);
 		InputTree->SetBranchAddress("y", &y_dec);

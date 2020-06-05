@@ -1,6 +1,6 @@
 #include <vector>
-#include "/Users/zhangce/WorkArea/CZhang/CZhangNew.h"
-//#include "../CZhang/CZhangNew.h"
+//#include "/Users/zhangce/WorkArea/CZhang/CZhangNew.h"
+#include "../CZhang/CZhangNew.h"
 
 double TBeam;// = -1;
 double DecayT;// = -1;

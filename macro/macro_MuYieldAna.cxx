@@ -1,8 +1,8 @@
 #include "macro_MuYieldAna.h"
 #include "macro_InsideLaserRegion.h"
 #include "macro_DrawAerogelGeo.h"
-#include "/Users/zhangce/WorkArea/CZhang/CZhangNew.h"
-//#include "../../CZhang/CZhangNew.h"
+//#include "/Users/zhangce/WorkArea/CZhang/CZhangNew.h"
+#include "../../CZhang/CZhangNew.h"
 
 
 #define YieldTime // Calculate the # of Mu inside the laser region as the function of time
@@ -81,9 +81,12 @@ void macro_MuYieldAna(){
 	//"../Root/3012/200421_HorizontalMulti_4mmShifted_25mm-v-14mm_tree_Type3012_D87000_T322_Nrepeat5182075_H_line1_Thick25.00_NewGeo0";
 	//"../Root/3006/200421_HorizontalMulti_8mmShifted_25mm-v-14mm_tree_Type3006_D87000_T322_Nrepeat5182075_H_line1_Thick25.00_NewGeo0";
 
-	"../Root/200524_H-line_TDR_tree_Type1002_D87000_T322_Nrepeat6504_H_line1_Thick7.12_NewGeo0";
+	//"../Root/200524_H-line_TDR_tree_Type1002_D87000_T322_Nrepeat6504_H_line1_Thick7.12_NewGeo0";
 
-	gROOT->ProcessLine(Form(".!mkdir %s",filename.Data()));
+	//"../Root/200526_H-line_TDR_1010308_tree_Type1002_D87000_T322_Nrepeat1010308_H_line1_Thick7.12_NewGeo0";
+	"/home/had/zhangce/g-2/MuYield/Root/MuYield_200605_2e6_010_focus05_329095_tree_Type1002_D87000_T322_Nrepeat135936_H_line1_Thick7.12_NewGeo0";
+
+	gROOT->ProcessLine( Form(".!mkdir %s",filename.Data()) );
 
 	SetPalette();
 	//SetOptStat();
@@ -341,7 +344,7 @@ void MuYieldAsTime(TTree * tree, TCanvas * c = new TCanvas("c_intrnl","c_intrnl"
 			c->Modified();
 			c->Update();
 			//gSystem->Sleep(100);
-			c->SaveAs(Form("MuYieldAsTime_%.3f_us.png",j*0.1));
+			//c->SaveAs(Form("MuYieldAsTime_%.3f_us.png",j*0.1));
 			if( gSystem->ProcessEvents()) break;
 		}
 
