@@ -1,5 +1,6 @@
-#include<iostream>
-#include<ctime>
+#include <iostream>
+#include <ctime>
+#include <iomanip>
 
 using namespace std;
 
@@ -50,7 +51,7 @@ const double MuonID(){
 
 	ofstream NewMuonIDtxt;
 	NewMuonIDtxt.open("MuonID.txt",ios::trunc);
-	NewMuonIDtxt << fixed<<setprecision(0)<<NewTime<<" "<<N<<" "<<setprecision(0)<<MuonID<<endl;
+	NewMuonIDtxt << fixed << setprecision(0)<<NewTime<<" "<<N<<" "<<setprecision(0)<<MuonID<<endl;
 	//fixed<<NewTime << " " <<setw(8)<< N << " " << MuonID << endl;
 	NewMuonIDtxt.close();
 
