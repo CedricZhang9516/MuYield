@@ -9,7 +9,7 @@
 //#define Track     /// draw the track inside the aerogel for single event
 //#define TrackTime
 //#define TrackEventTime
-//#define drawplot
+#define drawplot
 
 void macro_MuYieldAna(TString filename = "MuYield.root"){
 
@@ -98,8 +98,27 @@ void macro_MuYieldAna(TString filename = "MuYield.root"){
 	//SetOptStat();
 
 
-	TFile * f = new TFile( (filename + ".root").Data() );
-	TTree * tree = (TTree*) f-> Get("tree");
+	TChain * tree = new TChain("tree","tree");
+
+
+
+tree->Add("/home/had/zhangce/g-2/MuYield/Root/MuYield_200605_2e6_000_focus05_328933_tree_Type1002_D87000_T322_Nrepeat135905_H_line1_Thick7.12_NewGeo0.root");
+tree->Add("/home/had/zhangce/g-2/MuYield/Root/MuYield_200605_2e6_001_focus05_328990_tree_Type1002_D87000_T322_Nrepeat136328_H_line1_Thick7.12_NewGeo0.root");
+tree->Add("/home/had/zhangce/g-2/MuYield/Root/MuYield_200605_2e6_002_focus05_329245_tree_Type1002_D87000_T322_Nrepeat135545_H_line1_Thick7.12_NewGeo0.root");
+tree->Add("/home/had/zhangce/g-2/MuYield/Root/MuYield_200605_2e6_003_focus05_329794_tree_Type1002_D87000_T322_Nrepeat135665_H_line1_Thick7.12_NewGeo0.root");
+tree->Add("/home/had/zhangce/g-2/MuYield/Root/MuYield_200605_2e6_004_focus05_328766_tree_Type1002_D87000_T322_Nrepeat135315_H_line1_Thick7.12_NewGeo0.root");
+tree->Add("/home/had/zhangce/g-2/MuYield/Root/MuYield_200605_2e6_005_focus05_330282_tree_Type1002_D87000_T322_Nrepeat136127_H_line1_Thick7.12_NewGeo0.root");
+tree->Add("/home/had/zhangce/g-2/MuYield/Root/MuYield_200605_2e6_006_focus05_329103_tree_Type1002_D87000_T322_Nrepeat135772_H_line1_Thick7.12_NewGeo0.root");
+tree->Add("/home/had/zhangce/g-2/MuYield/Root/MuYield_200605_2e6_007_focus05_328824_tree_Type1002_D87000_T322_Nrepeat136132_H_line1_Thick7.12_NewGeo0.root");
+tree->Add("/home/had/zhangce/g-2/MuYield/Root/MuYield_200605_2e6_008_focus05_330099_tree_Type1002_D87000_T322_Nrepeat135491_H_line1_Thick7.12_NewGeo0.root");
+tree->Add("/home/had/zhangce/g-2/MuYield/Root/MuYield_200605_2e6_009_focus05_329506_tree_Type1002_D87000_T322_Nrepeat135741_H_line1_Thick7.12_NewGeo0.root");
+
+
+
+
+
+	//TFile * f = new TFile( (filename + ".root").Data() );
+	//TTree * tree = (TTree*) f-> Get("tree");
 
 	int Nentries = tree->GetEntries();
 
@@ -142,21 +161,23 @@ void macro_MuYieldAna(TString filename = "MuYield.root"){
 
 	///// OUTPUT the ionized muon events for further analysis, such as ToRFQ or Slow muon beam line
 
-	LaserIonization(tree,filename.Append(Form("_ionization_%0.02f.dat",lasertime)) );
+	//LaserIonization(tree,filename.Append(Form("_ionization_%0.02f.dat",lasertime)) );
 
 
 
 #ifdef drawplot
-
-	//MuYieldAsTime(tree);
-
-	//MuYieldAsEvent(tree,c0);
 
 	TCanvas * c0 = NewTCanvas("c0","c0",800,800,1,1);
 	TCanvas * c1 = NewTCanvas("c1","c1",1000,1000,3,3);
 	TCanvas * c2 = NewTCanvas("c2","c2",1333,333,4,1);
 
 	TCanvas * c_Track = NewTCanvas("c_Track","c_Track",1333,1333,1,1);
+
+	//MuYieldAsTime(tree);
+
+	MuYieldAsEvent(tree,c0);
+
+
 	//int NCanvas = 0;
 
 	/////////////////
@@ -239,6 +260,8 @@ void macro_MuYieldAna(TString filename = "MuYield.root"){
 	SaveTH1(hDecayZ0,"H-line_initial_Profile_GM_z0");
 */
 	hT->Draw();
+
+	c0->SaveAs("Yield Time; t[s]; count");
 
 #endif
 

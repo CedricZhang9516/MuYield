@@ -1,6 +1,6 @@
 #include <vector>
 //#include "/Users/zhangce/WorkArea/CZhang/CZhangNew.h"
-#include "../CZhang/CZhangNew.h"
+#include "../../CZhang/CZhangNew.h"
 
 double TBeam;// = -1;
 double DecayT;// = -1;
@@ -49,6 +49,7 @@ double DecayPositronMomtZ;
 double LaserX;// = -1;
 double LaserY;// = -1;
 double LaserZ;// = -1;
+double LaserE;// = -1;
 
 double DecayX;// = -1;
 double DecayY;// = -1;
@@ -83,7 +84,9 @@ double XXp,Xp2,X2;
 double YYp,Yp2,Y2;
 double BetaGamma;
 
-int nbinT = 8000; /// 8 us
+double MUONID;
+
+int nbinT = 7000; /// 8 us
 double Tstep = 1e-9; /// 1 ns
 double lasertime = -1;
 
@@ -107,6 +110,7 @@ tree->SetBranchAddress("DiffusionT",&DiffusionT);// = -1;// is not the initial t
 tree->SetBranchAddress("LaserX",&LaserX);// = -1;
 tree->SetBranchAddress("LaserY",&LaserY);// = -1;
 tree->SetBranchAddress("LaserZ",&LaserZ);// = -1;
+tree->SetBranchAddress("LaserE",&LaserE);// = -1;
 
 tree->SetBranchAddress("DecayX",&DecayX);// = -1;
 tree->SetBranchAddress("DecayY",&DecayY);// = -1;
@@ -155,6 +159,8 @@ tree->SetBranchAddress("DriftT_ab",&DriftT_ab);
 tree->SetBranchAddress("DriftX",&DriftX);
 tree->SetBranchAddress("DriftY",&DriftY);
 tree->SetBranchAddress("DriftZ",&DriftZ);
+
+tree->SetBranchAddress("MUONID",&MUONID);
 
 }
 
@@ -240,6 +246,7 @@ void Emittance(TTree* tree);
 void MuYieldAsEvent(TTree * tree, TCanvas * c = new TCanvas("c_intrnl","c_intrnl",1000,1000));
 void MuYieldAsTime(TTree * tree, TCanvas * c = new TCanvas("c_intrnl","c_intrnl",1000,1000));
 void TRIUMFVacuumRegion(TTree * tree, TCanvas * c = NewTCanvas("c_intrnl","c_intrnl",1000,1000,2,2));
+void LaserIonization(TTree * tree, TString Outputfilename = "LaserIonization.dat");
 /*
 bool InsideLaserRegion(double x, double y, double z);//{ // t = t0 + tbeam
 bool InsideLaserRegionNewGeo(double x, double y, double z);//{ // t = t0 + tbeam
