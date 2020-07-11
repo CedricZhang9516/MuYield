@@ -9,7 +9,7 @@
 //#define Track     /// draw the track inside the aerogel for single event
 //#define TrackTime
 //#define TrackEventTime
-//#define drawplot
+#define drawplot
 
 void macro_MuYieldAna(TString filename = "MuYield.root"){
 
@@ -59,13 +59,14 @@ void macro_MuYieldAna(TString filename = "MuYield.root"){
 	//// XY50 above, for test
 
 	//TString filename =
+	filename =
 
 	// 0420, Type 1001
 	//"../Root/1001_TDR_Fig_Reproduction/200420_TDR_Fig_X25Y28_singlePiece_tree_Type1001_D87000_T322_Nrepeat1352113_H_line1_Thick7.12_NewGeo0";
 	//"../Root/1001_TDR_Fig_Reproduction/TDR_200207_X50Y28limit_tree_Type3_D87000_T322_Nrepeat3231566_H_line1_Thick7.12_NewGeo0";
 
 	// 0420, Type 1002
-	//"../Root/1002_TDR_Xfree0.38Reproduction/200420_TDR_unlimited_X150Y150_singlePiece_tree_Type1002_D87000_T322_Nrepeat1352113_H_line1_Thick7.12_NewGeo0";
+	"../Root/1002_TDR_Xfree0.38Reproduction/200420_TDR_unlimited_X150Y150_singlePiece_tree_Type1002_D87000_T322_Nrepeat1352113_H_line1_Thick7.12_NewGeo0";
 	//"../Root/1002_TDR_Xfree0.38Reproduction/TDR_200207_XY300_Reproduce_tree_Type3_D87000_T322_Nrepeat3231566_H_line1_Thick7.12_NewGeo0";
 
 	//"../Root/2001_Multi-piece-3piece/200418_Mutipiece_tree_Type12_D87000_T322_Nrepeat3031781_H_line1_Thick8.00_NewGeo0";
@@ -79,10 +80,12 @@ void macro_MuYieldAna(TString filename = "MuYield.root"){
 	//"../Root/3004_Multi-piece-horizontal-14mm-v/GM_14_tree_Type5_D87000_T322_Nrepeat2150294_H_line1_Thick14.00_NewGeo1";
 
 	//"../Root/3005_Multi-piece-horizontal-25mm-v14mm/200420_HorizontalMulti_25mm-v-14mm_tree_Type3005_D87000_T322_Nrepeat5182075_H_line1_Thick25.00_NewGeo0";
+	//"../Root/3006/200421_HorizontalMulti_8mmShifted_25mm-v-14mm_tree_Type3006_D87000_T322_Nrepeat5182075_H_line1_Thick25.00_NewGeo0";
+
 	//"../Root/3011/200421_HorizontalMulti_4mm_25mm-v-14mm_tree_Type3011_D87000_T322_Nrepeat5182075_H_line1_Thick25.00_NewGeo0";
 
 	//"../Root/3012/200421_HorizontalMulti_4mmShifted_25mm-v-14mm_tree_Type3012_D87000_T322_Nrepeat5182075_H_line1_Thick25.00_NewGeo0";
-	//"../Root/3006/200421_HorizontalMulti_8mmShifted_25mm-v-14mm_tree_Type3006_D87000_T322_Nrepeat5182075_H_line1_Thick25.00_NewGeo0";
+
 
 	//"../Root/200524_H-line_TDR_tree_Type1002_D87000_T322_Nrepeat6504_H_line1_Thick7.12_NewGeo0";
 
@@ -110,14 +113,14 @@ void macro_MuYieldAna(TString filename = "MuYield.root"){
 
 	//////// Draw the tack of one of the events
 
-#ifdef Track
+	#ifdef Track
 
 	tree->GetEntry(3);
 	TGraph * g = new TGraph();
 	for(int i = 0; i<DiffusionVertexX->size() ;i++)g->SetPoint(i,DiffusionVertexZ->at(i),DiffusionVertexY->at(i));
 	g->Draw("APL*");
 
-#endif
+	#endif
 
 
 	//////// Draw the aerogel geometry
@@ -127,12 +130,12 @@ void macro_MuYieldAna(TString filename = "MuYield.root"){
 
 
 	//////// Draw The TRIUMF result in each regions
-/*
+	/*
 	TH1F * hDecayT = TreeToTH1F(tree,"DecayT * 1e6",100,0,10,
 		"DecayZ>10 && DecayZ<20 && sqrt(pow(DecayPositronMomtX,2) + pow(DecayPositronMomtY,2) + pow(DecayPositronMomtZ,2)) > 30 && DecayPositronMomtX>10");
 	hDecayT->SetTitle("DecayT, P > 30 Mev, Px > 10 MeV, 10 mm to 20 mm; T [us]; N");
  	hDecayT->Draw("");
-*/
+	*/
 
 	//////// Draw Mu yield dynamics in vacuum
 	///////// THIS TWO FUNCTIONS SHOULD NOT BE USED SIMUTANEOUSLY
@@ -142,15 +145,12 @@ void macro_MuYieldAna(TString filename = "MuYield.root"){
 
 	///// OUTPUT the ionized muon events for further analysis, such as ToRFQ or Slow muon beam line
 
-	LaserIonization(tree,filename.Append(Form("_ionization_%0.02f.dat",lasertime)) );
+	// LaserIonization(tree,filename.Append(Form("_ionization_%0.02f.dat",lasertime)) );
 
 
 
-#ifdef drawplot
+	#ifdef drawplot
 
-	//MuYieldAsTime(tree);
-
-	//MuYieldAsEvent(tree,c0);
 
 	TCanvas * c0 = NewTCanvas("c0","c0",800,800,1,1);
 	TCanvas * c1 = NewTCanvas("c1","c1",1000,1000,3,3);
@@ -158,6 +158,16 @@ void macro_MuYieldAna(TString filename = "MuYield.root"){
 
 	TCanvas * c_Track = NewTCanvas("c_Track","c_Track",1333,1333,1,1);
 	//int NCanvas = 0;
+
+	#endif
+
+
+	//MuYieldAsTime(tree);
+
+	MuYieldAsEvent(tree,c0);
+
+
+	#ifdef drawplot
 
 	/////////////////
 	// Yield on the surface

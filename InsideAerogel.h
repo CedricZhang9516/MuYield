@@ -175,13 +175,6 @@ void InitializingXYZ0(int index){
 		X0 = x_dec;
 		Y0 = y_dec;
 		Z0 = z_dec;
-/*
-		if(Z0>0){
-			if(Y0 < 20 && Y0 > 12) Z0 = Z0 + Thick;
-			if(Y0 < 4 && Y0 > -4) Z0 = Z0 + Thick;
-			if(Y0 < -12 && Y0 > -20) Z0 = Z0 + Thick;
-		}
-*/
 	}
 
 
