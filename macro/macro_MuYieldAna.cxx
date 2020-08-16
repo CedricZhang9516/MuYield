@@ -5,7 +5,7 @@
 //#include "../../CZhang/CZhangNew.h"
 
 
-#define YieldTime // Calculate the # of Mu inside the laser region as the function of time
+//#define YieldTime // Calculate the # of Mu inside the laser region as the function of time
 //#define Track     /// draw the track inside the aerogel for single event
 //#define TrackTime
 //#define TrackEventTime
@@ -66,7 +66,7 @@ void macro_MuYieldAna(TString filename = "MuYield.root"){
 	//"../Root/1001_TDR_Fig_Reproduction/TDR_200207_X50Y28limit_tree_Type3_D87000_T322_Nrepeat3231566_H_line1_Thick7.12_NewGeo0";
 
 	// 0420, Type 1002
-	"../Root/1002_TDR_Xfree0.38Reproduction/200420_TDR_unlimited_X150Y150_singlePiece_tree_Type1002_D87000_T322_Nrepeat1352113_H_line1_Thick7.12_NewGeo0";
+	//"../Root/1002_TDR_Xfree0.38Reproduction/200420_TDR_unlimited_X150Y150_singlePiece_tree_Type1002_D87000_T322_Nrepeat1352113_H_line1_Thick7.12_NewGeo0";
 	//"../Root/1002_TDR_Xfree0.38Reproduction/TDR_200207_XY300_Reproduce_tree_Type3_D87000_T322_Nrepeat3231566_H_line1_Thick7.12_NewGeo0";
 
 	//"../Root/2001_Multi-piece-3piece/200418_Mutipiece_tree_Type12_D87000_T322_Nrepeat3031781_H_line1_Thick8.00_NewGeo0";
@@ -96,6 +96,11 @@ void macro_MuYieldAna(TString filename = "MuYield.root"){
 	//"/home/had/zhangce/g-2/TDRFIG/MuYield_200605_TDR_1352591_G-2EDM_output_1e6_gendat_afterfit_SEPON_all_dump-sum_tree_Type1002_D87000_T322_Nrepeat1352591_H_line1_Thick7.12_NewGeo0";
 
 	//gROOT->ProcessLine( Form(".!mkdir %s",filename.Data()) );
+
+	//"../Root/3006-200728study/200728_test1_tree_Type3006_D87000_T322_Nrepeat5182075_H_line1_Thick25.00_NewGeo0";
+	//"../Root/3006-200728study/200728_test2_tree_Type3006_D87000_T322_Nrepeat2150294_H_line1_Thick25.00_NewGeo0";
+	"../Root/3006-200728study/200728_test2_tree_Type3006_D87000_T322_Nrepeat3031781_H_line1_Thick25.00_NewGeo0";
+
 
 	SetPalette();
 	//SetOptStat();
@@ -140,7 +145,8 @@ void macro_MuYieldAna(TString filename = "MuYield.root"){
 	//////// Draw Mu yield dynamics in vacuum
 	///////// THIS TWO FUNCTIONS SHOULD NOT BE USED SIMUTANEOUSLY
 
-	lasertime = 1.35; // if comment it, the laser will not be shot
+	//lasertime = 1.35; // if comment it, the laser will not be shot
+	lasertime = 1.40; // if comment it, the laser will not be shot
 
 
 	///// OUTPUT the ionized muon events for further analysis, such as ToRFQ or Slow muon beam line
@@ -155,8 +161,9 @@ void macro_MuYieldAna(TString filename = "MuYield.root"){
 	TCanvas * c0 = NewTCanvas("c0","c0",800,800,1,1);
 	TCanvas * c1 = NewTCanvas("c1","c1",1000,1000,3,3);
 	TCanvas * c2 = NewTCanvas("c2","c2",1333,333,4,1);
+	TCanvas * c3_laser = NewTCanvas("c3_laser","c3_laser",1333,333,3,2);
 
-	TCanvas * c_Track = NewTCanvas("c_Track","c_Track",1333,1333,1,1);
+	//TCanvas * c_Track = NewTCanvas("c_Track","c_Track",1333,1333,1,1);
 	//int NCanvas = 0;
 
 	#endif
@@ -166,6 +173,7 @@ void macro_MuYieldAna(TString filename = "MuYield.root"){
 
 	MuYieldAsEvent(tree,c0);
 
+	LaserIonization_noOutput(tree);
 
 	#ifdef drawplot
 
@@ -204,6 +212,20 @@ void macro_MuYieldAna(TString filename = "MuYield.root"){
 	hZX2D->Draw("colz");
 	c2->cd(1);
 	hXY2D->Draw("colz");
+
+	int c_i = 0;
+	c3_laser->cd(++c_i);
+	hZY2D_0->Draw("colz");
+	c3_laser->cd(++c_i);
+	hZX2D_0->Draw("colz");
+	c3_laser->cd(++c_i);
+	hXY2D_0->Draw("colz");
+	c3_laser->cd(++c_i);
+	hZY2D_laser->Draw("colz");
+	c3_laser->cd(++c_i);
+	hZX2D_laser->Draw("colz");
+	c3_laser->cd(++c_i);
+	hXY2D_laser->Draw("colz");
 
 	//SaveTCanvas(c1,(filename+"/"+hZY2D_sf->GetName()+"").Data());
 	//SaveTCanvas(c2,(filename+"/"+hZY2D->GetName()+"LaserRegion").Data());
@@ -437,7 +459,7 @@ void MuYieldAsEvent(TTree * tree, TCanvas * c = new TCanvas("c_intrnl","c_intrnl
 			hZXY3D->Fill(z, x, y);
 
 			//if(InsideLaserRegionTDR(x,y,z))hT->Fill(t);
-			if(InsideLaserRegionTDRnoXlimit(x,y,z))hT->Fill(t);
+			//if(InsideLaserRegionTDRnoXlimit(x,y,z))hT->Fill(t);
 			//if(InsideLaserRegionNewGeo_8mm(x,y,z))hT->Fill(t);
 			//if(InsideLaserRegionNewGeo_4mm(x,y,z))hT->Fill(t);
 			//if(InsideLaserRegionNewGeo_yannis(x,y,z))hT->Fill(t);
@@ -450,7 +472,23 @@ void MuYieldAsEvent(TTree * tree, TCanvas * c = new TCanvas("c_intrnl","c_intrnl
 			//if(InsideLaserRegionNewGeo_8mm_12mmthick(x,y,z))hT->Fill(t);
 			//if(InsideLaserRegion_3011(x,y,z))hT->Fill(t);
 			//if(InsideLaserRegion_3012(x,y,z))hT->Fill(t);
-			//if(InsideLaserRegion_3006(x,y,z))hT->Fill(t);
+			if(InsideLaserRegion_3006(x,y,z)){
+
+				hT->Fill(t);
+/*
+				hZY2D_0->Fill(z, y);
+				hZX2D_0->Fill(z, x);
+				hXY2D_0->Fill(x, y);
+*/
+/*
+				hZT2D->Fill(t, z);
+				hZY2D->Fill(z, y);
+				hZX2D->Fill(z, x);
+				hXY2D->Fill(x, y);
+				hXYT3D->Fill(t, x, y);
+				hZXY3D->Fill(z, x, y);
+*/
+			}
 
 #ifdef TrackTime
 			//hXY2D->Draw("colz");
@@ -799,6 +837,141 @@ void LaserIonization(TTree * tree, TString Outputfilename = "LaserIonization.dat
 	gROOT->ProcessLine( Form(".!mv %s %s",
 		Outputfilename.Data(),OutputfilenameWithN.Data()
 		) );
+
+
+}
+
+
+
+void LaserIonization_noOutput(TTree * tree)
+{
+
+
+	//ofstream wf(Outputfilename.Data());
+
+	int Nentries = tree->GetEntries();
+
+	double x, y, z, vx, vy, vz, t, muonid;
+
+	const double mmu = 105.658;
+	const double light = 299792458; // m/s
+	const double massMu = 106.16/light/light; // MeV/c2
+
+	//DEBUG
+	int NLaserRegion = 0;
+	int NLaserRegion3 = 0;
+	double tT1, tT2, tT3;
+	double tZ1, tZ2, tZ3;
+
+	for(int i = 0; i<Nentries; i++){
+	//for(int i = 0; i<9; i++){
+
+		//DEBUG
+		int FNLaserRegion = 0;
+		int FNLaserRegion3 = 0;
+		tZ1 = 0;
+
+		tree->GetEntry(i);
+
+		cout<<i<<"/"<<Nentries<<"\r"<<flush;
+
+		double delT = DecayT - DiffusionT;
+
+		if(
+			( DecayT <= (lasertime*1e-6  - TBeam) )  ||
+			(lasertime*1e-6 - TBeam - DiffusionT) < 0
+		)continue;
+
+
+
+		t = DiffusionT + TBeam;
+
+		x = X_sf;
+		y = Y_sf;
+		z = Z_sf;
+		vx = VX_sf;
+		vy = VY_sf;
+		vz = VZ_sf;
+
+		LaserE = 0.5 * massMu * 1e-6 * (VX_sf*VX_sf + VY_sf*VY_sf + VZ_sf*VZ_sf);//v:mm/s, Ek: MeV
+
+
+		t = DiffusionT + TBeam;
+		x = X_sf;
+		y = Y_sf;
+		z = Z_sf;
+
+		x = x + vx * (lasertime*1e-6 - TBeam - DiffusionT);
+		y = y + vy * (lasertime*1e-6 - TBeam - DiffusionT);
+		z = z + vz * (lasertime*1e-6 - TBeam - DiffusionT);
+		t = lasertime*1e-6;
+
+		//std::streamsize prev_precision = wf.precision(); // save old precision
+
+		if(InsideLaserRegion_3006(x,y,z)){
+
+			double p = 1.0*sqrt(2.0*LaserE*mmu+LaserE*LaserE);
+			double g = 1.0*(mmu+LaserE)/mmu;
+			double b = 1.0*sqrt(2.0*LaserE*mmu+LaserE*LaserE)/(mmu+LaserE);
+			//cout << g << "\t" << b << endl;
+
+			double xp = VX_sf/VZ_sf;
+			double yp = VY_sf/VZ_sf;
+
+
+			hZY2D_laser->Fill(z, y);
+			hZX2D_laser->Fill(z, x);
+			hXY2D_laser->Fill(x, y);
+
+			hZY2D_0->Fill(Z0, Y0);
+			hZX2D_0->Fill(Z0, X0);
+			hXY2D_0->Fill(X0, Y0);
+
+
+/*
+
+			wf << x*0.1 << " "
+			<< xp*1000 << " "
+			<< y*0.1 << " "
+			<< yp*1000 << " ";
+
+			wf << scientific
+			<< mmu/1000*g*b << " ";
+
+			wf.precision(prev_precision); // restore old precision
+
+			wf << fixed << z << " "
+			<< 0 << " "
+			<< "-1 -1 ";// << endl;
+
+			wf << fixed << setprecision(0) << MUONID
+			<< endl;
+
+
+			wf.precision(prev_precision); // restore old precision
+
+			NLaserRegion3++;
+*/
+			/*
+			//DEBUG
+			if(FNLaserRegion==0){
+				cout<<"check with two methods "<<tZ1<<" "<<z<< endl;
+			}
+			*/
+
+
+		}
+
+	} // all surface events
+
+
+	//DEBUG
+	//cout<<"total NLaserRegion "<<NLaserRegion<<endl;
+	//cout<<"total NLaserRegion2 "<<NLaserRegion2<<endl;
+	//cout<<"total NLaserRegion3 "<<NLaserRegion3<<endl;
+
+	//String OutputfilenameWithN = Outputfilename;
+	//OutputfilenameWithN.ReplaceAll(".dat", Form("_%d.dat",NLaserRegion3) );
 
 
 }

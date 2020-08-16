@@ -94,6 +94,11 @@ void InitTree(TTree* tree){
 
 tree->SetBranchAddress("TBeam",&TBeam);//,"TBeam/D");
 tree->SetBranchAddress("DecayT",&DecayT);//,"DecayT/D");
+
+tree->SetBranchAddress("X0",&X0);// = -1;
+tree->SetBranchAddress("Y0",&Y0);// = -1;
+tree->SetBranchAddress("Z0",&Z0);// = -1;
+
 tree->SetBranchAddress("X_sf",&X_sf);// = -1;
 tree->SetBranchAddress("Y_sf",&Y_sf);// = -1;
 tree->SetBranchAddress("Z_sf",&Z_sf);// = -1;
@@ -231,6 +236,18 @@ TH2D *hXY2D_sf = new TH2D("X-Y-2D_sf","X-Y-2D_sf; X(mm);Y (mm)",500,-40,40,500,-
 TH3D *hXYT3D_sf = new TH3D("ZX-T-3D_sf","ZX-T-3D_sf; t(us); x (mm); y (mm)",nbinT,0e-9,nbinT*Tstep,100,-40,40,100,-40,40);
 TH3D *hZXY3D_sf = new TH3D("ZXY-3D_sf","ZXY-3D_sf;   z(mm); x (mm); y (mm)",100,-1,10,100,-40,40,100,-40,40);
 
+TH2D *hZY2D_0 = new TH2D("Z-Y-2D-0","Z-Y-2D-0; Z(mm);Y (mm)",100,0,30,60,-30,30);
+TH2D *hZX2D_0 = new TH2D("Z-X-2D-0","Z-X-2D-0; Z(mm);X (mm)",100,-40,40,100,-40,40);
+TH2D *hXY2D_0 = new TH2D("X-Y-2D-0","X-Y-2D-0; X(mm);Y (mm)",100,-80,80,60,-30,30);
+
+TH2D *hZY2D_laser = new TH2D("Z-Y-2D-laser","Z-Y-2D-laser; Z(mm);Y (mm)",100,0,30,60,-30,30);
+TH2D *hZX2D_laser = new TH2D("Z-X-2D-laser","Z-X-2D-laser; Z(mm);X (mm)",100,-40,40,100,-40,40);
+TH2D *hXY2D_laser = new TH2D("X-Y-2D-laser","X-Y-2D-laser; X(mm);Y (mm)",100,-80,80,60,-30,30);
+
+
+
+
+
 //if(flag_Newgeo==1){
 //	EmissionX = new TH2D("EmissionZ","EmissionZ;Z;Z'",240,-120,120,320,0.16,0.16); // mm
 //	EmissionY = new TH2D("EmissionX","EmissionX;X;X'",500,-25,25,320,0.16,0.16); // mm
@@ -247,6 +264,7 @@ void MuYieldAsEvent(TTree * tree, TCanvas * c = new TCanvas("c_intrnl","c_intrnl
 void MuYieldAsTime(TTree * tree, TCanvas * c = new TCanvas("c_intrnl","c_intrnl",1000,1000));
 void TRIUMFVacuumRegion(TTree * tree, TCanvas * c = NewTCanvas("c_intrnl","c_intrnl",1000,1000,2,2));
 void LaserIonization(TTree * tree, TString Outputfilename = "LaserIonization.dat");
+void LaserIonization_noOutput(TTree * tree);
 /*
 bool InsideLaserRegion(double x, double y, double z);//{ // t = t0 + tbeam
 bool InsideLaserRegionNewGeo(double x, double y, double z);//{ // t = t0 + tbeam
