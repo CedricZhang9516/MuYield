@@ -287,18 +287,11 @@ void SetTreeBranch(TTree * tree){
 	tree->Branch("theta_sf",&theta_sf,"theta_sf/D");
 	tree->Branch("phi_sf",&phi_sf,"phi_sf/D");
 
-	//double DiffusionT;
-	//tree->Branch("DiffusionVertexX", DiffusionVertexX,  "DiffusionVertexX/D");// std::vector<double> DiffusionVertexX;
-	//tree->Branch("DiffusionVertexY", DiffusionVertexY, "DiffusionVertexY/D");// std::vector<double> DiffusionVertexY;
-	//tree->Branch("DiffusionVertexZ", DiffusionVertexZ, "DiffusionVertexZ/D");// std::vector<double> DiffusionVertexZ;
-	//tree->Branch("DiffusionVertexT", DiffusionVertexT, "DiffusionVertexT/D");// std::vector<double> DiffusionVertexT;
-
 
 	tree->Branch("DiffusionVertexX", "vector<Double_t>", &DiffusionVertexX);//  "DiffusionVertexX/D");// std::vector<double> DiffusionVertexX;
 	tree->Branch("DiffusionVertexY", "vector<Double_t>", &DiffusionVertexY);// "DiffusionVertexY/D");// std::vector<double> DiffusionVertexY;
 	tree->Branch("DiffusionVertexZ", "vector<Double_t>", &DiffusionVertexZ);// "DiffusionVertexZ/D");// std::vector<double> DiffusionVertexZ;
 	tree->Branch("DiffusionVertexT", "vector<Double_t>", &DiffusionVertexT);// "DiffusionVertexT/D");// std::vector<double> DiffusionVertexT;
-
 
 
 	tree->Branch("DecayX",&DecayX,"DecayX/D");
@@ -312,35 +305,35 @@ void SetTreeBranch(TTree * tree){
 	tree->Branch("DecayPositronMomtX",&DecayPositronMomtX,"DecayPositronMomtX/D");
 	tree->Branch("DecayPositronMomtY",&DecayPositronMomtY,"DecayPositronMomtY/D");
 	tree->Branch("DecayPositronMomtZ",&DecayPositronMomtZ,"DecayPositronMomtZ/D");
-
+//
 	///////////////////
 
-	tree->Branch("LaserX",&LaserX,"LaserX/D");
-	tree->Branch("LaserY",&LaserY,"LaserY/D");
-	tree->Branch("LaserZ",&LaserZ,"LaserZ/D");
-	tree->Branch("LaserE",&LaserE,"LaserE/D");
-	tree->Branch("LaserXp",&LaserXp,"LaserXp/D");
-	tree->Branch("LaserYp",&LaserYp,"LaserYp/D");
+	//tree->Branch("LaserX",&LaserX,"LaserX/D");
+	//tree->Branch("LaserY",&LaserY,"LaserY/D");
+	//tree->Branch("LaserZ",&LaserZ,"LaserZ/D");
+	//tree->Branch("LaserE",&LaserE,"LaserE/D");
+	//tree->Branch("LaserXp",&LaserXp,"LaserXp/D");
+	//tree->Branch("LaserYp",&LaserYp,"LaserYp/D");
 
-	tree->Branch("MeshEk",&MeshEk,"MeshEk/D");
-	tree->Branch("MeshE",&MeshE,"MeshE/D");
-	tree->Branch("MeshT",&MeshT,"MeshT/D");
-	tree->Branch("MeshT_ab",&MeshT_ab,"MeshT_ab/D");
-	tree->Branch("MeshX",&MeshX,"MeshX/D");
-	tree->Branch("MeshY",&MeshY,"MeshY/D");
-	tree->Branch("MeshZ",&MeshZ,"MeshZ/D");
-	tree->Branch("MeshXp",&MeshXp,"MeshXp/D");
-	tree->Branch("MeshYp",&MeshYp,"MeshYp/D");
-	tree->Branch("MeshBeta",&MeshBeta,"MeshBeta/D");
-	tree->Branch("MeshVY",&MeshVY,"MeshVY/D");
-	tree->Branch("MeshVX",&MeshVX,"MeshVX/D");
-	tree->Branch("MeshVZ",&MeshVZ,"MeshVZ/D");
+	//tree->Branch("MeshEk",&MeshEk,"MeshEk/D");
+	//tree->Branch("MeshE",&MeshE,"MeshE/D");
+	//tree->Branch("MeshT",&MeshT,"MeshT/D");
+	//tree->Branch("MeshT_ab",&MeshT_ab,"MeshT_ab/D");
+	//tree->Branch("MeshX",&MeshX,"MeshX/D");
+	//tree->Branch("MeshY",&MeshY,"MeshY/D");
+	//tree->Branch("MeshZ",&MeshZ,"MeshZ/D");
+	//tree->Branch("MeshXp",&MeshXp,"MeshXp/D");
+	//tree->Branch("MeshYp",&MeshYp,"MeshYp/D");
+	//tree->Branch("MeshBeta",&MeshBeta,"MeshBeta/D");
+	//tree->Branch("MeshVY",&MeshVY,"MeshVY/D");
+	//tree->Branch("MeshVX",&MeshVX,"MeshVX/D");
+	//tree->Branch("MeshVZ",&MeshVZ,"MeshVZ/D");
 
-	tree->Branch("DriftT",&DriftT,"DriftT/D");
-	tree->Branch("DriftT_ab",&DriftT_ab,"DriftT_ab/D");
-	tree->Branch("DriftX",&DriftX,"DriftX/D");
-	tree->Branch("DriftY",&DriftY,"DriftY/D");
-	tree->Branch("DriftZ",&DriftZ,"DriftZ/D");
+	//tree->Branch("DriftT",&DriftT,"DriftT/D");
+	//tree->Branch("DriftT_ab",&DriftT_ab,"DriftT_ab/D");
+	//tree->Branch("DriftX",&DriftX,"DriftX/D");
+	//tree->Branch("DriftY",&DriftY,"DriftY/D");
+	//tree->Branch("DriftZ",&DriftZ,"DriftZ/D");
 	tree->Branch("MUONID",&MUONID,"MUONID/D");
 }
 
