@@ -8,6 +8,9 @@
 #ifndef MuYield_Class_h
 #define MuYield_Class_h
 
+//#define TrackTime
+//#define TrackEventTime
+
 #include <TROOT.h>
 #include <TChain.h>
 #include <TFile.h>
@@ -19,6 +22,13 @@ class MuYield_Class {
 public :
    TTree          *fChain;   //!pointer to the analyzed TTree or TChain
    Int_t           fCurrent; //!current Tree number in a TChain
+
+   TString         filename;
+   TTree          *tree;
+   Int_t           MCtype;
+
+   Int_t           Nentries;
+   Int_t           OutputLaserIonization = 0;
 
 // Fixed size dimensions of array or collections stored in the TTree if any.
 
@@ -58,30 +68,30 @@ public :
    Double_t        DecayPositronMomtX;
    Double_t        DecayPositronMomtY;
    Double_t        DecayPositronMomtZ;
-   Double_t        LaserX;
-   Double_t        LaserY;
-   Double_t        LaserZ;
-   Double_t        LaserE;
-   Double_t        LaserXp;
-   Double_t        LaserYp;
-   Double_t        MeshEk;
-   Double_t        MeshE;
-   Double_t        MeshT;
-   Double_t        MeshT_ab;
-   Double_t        MeshX;
-   Double_t        MeshY;
-   Double_t        MeshZ;
-   Double_t        MeshXp;
-   Double_t        MeshYp;
-   Double_t        MeshBeta;
-   Double_t        MeshVY;
-   Double_t        MeshVX;
-   Double_t        MeshVZ;
-   Double_t        DriftT;
-   Double_t        DriftT_ab;
-   Double_t        DriftX;
-   Double_t        DriftY;
-   Double_t        DriftZ;
+//   Double_t        LaserX;
+//   Double_t        LaserY;
+//   Double_t        LaserZ;
+//   Double_t        LaserE;
+//   Double_t        LaserXp;
+//   Double_t        LaserYp;
+//   Double_t        MeshEk;
+//   Double_t        MeshE;
+//   Double_t        MeshT;
+//   Double_t        MeshT_ab;
+//   Double_t        MeshX;
+//   Double_t        MeshY;
+//   Double_t        MeshZ;
+//   Double_t        MeshXp;
+//   Double_t        MeshYp;
+//   Double_t        MeshBeta;
+//   Double_t        MeshVY;
+//   Double_t        MeshVX;
+//   Double_t        MeshVZ;
+//   Double_t        DriftT;
+//   Double_t        DriftT_ab;
+//   Double_t        DriftX;
+//   Double_t        DriftY;
+//   Double_t        DriftZ;
 
    // List of branches
    TBranch        *b_TBeam;   //!
@@ -119,51 +129,58 @@ public :
    TBranch        *b_DecayPositronMomtX;   //!
    TBranch        *b_DecayPositronMomtY;   //!
    TBranch        *b_DecayPositronMomtZ;   //!
-   TBranch        *b_LaserX;   //!
-   TBranch        *b_LaserY;   //!
-   TBranch        *b_LaserZ;   //!
-   TBranch        *b_LaserE;   //!
-   TBranch        *b_LaserXp;   //!
-   TBranch        *b_LaserYp;   //!
-   TBranch        *b_MeshEk;   //!
-   TBranch        *b_MeshE;   //!
-   TBranch        *b_MeshT;   //!
-   TBranch        *b_MeshT_ab;   //!
-   TBranch        *b_MeshX;   //!
-   TBranch        *b_MeshY;   //!
-   TBranch        *b_MeshZ;   //!
-   TBranch        *b_MeshXp;   //!
-   TBranch        *b_MeshYp;   //!
-   TBranch        *b_MeshBeta;   //!
-   TBranch        *b_MeshVY;   //!
-   TBranch        *b_MeshVX;   //!
-   TBranch        *b_MeshVZ;   //!
-   TBranch        *b_DriftT;   //!
-   TBranch        *b_DriftT_ab;   //!
-   TBranch        *b_DriftX;   //!
-   TBranch        *b_DriftY;   //!
-   TBranch        *b_DriftZ;   //!
+//   TBranch        *b_LaserX;   //!
+//   TBranch        *b_LaserY;   //!
+//   TBranch        *b_LaserZ;   //!
+//   TBranch        *b_LaserE;   //!
+//   TBranch        *b_LaserXp;   //!
+//   TBranch        *b_LaserYp;   //!
+//   TBranch        *b_MeshEk;   //!
+//   TBranch        *b_MeshE;   //!
+//   TBranch        *b_MeshT;   //!
+//   TBranch        *b_MeshT_ab;   //!
+//   TBranch        *b_MeshX;   //!
+//   TBranch        *b_MeshY;   //!
+//   TBranch        *b_MeshZ;   //!
+//   TBranch        *b_MeshXp;   //!
+//   TBranch        *b_MeshYp;   //!
+//   TBranch        *b_MeshBeta;   //!
+//   TBranch        *b_MeshVY;   //!
+//   TBranch        *b_MeshVX;   //!
+//   TBranch        *b_MeshVZ;   //!
+//   TBranch        *b_DriftT;   //!
+//   TBranch        *b_DriftT_ab;   //!
+//   TBranch        *b_DriftX;   //!
+//   TBranch        *b_DriftY;   //!
+//   TBranch        *b_DriftZ;   //!
 
 
-   TH1D* hMeshEk;// = new TH1D("hMeshEk","hMeshEk;MeV",100,0.07e-3,0.20e-3);
-   TH1D* hMeshT;// = new TH1D("hMeshT","hMeshT;s",100,20e-9,34e-9);
-   TH1D* hMeshT_ab;// = new TH1D("hMeshT_ab","hMeshT_ab;s",100,1.32e-6,1.334e-6);
-   TH1D* hMeshX;// = new TH1D("hMeshX","hMeshX;mm",200,-150,150);
-   TH1D* hMeshY;// = new TH1D("hMeshY","hMeshY;mm",200,-25,25);
-   TH1D* hMeshZ;// = new TH1D("hMeshZ","hMeshZ;mm",200,-100,100);
-   TH1D* hMeshXp;// = new TH1D("hMeshXp","hMeshXp",100,-0.04,0.04);
-   TH1D* hMeshYp;// = new TH1D("hMeshYp","hMeshYp",100,-0.05,0.05);
+   TH1D* hT_sf;// = new TH1D("hT_sf","hT_sf;T[s];N",nbinT,0,nbinT*Tstep);
+   TH2D *hZY2D_sf;// = new TH2D("Z-Y-2D_sf","Z-Y-2D_sf; Z(mm);Y (mm)",500,-10,40,500,-40,40);
+   TH2D *hZX2D_sf;// = new TH2D("Z-X-2D_sf","Z-X-2D_sf; Z(mm);X (mm)",500,-40,40,500,-40,40);
+   TH2D *hXY2D_sf;// = new TH2D("X-Y-2D_sf","X-Y-2D_sf; X(mm);Y (mm)",500,-40,40,500,-40,40);
 
-   TH1D* hMeshBeta;// = new TH1D("hMeshBeta","hMeshBeta",100,0.0012,0.0019);
-   TH1D* hMeshVY;// = new TH1D("hMeshVY","hMeshVY;mm/s",100,-15e6,15e6);
-   TH1D* hMeshVX;// = new TH1D("hMeshVX","hMeshVX;mm/s",100,-20e6,20e6);
-   TH1D* hMeshVZ;// = new TH1D("hMeshVZ","hMeshVZ;mm/s",100,360e6,560e6);
+   TH3D *hZXY3D_sf;// = new TH3D("ZXY-3D_sf","ZXY-3D_sf;   z(mm); x (mm); y (mm)",100,-1,10,100,-40,40,100,-40,40);
 
-   TH1D* hDriftT;// = new TH1D("hDriftT","hDriftT;s",100,0.8e-6,1.4e-6);
-   TH1D* hDriftT_ab;// = new TH1D("hDriftT_ab","hDriftT_ab;s",100,2.2e-6,2.7e-6);
-   TH1D* hDriftX;// = new TH1D("hDriftX","hDriftX;mm",200,-150,150);
-   TH1D* hDriftY;// = new TH1D("hDriftY","hDriftY;mm",200,-40,40);
-   TH1D* hDriftZ;// = new TH1D("hDriftZ","hDriftZ;mm",200,-100,600);
+   TH2D *hZT2D;// = new TH2D("Z-T-2D","Z-T-2D; t(us);Z (mm)",nbinT,0e-9,nbinT*Tstep,1000,1,10);
+   TH2D *hZY2D;// = new TH2D("Z-Y-2D","Z-Y-2D; Z(mm);Y (mm)",100,0,30,60,-30,30);
+   TH2D *hZX2D;// = new TH2D("Z-X-2D","Z-X-2D; Z(mm);X (mm)",100,-40,40,100,-40,40);
+   TH2D *hXY2D;// = new TH2D("X-Y-2D","X-Y-2D; X(mm);Y (mm)",100,-80,80,60,-30,30);
+
+   TH3D *hXYT3D;// = new TH3D("ZX-T-3D","ZX-T-3D; t(us); x (mm); y (mm)",nbinT,0e-9,nbinT*Tstep,100,-40,40,100,-40,40);
+   TH3D *hZXY3D;// = new TH3D("ZXY-3D","ZXY-3D;   z(mm); x (mm); y (mm)",100,-1,10,100,-40,40,100,-40,40);
+
+   TH1D* hT;// = new TH1D("hT","hT;T[s];N",nbinT,0,nbinT*Tstep);
+
+   TH2D *hZY2D_0;// = new TH2D("Z-Y-2D-0","Z-Y-2D-0; Z(mm);Y (mm)",100,0,30,60,-30,30);
+   TH2D *hZX2D_0;// = new TH2D("Z-X-2D-0","Z-X-2D-0; Z(mm);X (mm)",100,-40,40,100,-40,40);
+   TH2D *hXY2D_0;// = new TH2D("X-Y-2D-0","X-Y-2D-0; X(mm);Y (mm)",100,-80,80,60,-30,30);
+
+   TH2D *hZY2D_laser;// = new TH2D("Z-Y-2D-laser","Z-Y-2D-laser; Z(mm);Y (mm)",100,0,30,60,-30,30);
+   TH2D *hZX2D_laser;// = new TH2D("Z-X-2D-laser","Z-X-2D-laser; Z(mm);X (mm)",100,-40,40,100,-40,40);
+   TH2D *hXY2D_laser;// = new TH2D("X-Y-2D-laser","X-Y-2D-laser; X(mm);Y (mm)",100,-80,80,60,-30,30);
+
+   //// currently not used in the new class
 
    TH1D* hXXp;// = new TH1D("hXXp","hXXp",100,-16,16);
    TH1D* hXp2;// = new TH1D("hXp2","hXp2",100,0,0.0016);
@@ -173,46 +190,33 @@ public :
    TH1D* hY2;// = new TH1D("hY2","hY2",100,0,1e4);
    TH1D* hBetaGamma;// = new TH1D("hBetaGamma","hBetaGamma",100,0.0012,0.0019);
 
-   TH1D* hT;// = new TH1D("hT","hT;T[s];N",nbinT,0,nbinT*Tstep);
-   TH1D* hT_sf;// = new TH1D("hT_sf","hT_sf;T[s];N",nbinT,0,nbinT*Tstep);
-
-
    TH2D* EmissionX;// = new TH2D("EmissionX","EmissionX;X;X'",240,-120,120,320,0.16,0.16); // mm
    TH2D* EmissionY;// = new TH2D("EmissionY","EmissionY;Y;Y'",500,-25,25,320,0.16,0.16); // mm
 
    TH2D* CorrMeshTE;// = new TH2D("CorrMeshTE","CorrMeshTE;T(s);Ek(MeV)",100,30e-9,80e-9,100,0.185e-3,0.21e-3);
 
-   TH2D *hZT2D;// = new TH2D("Z-T-2D","Z-T-2D; t(us);Z (mm)",nbinT,0e-9,nbinT*Tstep,1000,1,10);
-
-   TH2D *hZY2D;// = new TH2D("Z-Y-2D","Z-Y-2D; Z(mm);Y (mm)",100,0,30,60,-30,30);
-   TH2D *hZX2D;// = new TH2D("Z-X-2D","Z-X-2D; Z(mm);X (mm)",100,-40,40,100,-40,40);
-   TH2D *hXY2D;// = new TH2D("X-Y-2D","X-Y-2D; X(mm);Y (mm)",100,-80,80,60,-30,30);
-
    TH2D *hZT2D_sf;// = new TH2D("Z-T-2D_sf","Z-T-2D_sf; t(us);Z (mm)",nbinT,0e-9,nbinT*Tstep,1000,1,10);
-
-   TH2D *hZY2D_sf;// = new TH2D("Z-Y-2D_sf","Z-Y-2D_sf; Z(mm);Y (mm)",500,-10,40,500,-40,40);
-   TH2D *hZX2D_sf;// = new TH2D("Z-X-2D_sf","Z-X-2D_sf; Z(mm);X (mm)",500,-40,40,500,-40,40);
-   TH2D *hXY2D_sf;// = new TH2D("X-Y-2D_sf","X-Y-2D_sf; X(mm);Y (mm)",500,-40,40,500,-40,40);
-   TH2D *hZY2D_0;// = new TH2D("Z-Y-2D-0","Z-Y-2D-0; Z(mm);Y (mm)",100,0,30,60,-30,30);
-   TH2D *hZX2D_0;// = new TH2D("Z-X-2D-0","Z-X-2D-0; Z(mm);X (mm)",100,-40,40,100,-40,40);
-   TH2D *hXY2D_0;// = new TH2D("X-Y-2D-0","X-Y-2D-0; X(mm);Y (mm)",100,-80,80,60,-30,30);
-
-   TH2D *hZY2D_laser;// = new TH2D("Z-Y-2D-laser","Z-Y-2D-laser; Z(mm);Y (mm)",100,0,30,60,-30,30);
-   TH2D *hZX2D_laser;// = new TH2D("Z-X-2D-laser","Z-X-2D-laser; Z(mm);X (mm)",100,-40,40,100,-40,40);
-   TH2D *hXY2D_laser;// = new TH2D("X-Y-2D-laser","X-Y-2D-laser; X(mm);Y (mm)",100,-80,80,60,-30,30);
-
    TH3D *hXYT3D_sf;// = new TH3D("ZX-T-3D_sf","ZX-T-3D_sf; t(us); x (mm); y (mm)",nbinT,0e-9,nbinT*Tstep,100,-40,40,100,-40,40);
-   TH3D *hZXY3D_sf;// = new TH3D("ZXY-3D_sf","ZXY-3D_sf;   z(mm); x (mm); y (mm)",100,-1,10,100,-40,40,100,-40,40);
-   TH3D *hXYT3D;// = new TH3D("ZX-T-3D","ZX-T-3D; t(us); x (mm); y (mm)",nbinT,0e-9,nbinT*Tstep,100,-40,40,100,-40,40);
-   TH3D *hZXY3D;// = new TH3D("ZXY-3D","ZXY-3D;   z(mm); x (mm); y (mm)",100,-1,10,100,-40,40,100,-40,40);
 
-   MuYield_Class(TTree *tree=0);
+
+   int nbinT = 7000; /// 8 us
+   double Tstep = 1e-9; /// 1 ns
+   double lasertime = -1;
+
+   TGraph * g_track;// = new TGraph();
+
+   TCanvas * c;// = NewTCanvas("c_intrnl","c_intrnl",1000,1000,2,2)
+
+   MuYield_Class(TString name = "MuYield.root", int mctype = 1002);
    virtual ~MuYield_Class();
    virtual Int_t    Cut(Long64_t entry);
    virtual Int_t    GetEntry(Long64_t entry);
    virtual Long64_t LoadTree(Long64_t entry);
    virtual void     Init(TTree *tree);
-   virtual void     Loop();
+   virtual void     LoopEvent();
+   virtual void     LoopTime();
+   virtual void     Track(Int_t Nevent);
+   virtual void     LaserIonization(double Lasertime = -1, TString Outputfilename = "");
    virtual Bool_t   Notify();
    virtual void     Show(Long64_t entry = -1);
 };
@@ -220,18 +224,24 @@ public :
 #endif
 
 #ifdef MuYield_Class_cxx
-MuYield_Class::MuYield_Class(TTree *tree) : fChain(0)
+//MuYield_Class::MuYield_Class(TTree *tree) : fChain(0)
+MuYield_Class::MuYield_Class(TString name = "MuYield.root", int mctype = 1002) : fChain(0)
 {
 // if parameter tree is not specified (or zero), connect the file
 // used to generate this class and read the Tree.
-   if (tree == 0) {
-      TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("200421_HorizontalMulti_8mmShifted_25mm-v-14mm_tree_Type3006_D87000_T322_Nrepeat5182075_H_line1_Thick25.00_NewGeo0.root");
-      if (!f || !f->IsOpen()) {
-         f = new TFile("200421_HorizontalMulti_8mmShifted_25mm-v-14mm_tree_Type3006_D87000_T322_Nrepeat5182075_H_line1_Thick25.00_NewGeo0.root");
-      }
-      f->GetObject("tree",tree);
+   filename = name;
+   filename.ReplaceAll(".root","");
 
+   TFile * f = new TFile( (filename + ".root").Data() );
+
+   if (!f || !f->IsOpen()) {
+      cout<<"no files found, using MuYield.root"<<endl;
+      f = new TFile("MuYield.root");
    }
+   f->GetObject("tree",tree);
+
+   MCtype = mctype;
+
    Init(tree);
 }
 
@@ -316,50 +326,50 @@ void MuYield_Class::Init(TTree *tree)
    fChain->SetBranchAddress("DecayPositronMomtX", &DecayPositronMomtX, &b_DecayPositronMomtX);
    fChain->SetBranchAddress("DecayPositronMomtY", &DecayPositronMomtY, &b_DecayPositronMomtY);
    fChain->SetBranchAddress("DecayPositronMomtZ", &DecayPositronMomtZ, &b_DecayPositronMomtZ);
-   fChain->SetBranchAddress("LaserX", &LaserX, &b_LaserX);
-   fChain->SetBranchAddress("LaserY", &LaserY, &b_LaserY);
-   fChain->SetBranchAddress("LaserZ", &LaserZ, &b_LaserZ);
-   fChain->SetBranchAddress("LaserE", &LaserE, &b_LaserE);
-   fChain->SetBranchAddress("LaserXp", &LaserXp, &b_LaserXp);
-   fChain->SetBranchAddress("LaserYp", &LaserYp, &b_LaserYp);
-   fChain->SetBranchAddress("MeshEk", &MeshEk, &b_MeshEk);
-   fChain->SetBranchAddress("MeshE", &MeshE, &b_MeshE);
-   fChain->SetBranchAddress("MeshT", &MeshT, &b_MeshT);
-   fChain->SetBranchAddress("MeshT_ab", &MeshT_ab, &b_MeshT_ab);
-   fChain->SetBranchAddress("MeshX", &MeshX, &b_MeshX);
-   fChain->SetBranchAddress("MeshY", &MeshY, &b_MeshY);
-   fChain->SetBranchAddress("MeshZ", &MeshZ, &b_MeshZ);
-   fChain->SetBranchAddress("MeshXp", &MeshXp, &b_MeshXp);
-   fChain->SetBranchAddress("MeshYp", &MeshYp, &b_MeshYp);
-   fChain->SetBranchAddress("MeshBeta", &MeshBeta, &b_MeshBeta);
-   fChain->SetBranchAddress("MeshVY", &MeshVY, &b_MeshVY);
-   fChain->SetBranchAddress("MeshVX", &MeshVX, &b_MeshVX);
-   fChain->SetBranchAddress("MeshVZ", &MeshVZ, &b_MeshVZ);
-   fChain->SetBranchAddress("DriftT", &DriftT, &b_DriftT);
-   fChain->SetBranchAddress("DriftT_ab", &DriftT_ab, &b_DriftT_ab);
-   fChain->SetBranchAddress("DriftX", &DriftX, &b_DriftX);
-   fChain->SetBranchAddress("DriftY", &DriftY, &b_DriftY);
-   fChain->SetBranchAddress("DriftZ", &DriftZ, &b_DriftZ);
+   //fChain->SetBranchAddress("LaserX", &LaserX, &b_LaserX);
+   //fChain->SetBranchAddress("LaserY", &LaserY, &b_LaserY);
+   //fChain->SetBranchAddress("LaserZ", &LaserZ, &b_LaserZ);
+   //fChain->SetBranchAddress("LaserE", &LaserE, &b_LaserE);
+   //fChain->SetBranchAddress("LaserXp", &LaserXp, &b_LaserXp);
+   //fChain->SetBranchAddress("LaserYp", &LaserYp, &b_LaserYp);
+   //fChain->SetBranchAddress("MeshEk", &MeshEk, &b_MeshEk);
+   //fChain->SetBranchAddress("MeshE", &MeshE, &b_MeshE);
+   //fChain->SetBranchAddress("MeshT", &MeshT, &b_MeshT);
+   //fChain->SetBranchAddress("MeshT_ab", &MeshT_ab, &b_MeshT_ab);
+   //fChain->SetBranchAddress("MeshX", &MeshX, &b_MeshX);
+   //fChain->SetBranchAddress("MeshY", &MeshY, &b_MeshY);
+   //fChain->SetBranchAddress("MeshZ", &MeshZ, &b_MeshZ);
+   //fChain->SetBranchAddress("MeshXp", &MeshXp, &b_MeshXp);
+   //fChain->SetBranchAddress("MeshYp", &MeshYp, &b_MeshYp);
+   //fChain->SetBranchAddress("MeshBeta", &MeshBeta, &b_MeshBeta);
+   //fChain->SetBranchAddress("MeshVY", &MeshVY, &b_MeshVY);
+   //fChain->SetBranchAddress("MeshVX", &MeshVX, &b_MeshVX);
+   //fChain->SetBranchAddress("MeshVZ", &MeshVZ, &b_MeshVZ);
+   //fChain->SetBranchAddress("DriftT", &DriftT, &b_DriftT);
+   //fChain->SetBranchAddress("DriftT_ab", &DriftT_ab, &b_DriftT_ab);
+   //fChain->SetBranchAddress("DriftX", &DriftX, &b_DriftX);
+   //fChain->SetBranchAddress("DriftY", &DriftY, &b_DriftY);
+   //fChain->SetBranchAddress("DriftZ", &DriftZ, &b_DriftZ);
 
-   hMeshEk = new TH1D("hMeshEk","hMeshEk;MeV",100,0.07e-3,0.20e-3);
-   hMeshT = new TH1D("hMeshT","hMeshT;s",100,20e-9,34e-9);
-   hMeshT_ab = new TH1D("hMeshT_ab","hMeshT_ab;s",100,1.32e-6,1.334e-6);
-   hMeshX = new TH1D("hMeshX","hMeshX;mm",200,-150,150);
-   hMeshY = new TH1D("hMeshY","hMeshY;mm",200,-25,25);
-   hMeshZ = new TH1D("hMeshZ","hMeshZ;mm",200,-100,100);
-   hMeshXp = new TH1D("hMeshXp","hMeshXp",100,-0.04,0.04);
-   hMeshYp = new TH1D("hMeshYp","hMeshYp",100,-0.05,0.05);
-
-   hMeshBeta = new TH1D("hMeshBeta","hMeshBeta",100,0.0012,0.0019);
-   hMeshVY = new TH1D("hMeshVY","hMeshVY;mm/s",100,-15e6,15e6);
-   hMeshVX = new TH1D("hMeshVX","hMeshVX;mm/s",100,-20e6,20e6);
-   hMeshVZ = new TH1D("hMeshVZ","hMeshVZ;mm/s",100,360e6,560e6);
-
-   hDriftT = new TH1D("hDriftT","hDriftT;s",100,0.8e-6,1.4e-6);
-   hDriftT_ab = new TH1D("hDriftT_ab","hDriftT_ab;s",100,2.2e-6,2.7e-6);
-   hDriftX = new TH1D("hDriftX","hDriftX;mm",200,-150,150);
-   hDriftY = new TH1D("hDriftY","hDriftY;mm",200,-40,40);
-   hDriftZ = new TH1D("hDriftZ","hDriftZ;mm",200,-100,600);
+   //hMeshEk = new TH1D("hMeshEk","hMeshEk;MeV",100,0.07e-3,0.20e-3);
+   //hMeshT = new TH1D("hMeshT","hMeshT;s",100,20e-9,34e-9);
+   //hMeshT_ab = new TH1D("hMeshT_ab","hMeshT_ab;s",100,1.32e-6,1.334e-6);
+   //hMeshX = new TH1D("hMeshX","hMeshX;mm",200,-150,150);
+   //hMeshY = new TH1D("hMeshY","hMeshY;mm",200,-25,25);
+   //hMeshZ = new TH1D("hMeshZ","hMeshZ;mm",200,-100,100);
+   //hMeshXp = new TH1D("hMeshXp","hMeshXp",100,-0.04,0.04);
+   //hMeshYp = new TH1D("hMeshYp","hMeshYp",100,-0.05,0.05);
+//
+//   //hMeshBeta = new TH1D("hMeshBeta","hMeshBeta",100,0.0012,0.0019);
+//   //hMeshVY = new TH1D("hMeshVY","hMeshVY;mm/s",100,-15e6,15e6);
+//   //hMeshVX = new TH1D("hMeshVX","hMeshVX;mm/s",100,-20e6,20e6);
+//   //hMeshVZ = new TH1D("hMeshVZ","hMeshVZ;mm/s",100,360e6,560e6);
+//
+//   //hDriftT = new TH1D("hDriftT","hDriftT;s",100,0.8e-6,1.4e-6);
+//   //hDriftT_ab = new TH1D("hDriftT_ab","hDriftT_ab;s",100,2.2e-6,2.7e-6);
+//   //hDriftX = new TH1D("hDriftX","hDriftX;mm",200,-150,150);
+//   //hDriftY = new TH1D("hDriftY","hDriftY;mm",200,-40,40);
+   //hDriftZ = new TH1D("hDriftZ","hDriftZ;mm",200,-100,600);
 
    hXXp = new TH1D("hXXp","hXXp",100,-16,16);
    hXp2 = new TH1D("hXp2","hXp2",100,0,0.0016);
@@ -403,6 +413,10 @@ void MuYield_Class::Init(TTree *tree)
    hZXY3D = new TH3D("ZXY-3D","ZXY-3D;   z(mm); x (mm); y (mm)",100,-1,10,100,-40,40,100,-40,40);
 
    Notify();
+
+   Nentries = fChain->GetEntriesFast();
+
+   c = NewTCanvas("c_intrnl","c_intrnl",1000,1000,2,2);
 }
 
 Bool_t MuYield_Class::Notify()

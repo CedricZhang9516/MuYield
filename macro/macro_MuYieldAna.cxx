@@ -5,16 +5,13 @@
 //#include "../../CZhang/CZhangNew.h"
 
 
-//#define YieldTime // Calculate the # of Mu inside the laser region as the function of time
+#define YieldTime // Calculate the # of Mu inside the laser region as the function of time
 //#define Track     /// draw the track inside the aerogel for single event
 //#define TrackTime
 //#define TrackEventTime
 #define drawplot
 
 void macro_MuYieldAna(TString filename = "MuYield.root"){
-
-	filename.ReplaceAll(".root","");
-
 
 	/// Reproduce
 	//TString filename = "../Root/TDR_Reproduce_200204_tree_Type3_D87000_T322_Nrepeat200000_Xfree1_Thick7.12_NewGeo0";
@@ -99,12 +96,15 @@ void macro_MuYieldAna(TString filename = "MuYield.root"){
 
 	//"../Root/3006-200728study/200728_test1_tree_Type3006_D87000_T322_Nrepeat5182075_H_line1_Thick25.00_NewGeo0";
 	//"../Root/3006-200728study/200728_test2_tree_Type3006_D87000_T322_Nrepeat2150294_H_line1_Thick25.00_NewGeo0";
-	"../Root/3006-200728study/200728_test2_tree_Type3006_D87000_T322_Nrepeat3031781_H_line1_Thick25.00_NewGeo0";
+	//"../Root/3006-200728study/200728_test2_tree_Type3006_D87000_T322_Nrepeat3031781_H_line1_Thick25.00_NewGeo0";
+	"../Root/1002_hline_SimBeamStop_GM_7.12mm_tree_Type1002_D87000_T322_Nrepeat1352113_H_line1_Thick25.00_NewGeo0";
 
+	filename.ReplaceAll(".root","");
+
+	MCtype = 1002;
 
 	SetPalette();
 	//SetOptStat();
-
 
 	TFile * f = new TFile( (filename + ".root").Data() );
 	TTree * tree = (TTree*) f-> Get("tree");
@@ -112,8 +112,6 @@ void macro_MuYieldAna(TString filename = "MuYield.root"){
 	int Nentries = tree->GetEntries();
 
 	InitTree(tree);
-
-
 
 
 	//////// Draw the tack of one of the events
@@ -161,7 +159,7 @@ void macro_MuYieldAna(TString filename = "MuYield.root"){
 	TCanvas * c0 = NewTCanvas("c0","c0",800,800,1,1);
 	TCanvas * c1 = NewTCanvas("c1","c1",1000,1000,3,3);
 	TCanvas * c2 = NewTCanvas("c2","c2",1333,333,4,1);
-	TCanvas * c3_laser = NewTCanvas("c3_laser","c3_laser",1333,333,3,2);
+	TCanvas * c3_laser = NewTCanvas("c3_laser","c3_laser",1000,500,3,2);
 
 	//TCanvas * c_Track = NewTCanvas("c_Track","c_Track",1333,1333,1,1);
 	//int NCanvas = 0;
@@ -173,7 +171,7 @@ void macro_MuYieldAna(TString filename = "MuYield.root"){
 
 	MuYieldAsEvent(tree,c0);
 
-	LaserIonization_noOutput(tree);
+	//LaserIonization_noOutput(tree);
 
 	#ifdef drawplot
 
@@ -276,7 +274,7 @@ void macro_MuYieldAna(TString filename = "MuYield.root"){
 
 }
 
-
+/*
 void TRIUMFVacuumRegion(TTree * tree, TCanvas * c = NewTCanvas("c_intrnl","c_intrnl",1000,1000,2,2) )
 {
 	c->cd(1);
@@ -290,7 +288,7 @@ void TRIUMFVacuumRegion(TTree * tree, TCanvas * c = NewTCanvas("c_intrnl","c_int
 
 
 }
-
+*/
 void MuYieldAsTime(TTree * tree, TCanvas * c = new TCanvas("c_intrnl","c_intrnl",300,1500))
 //void MuYieldInVacuum(TTree * tree)
 {
@@ -341,7 +339,8 @@ void MuYieldAsTime(TTree * tree, TCanvas * c = new TCanvas("c_intrnl","c_intrnl"
 			//  from Mu formation to its decay.
 			//  but the exact Mu formation time for different muon event is different
 			//if(InsideLaserRegionTDR(x,y,z)){
-			if(InsideLaserRegionTDRnoXlimit(x,y,z)){
+			//if(InsideLaserRegionTDRnoXlimit(x,y,z)){
+			if(InsideLaserRegion(x,y,z,MCtype)){
 
 			//if(InsideLaserRegionNewGeo_8mm(x,y,z)){
 			//if(InsideLaserRegionNewGeo_8mm_12mmthick(x,y,z)){
@@ -472,7 +471,9 @@ void MuYieldAsEvent(TTree * tree, TCanvas * c = new TCanvas("c_intrnl","c_intrnl
 			//if(InsideLaserRegionNewGeo_8mm_12mmthick(x,y,z))hT->Fill(t);
 			//if(InsideLaserRegion_3011(x,y,z))hT->Fill(t);
 			//if(InsideLaserRegion_3012(x,y,z))hT->Fill(t);
-			if(InsideLaserRegion_3006(x,y,z)){
+			//if(InsideLaserRegion_3006(x,y,z)){
+
+			if(InsideLaserRegion(x,y,z,MCtype)){
 
 				hT->Fill(t);
 /*
@@ -501,7 +502,7 @@ void MuYieldAsEvent(TTree * tree, TCanvas * c = new TCanvas("c_intrnl","c_intrnl
 			if( gSystem->ProcessEvents()) break;
 #endif // track time per point
 
-		} // event loop
+		} // event time loop
 
 #ifdef TrackEventTime
 

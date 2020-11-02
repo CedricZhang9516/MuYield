@@ -2,6 +2,8 @@
 //#include "/Users/zhangce/WorkArea/CZhang/CZhangNew.h"
 #include "../../CZhang/CZhangNew.h"
 
+int MCtype = 1002;
+
 double TBeam;// = -1;
 double DecayT;// = -1;
 double X0;// = -1;
@@ -112,11 +114,12 @@ tree->SetBranchAddress("t0",&t0);// = -1;// is not the initial t, but the total 
 tree->SetBranchAddress("DiffusionT",&DiffusionT);// = -1;// is not the initial t, but the total time spent inside aerogel
 
 // laser region/decay information
+/*
 tree->SetBranchAddress("LaserX",&LaserX);// = -1;
 tree->SetBranchAddress("LaserY",&LaserY);// = -1;
 tree->SetBranchAddress("LaserZ",&LaserZ);// = -1;
 tree->SetBranchAddress("LaserE",&LaserE);// = -1;
-
+*/
 tree->SetBranchAddress("DecayX",&DecayX);// = -1;
 tree->SetBranchAddress("DecayY",&DecayY);// = -1;
 tree->SetBranchAddress("DecayZ",&DecayZ);// = -1;
@@ -143,7 +146,7 @@ tree->SetBranchAddress("DecayPositronMomtZ",&DecayPositronMomtZ);//,"DecayPositr
 
 
 // Mesh plane information
-
+/*
 tree->SetBranchAddress("MeshEk",&MeshEk);// = -1;
 tree->SetBranchAddress("MeshE",&MeshE);// = -1;
 tree->SetBranchAddress("MeshT",&MeshT);// = -1;
@@ -164,7 +167,7 @@ tree->SetBranchAddress("DriftT_ab",&DriftT_ab);
 tree->SetBranchAddress("DriftX",&DriftX);
 tree->SetBranchAddress("DriftY",&DriftY);
 tree->SetBranchAddress("DriftZ",&DriftZ);
-
+*/
 tree->SetBranchAddress("MUONID",&MUONID);
 
 }
@@ -245,9 +248,6 @@ TH2D *hZX2D_laser = new TH2D("Z-X-2D-laser","Z-X-2D-laser; Z(mm);X (mm)",100,-40
 TH2D *hXY2D_laser = new TH2D("X-Y-2D-laser","X-Y-2D-laser; X(mm);Y (mm)",100,-80,80,60,-30,30);
 
 
-
-
-
 //if(flag_Newgeo==1){
 //	EmissionX = new TH2D("EmissionZ","EmissionZ;Z;Z'",240,-120,120,320,0.16,0.16); // mm
 //	EmissionY = new TH2D("EmissionX","EmissionX;X;X'",500,-25,25,320,0.16,0.16); // mm
@@ -262,7 +262,7 @@ TH2D *hXY2D_laser = new TH2D("X-Y-2D-laser","X-Y-2D-laser; X(mm);Y (mm)",100,-80
 void Emittance(TTree* tree);
 void MuYieldAsEvent(TTree * tree, TCanvas * c = new TCanvas("c_intrnl","c_intrnl",1000,1000));
 void MuYieldAsTime(TTree * tree, TCanvas * c = new TCanvas("c_intrnl","c_intrnl",1000,1000));
-void TRIUMFVacuumRegion(TTree * tree, TCanvas * c = NewTCanvas("c_intrnl","c_intrnl",1000,1000,2,2));
+//void TRIUMFVacuumRegion(TTree * tree, TCanvas * c = NewTCanvas("c_intrnl","c_intrnl",1000,1000,2,2));
 void LaserIonization(TTree * tree, TString Outputfilename = "LaserIonization.dat");
 void LaserIonization_noOutput(TTree * tree);
 /*

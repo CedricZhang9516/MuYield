@@ -2,6 +2,7 @@
 #include "MyMuonDecay.h"
 #include "DiffusionModel.h"
 #include "InsideAerogel.h"
+#include "InitializingXYZ0.h"
 
 //void MuYield(
 int main(int argc, char **argv){
