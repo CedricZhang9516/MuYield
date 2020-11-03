@@ -12,11 +12,12 @@ void macro_MuYieldAna2(TString filename = "MuYield.root"){
 
 	//TString filename =
 	filename =
-	"../Root/1002_hline_SimBeamStop_GM_7.12mm_tree_Type1002_D87000_T322_Nrepeat1352113_H_line1_Thick25.00_NewGeo0";
+	//"../Root/1002_hline_SimBeamStop_GM_7.12mm_tree_Type1002_D87000_T322_Nrepeat1352113_H_line1_Thick25.00_NewGeo0";
+	"../Root/201101_test_3006_tree_Type3006_D87000_T322_Nrepeat3031781_H_line1_Thick25.00_NewGeo0";
 
 	filename.ReplaceAll(".root","");
-	//MCtype = 3006;
-	MCtype = 1002;
+	MCtype = 3006;
+	//MCtype = 1002;
 
 	//SetPalette();
 	//SetOptStat();
