@@ -13,7 +13,12 @@ void macro_MuYieldAna2(TString filename = "MuYield.root"){
 	//TString filename =
 	filename =
 	//"../Root/1002_hline_SimBeamStop_GM_7.12mm_tree_Type1002_D87000_T322_Nrepeat1352113_H_line1_Thick25.00_NewGeo0";
-	"../Root/201101_test_3006_tree_Type3006_D87000_T322_Nrepeat3031781_H_line1_Thick25.00_NewGeo0";
+	//"../Root/201101_test_3006_tree_Type3006_D87000_T322_Nrepeat3031781_H_line1_Thick25.00_NewGeo0";
+	"../Root/201103_Reflectoin/201103_Reflection_3005_tree_Type3005_D87000_T322_Nrepeat3031781_H_line1_Thick7.12_NewGeo0.root";
+	//"../Root/201103_Reflectoin/201103_Reflection_3006_tree_Type3006_D87000_T322_Nrepeat3031781_H_line1_Thick7.12_NewGeo0.root";
+	//"../Root/201103_Reflectoin/201103_Reflection_3006_tree_Type3006_D87000_T322_Nrepeat5182075_H_line1_Thick7.12_NewGeo0.root";
+	//"../Root/201103_Reflectoin/201103_Reflection_3011_tree_Type3011_D87000_T322_Nrepeat3031781_H_line1_Thick7.12_NewGeo0.root";
+	//"../Root/201103_Reflectoin/201103_Reflection_3012_tree_Type3012_D87000_T322_Nrepeat3031781_H_line1_Thick7.12_NewGeo0.root";
 
 	filename.ReplaceAll(".root","");
 	MCtype = 3006;
