@@ -10,25 +10,25 @@
 
 void macro_MuYieldAna2(){//TString filename = "MuYield.root", int MCtype=1002){
 
-	const int Nfile = 5;
+	const int Nfile = 2;
 
 	TString filename [Nfile] = {
 	//filename =
 	//"../Root/1002_hline_SimBeamStop_GM_7.12mm_tree_Type1002_D87000_T322_Nrepeat1352113_H_line1_Thick25.00_NewGeo0";
 	//"../Root/201101_test_3006_tree_Type3006_D87000_T322_Nrepeat3031781_H_line1_Thick25.00_NewGeo0";
 
-		"../Root/201103_Reflectoin/201103_Reflection_3005_tree_Type3005_D87000_T322_Nrepeat3031781_H_line1_Thick25.00_NewGeo0.root", //MCtype = 3005;
-		"../Root/201103_Reflectoin/201103_Reflection_3006_tree_Type3006_D87000_T322_Nrepeat3031781_H_line1_Thick25.00_NewGeo0.root", //MCtype = 3006;
-		"../Root/201103_Reflectoin/201103_Reflection_3006_tree_Type3006_D87000_T322_Nrepeat5182075_H_line1_Thick25.00_NewGeo0.root", //MCtype = 3006;
+		//"../Root/201103_Reflectoin/201103_Reflection_3005_tree_Type3005_D87000_T322_Nrepeat3031781_H_line1_Thick25.00_NewGeo0.root", //MCtype = 3005;
+		//"../Root/201103_Reflectoin/201103_Reflection_3006_tree_Type3006_D87000_T322_Nrepeat3031781_H_line1_Thick25.00_NewGeo0.root", //MCtype = 3006;
+		//"../Root/201103_Reflectoin/201103_Reflection_3006_tree_Type3006_D87000_T322_Nrepeat5182075_H_line1_Thick25.00_NewGeo0.root", //MCtype = 3006;
 		"../Root/201103_Reflectoin/201103_Reflection_3011_tree_Type3011_D87000_T322_Nrepeat3031781_H_line1_Thick25.00_NewGeo0.root", //MCtype = 3011;
 		"../Root/201103_Reflectoin/201103_Reflection_3012_tree_Type3012_D87000_T322_Nrepeat3031781_H_line1_Thick25.00_NewGeo0.root" //MCtype = 3012;
 
 	};
 
 	int MCtype [Nfile] = {
-		3005,
-		3006,
-		3006,
+		//3005,
+		//3006,
+		//3006,
 		3011,
 		3012
 	};
@@ -49,8 +49,17 @@ void macro_MuYieldAna2(){//TString filename = "MuYield.root", int MCtype=1002){
 		//t[i]->hT->Draw();
 		//t[i]->hXY2D_0->Draw("colz");
 		//t[i]->Track(1);
-		t[i]->SavePlots();
+		//t[i]->SavePlots();
 	}
+
+	int c_i = 0;
+
+	TCanvas * c1 = new TCanvas("c1_comparison","c1_comparison");
+	c1->Divide(2,2);
+	c1->cd(++c_i);
+	t[0]->Track(1);
+	c1->cd(++c_i);
+	t[1]->Track(1);
 
 
 }
