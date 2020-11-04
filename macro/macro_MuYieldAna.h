@@ -258,6 +258,7 @@ TH2D *hXY2D_laser = new TH2D("X-Y-2D-laser","X-Y-2D-laser; X(mm);Y (mm)",100,-80
 //TGraph * EmissionY = new TGraph();
 //TGraph * gZXY3D_sf = new TGraph();
 
+void macro_MuYieldAna2();//TString filename = "MuYield.root", int MCtype=1002);
 
 void Emittance(TTree* tree);
 void MuYieldAsEvent(TTree * tree, TCanvas * c = new TCanvas("c_intrnl","c_intrnl",1000,1000));

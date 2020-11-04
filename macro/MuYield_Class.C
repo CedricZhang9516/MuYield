@@ -404,3 +404,98 @@ void MuYield_Class::Track(Int_t Nevent = 1){
 
 
 }
+
+
+
+void MuYield_Class::SavePlots(){
+
+	//#ifdef drawplot
+
+	//TCanvas * c0 = NewTCanvas("c0","c0",800,800,1,1);
+	c1 = NewTCanvas("c1","c1_surface",1000,1000,3,3);
+	c2 = NewTCanvas("c2","c2_accumulation_yield",1000,1000,3,3);
+	c3 = NewTCanvas("c3_laser","c3_laser",1000,1000,3,3);
+
+	/////////////////
+	// Yield on the surface
+	/////////////////
+
+	c1->cd(1);
+	hZY2D_sf->Draw("colz");
+	c1->cd(2);
+	hZX2D_sf->Draw("colz");
+	c1->cd(3);
+	hXY2D_sf->Draw("colz");
+	c1->cd(4);
+	hT_sf->Draw("");
+
+
+	/////////////////
+	// Total yield
+	/////////////////
+
+	c2->cd(1);
+	hXY2D->Draw("colz");
+	c2->cd(2);
+	hZY2D->Draw("colz");
+	c2->cd(3);
+	hZX2D->Draw("colz");
+	c2->cd(4);
+	hT->Draw();
+	cout<<"Maximum Yield in the laser region "
+		<<hT->GetMaximum()
+		<<" in the bin "
+		<<hT->GetMaximumBin()
+		<<endl;
+
+	/////////////////
+	// Laser yield
+	/////////////////
+
+	int c_i = 0;
+	c3->cd(++c_i);
+	hZY2D_0->Draw("colz");
+	c3->cd(++c_i);
+	hZX2D_0->Draw("colz");
+	c3->cd(++c_i);
+	hXY2D_0->Draw("colz");
+	c3->cd(++c_i);
+	hZY2D_laser->Draw("colz");
+	c3->cd(++c_i);
+	hZX2D_laser->Draw("colz");
+	c3->cd(++c_i);
+	hXY2D_laser->Draw("colz");
+
+	/////////////////
+	///// Draw other 2D and 3D plots
+	/////////////////
+/*
+	c1->cd(1);
+ 	t1->hZT2D->Draw("colz");
+ 	c1->cd(2);
+ 	t1->hZY2D->Draw("colz");
+ 	c1->cd(3);
+ 	t1->hZX2D->Draw("colz");
+ 	c1->cd(4);
+ 	t1->hXY2D->Draw("colz");
+ 	c1->cd(5);
+ 	t1->hZXT3D->Draw("LEGO");
+ 	c1->cd(6);
+ 	t1->hZXY3D->Draw("lego2");
+*/
+
+	//#endif
+
+
+ 	//#ifdef saveplot
+
+ 	c1->SaveAs( Form("%s.pdf(", filename.Data()) );
+ 	c2->SaveAs( Form("%s.pdf", filename.Data()) );
+ 	c3->SaveAs( Form("%s.pdf)", filename.Data()) );
+
+
+ 	//#endif
+
+
+
+}

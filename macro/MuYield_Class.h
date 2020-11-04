@@ -207,6 +207,10 @@ public :
 
    TCanvas * c;// = NewTCanvas("c_intrnl","c_intrnl",1000,1000,2,2)
 
+   TCanvas * c1;
+   TCanvas * c2;
+   TCanvas * c3;
+
    MuYield_Class(TString name = "MuYield.root", int mctype = 1002);
    virtual ~MuYield_Class();
    virtual Int_t    Cut(Long64_t entry);
@@ -217,6 +221,8 @@ public :
    virtual void     LoopTime();
    virtual void     Track(Int_t Nevent);
    virtual void     LaserIonization(double Lasertime = -1, TString Outputfilename = "");
+   virtual void     SavePlots();
+
    virtual Bool_t   Notify();
    virtual void     Show(Long64_t entry = -1);
 };
