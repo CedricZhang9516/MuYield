@@ -10,15 +10,12 @@
 
 void macro_MuYieldAna2(){//TString filename = "MuYield.root", int MCtype=1002){
 
-	const int Nfile = 2;
+	const int Nfile = 3;
 
 	TString filename [Nfile] = {
-	//filename =
-	//"../Root/1002_hline_SimBeamStop_GM_7.12mm_tree_Type1002_D87000_T322_Nrepeat1352113_H_line1_Thick25.00_NewGeo0";
-	//"../Root/201101_test_3006_tree_Type3006_D87000_T322_Nrepeat3031781_H_line1_Thick25.00_NewGeo0";
 
 		//"../Root/201103_Reflectoin/201103_Reflection_3005_tree_Type3005_D87000_T322_Nrepeat3031781_H_line1_Thick25.00_NewGeo0.root", //MCtype = 3005;
-		//"../Root/201103_Reflectoin/201103_Reflection_3006_tree_Type3006_D87000_T322_Nrepeat3031781_H_line1_Thick25.00_NewGeo0.root", //MCtype = 3006;
+		"../Root/201103_Reflectoin/201103_Reflection_3006_tree_Type3006_D87000_T322_Nrepeat3031781_H_line1_Thick25.00_NewGeo0.root", //MCtype = 3006;
 		//"../Root/201103_Reflectoin/201103_Reflection_3006_tree_Type3006_D87000_T322_Nrepeat5182075_H_line1_Thick25.00_NewGeo0.root", //MCtype = 3006;
 		"../Root/201103_Reflectoin/201103_Reflection_3011_tree_Type3011_D87000_T322_Nrepeat3031781_H_line1_Thick25.00_NewGeo0.root", //MCtype = 3011;
 		"../Root/201103_Reflectoin/201103_Reflection_3012_tree_Type3012_D87000_T322_Nrepeat3031781_H_line1_Thick25.00_NewGeo0.root" //MCtype = 3012;
@@ -27,7 +24,7 @@ void macro_MuYieldAna2(){//TString filename = "MuYield.root", int MCtype=1002){
 
 	int MCtype [Nfile] = {
 		//3005,
-		//3006,
+		3006,
 		//3006,
 		3011,
 		3012
@@ -37,29 +34,41 @@ void macro_MuYieldAna2(){//TString filename = "MuYield.root", int MCtype=1002){
 	//SetOptStat();
 
 	MuYield_Class * t[Nfile];
+	TGraph*** g = new TGraph**[Nfile];
+
+	lasertime = 1.35;
 
 	for(int i = 0; i< Nfile; i++){
 
 		filename[i].ReplaceAll(".root","");
 
 		t[i] = new MuYield_Class(filename[i], MCtype[i]);
-		t[i]->LoopEvent();
+		t[i]->Surface();
+		//t[i]->LoopEvent();
 		//t[i]->LoopTime();
-		t[i]->LaserIonization(1.35);
+		//t[i]->LaserIonization(1.35);
 		//t[i]->hT->Draw();
 		//t[i]->hXY2D_0->Draw("colz");
-		//t[i]->Track(1);
 		//t[i]->SavePlots();
-	}
 
-	int c_i = 0;
+		t[i]->SetLasertime(lasertime);
+		g[i] = new TGraph*[t[i]->Nentries];
+		for(int j = 0; j<t[i]->Nentries;j++) g[i][j] = t[i]->Track(j);
+		//if(t[1]->IsInsideLaserRegion(i, lasertime))cout<<"MCtype "<<MCtype[1]<<" file "<<1<<" has the event "<<i<<" inside laser region at "<<lasertime<<" us"<<endl;
+
+	}
 
 	TCanvas * c1 = new TCanvas("c1_comparison","c1_comparison");
 	c1->Divide(2,2);
-	c1->cd(++c_i);
-	t[0]->Track(1);
-	c1->cd(++c_i);
-	t[1]->Track(1);
+	int c_i = 0;
+
+	for(int i = 0; i<Nfile;i++){
+
+		c1->cd(++c_i);
+		t[i]->hZY2D_sf->Draw("colz");
+		for(int j = 0; j<100;j++)g[i][j]->Draw("PLsame");
+	}
+
 
 
 }

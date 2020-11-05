@@ -204,6 +204,7 @@ public :
    double lasertime = -1;
 
    TGraph * g_track;// = new TGraph();
+   //TGraph * g_track_laser;// = new TGraph();
 
    TCanvas * c;// = NewTCanvas("c_intrnl","c_intrnl",1000,1000,2,2)
 
@@ -217,9 +218,14 @@ public :
    virtual Int_t    GetEntry(Long64_t entry);
    virtual Long64_t LoadTree(Long64_t entry);
    virtual void     Init(TTree *tree);
+
+   virtual void     SetLasertime(double Lasertime);
+   virtual bool     IsInsideLaserRegion(Int_t Nevent = 1, double Lasertime = -1);
+
+   virtual void     Surface();
    virtual void     LoopEvent();
    virtual void     LoopTime();
-   virtual void     Track(Int_t Nevent);
+   virtual TGraph*  Track(Int_t Nevent);
    virtual void     LaserIonization(double Lasertime = -1, TString Outputfilename = "");
    virtual void     SavePlots();
 

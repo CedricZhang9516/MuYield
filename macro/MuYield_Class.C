@@ -8,6 +8,49 @@
 //#define TrackTime
 //#define TrackEventTime
 
+void MuYield_Class::Surface()
+{
+
+	if (fChain == 0) return;
+
+   Long64_t nentries = fChain->GetEntriesFast();
+
+   Long64_t nbytes = 0, nb = 0;
+
+   Double_t x, y, z, vx, vy, vz, t;
+
+   for (Long64_t jentry=0; jentry<nentries;jentry++) {
+
+		Long64_t ientry = LoadTree(jentry);
+		if (ientry < 0) break;
+
+		nb = fChain->GetEntry(jentry);
+		nbytes += nb;
+
+		cout<<jentry<<"/"<<nentries<<"\r"<<flush;
+
+		double delT = DecayT - DiffusionT;
+
+		t = DiffusionT + TBeam;
+		x = X_sf;
+		y = Y_sf;
+		z = Z_sf;
+		vx = VX_sf;
+		vy = VY_sf;
+		vz = VZ_sf;
+
+		hT_sf->Fill(t);
+		hZXY3D_sf->Fill(Z_sf, X_sf, Y_sf);
+
+		if(z>0){
+			hZY2D_sf->Fill(Z_sf, Y_sf);
+			hZX2D_sf->Fill(Z_sf, X_sf);
+			hXY2D_sf->Fill(X_sf, Y_sf);
+		}
+	}
+
+}
+
 void MuYield_Class::LoopEvent()
 {
 //   In a ROOT session, you can do:
@@ -393,17 +436,115 @@ void MuYield_Class::LaserIonization(double Lasertime = -1, TString Outputfilenam
 }
 
 
-void MuYield_Class::Track(Int_t Nevent = 1){
+void MuYield_Class::SetLasertime(double Lasertime){
+	lasertime = Lasertime;
+}
+
+bool MuYield_Class::IsInsideLaserRegion(Int_t Nevent = 1, double Lasertime = -1){
+
+	tree->GetEntry(Nevent);
+
+	lasertime = Lasertime;
+
+	double x, y, z, vx, vy, vz, t, muonid;
+
+	const double mmu = 105.658;
+	const double light = 299792458; // m/s
+	const double massMu = 106.16/light/light; // MeV/c2
+
+	double delT = DecayT - DiffusionT;
+
+
+
+	if(
+			lasertime == -1 ||
+			( DecayT <= (lasertime*1e-6  - TBeam) )  ||
+			(lasertime*1e-6 - TBeam - DiffusionT) < 0
+	)return false;
+
+
+	t = DiffusionT + TBeam;
+
+	x = X_sf;
+	y = Y_sf;
+	z = Z_sf;
+	vx = VX_sf;
+	vy = VY_sf;
+	vz = VZ_sf;
+
+	LaserE = 0.5 * massMu * 1e-6 * (VX_sf*VX_sf + VY_sf*VY_sf + VZ_sf*VZ_sf);//v:mm/s, Ek: MeV
+
+	t = DiffusionT + TBeam;
+	x = X_sf;
+	y = Y_sf;
+	z = Z_sf;
+
+	x = x + vx * (lasertime*1e-6 - TBeam - DiffusionT);
+	y = y + vy * (lasertime*1e-6 - TBeam - DiffusionT);
+	z = z + vz * (lasertime*1e-6 - TBeam - DiffusionT);
+	t = lasertime*1e-6;
+
+	if(InsideLaserRegion(x,y,z, MCtype))return true;
+
+	return false;
+
+}
+
+TGraph* MuYield_Class::Track(Int_t Nevent = 1){
 
 	tree->GetEntry(Nevent);
 
 	g_track = new TGraph();
+	//for(int i = 0; i<DiffusionVertexX->size() ;i++)g_track->SetPoint(i,DiffusionVertexZ->at(i),DiffusionVertexY->at(i));
 	for(int i = 0; i<DiffusionVertexX->size() ;i++)g_track->SetPoint(i,DiffusionVertexZ->at(i),DiffusionVertexY->at(i));
-	g_track->Draw("APL*");
+
+	/////////// Draw the position at the laser time, remember to set the lasertime first!!!!!
+
+	double x, y, z, vx, vy, vz, t, muonid;
+
+	const double mmu = 105.658;
+	const double light = 299792458; // m/s
+	const double massMu = 106.16/light/light; // MeV/c2
+
+	double delT = DecayT - DiffusionT;
 
 
+
+	if(
+			lasertime == -1 ||
+			( DecayT <= (lasertime*1e-6  - TBeam) )  ||
+			(lasertime*1e-6 - TBeam - DiffusionT) < 0
+	)return g_track;
+
+
+	t = DiffusionT + TBeam;
+
+	x = X_sf;
+	y = Y_sf;
+	z = Z_sf;
+	vx = VX_sf;
+	vy = VY_sf;
+	vz = VZ_sf;
+
+	LaserE = 0.5 * massMu * 1e-6 * (VX_sf*VX_sf + VY_sf*VY_sf + VZ_sf*VZ_sf);//v:mm/s, Ek: MeV
+
+	t = DiffusionT + TBeam;
+	x = X_sf;
+	y = Y_sf;
+	z = Z_sf;
+
+	x = x + vx * (lasertime*1e-6 - TBeam - DiffusionT);
+	y = y + vy * (lasertime*1e-6 - TBeam - DiffusionT);
+	z = z + vz * (lasertime*1e-6 - TBeam - DiffusionT);
+	t = lasertime*1e-6;
+
+
+	g_track->SetPoint(DiffusionVertexX->size(),z,y);
+
+	return g_track;
 
 }
+
 
 
 
