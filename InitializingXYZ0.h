@@ -7,6 +7,7 @@ void InitializingXYZ0(int index){
 	//beam xy: uniformed or gaussian from tdr
 	//x0=((double) rand() / (RAND_MAX))*40;//0-20mm;index+xStep/2;
 	//y0=((double) rand() / (RAND_MAX))*40;//0-20mm;
+	double Thick =  7.12;
 
 	switch(MCtype){
 
@@ -30,6 +31,8 @@ void InitializingXYZ0(int index){
 		/////// My own MC
 		case 1:
 
+			Thick =  7.12;
+
 			Z0 = - ((double) rand() / (RAND_MAX)) * Thick;    // z0=-0.0~-7.12mm
 			X0 = GenerateGaus(0,31.96);//
 			Y0 = GenerateGaus(0,14.36);//2mm
@@ -46,6 +49,7 @@ void InitializingXYZ0(int index){
 
 		// for TRIUMF case z
 		case 2:
+
 			X0 = -5 + ((double) rand() / (RAND_MAX))*10;//0-20mm;index+xStep/2;
 			Y0 = -5 + ((double) rand() / (RAND_MAX))*10;//0-20mm;
 			Z0 = GenerateGaus(0,1.69);//2mm
@@ -54,6 +58,7 @@ void InitializingXYZ0(int index){
 
 		////// H-line
 		case 3:
+
 			InputTree->GetEntry(index);
 			X0 = x_dec;
 			Y0 = y_dec;
@@ -62,6 +67,7 @@ void InitializingXYZ0(int index){
 
 		///////// S-line
 		case 4:
+
 			InputTree->GetEntry(index);
 			X0 = x_dec;
 			Y0 = y_dec;
@@ -71,6 +77,8 @@ void InitializingXYZ0(int index){
 		// MCType = 5; New Geometry inspired by Uetake-san and Mibe-san
 
 		case 5:
+
+			Thick =  25;
 			InputTree->GetEntry(index);
 			X0 = x_dec;
 			Y0 = y_dec;
@@ -89,6 +97,8 @@ void InitializingXYZ0(int index){
 
 
 		case 6:
+
+			Thick =  25;
 			InputTree->GetEntry(index);
 			X0 = x_dec;
 			Y0 = y_dec;
@@ -104,6 +114,8 @@ void InitializingXYZ0(int index){
 			break;
 
 		case 7: //Yannis
+
+			Thick =  8;
 	 		InputTree->GetEntry(index);
 			X0 = x_dec;
 			Y0 = y_dec;
@@ -119,6 +131,7 @@ void InitializingXYZ0(int index){
 		break;
 
 		case 8:
+			Thick =  25;
 			InputTree->GetEntry(index);
 			X0 = x_dec;
 			Y0 = y_dec;
@@ -140,6 +153,8 @@ void InitializingXYZ0(int index){
 		case 9:
 		case 3003:
 
+			Thick =  25;
+
 			InputTree->GetEntry(index);
 			X0 = x_dec;
 			Y0 = y_dec;
@@ -156,6 +171,8 @@ void InitializingXYZ0(int index){
 
 		case 3004:
 		case 3002:
+
+			Thick =  25;
 
 			InputTree->GetEntry(index);
 			X0 = x_dec;
@@ -183,10 +200,9 @@ void InitializingXYZ0(int index){
 			Z0 = z_dec;
 			break;
 
-
-
-
 		case 10:
+
+			Thick =  25;
 
 			InputTree->GetEntry(index);
 			X0 = x_dec;
@@ -206,6 +222,8 @@ void InitializingXYZ0(int index){
 			break;
 
 		case 11:
+
+			Thick =  25;
 
 			InputTree->GetEntry(index);
 			X0 = x_dec;
@@ -228,6 +246,7 @@ void InitializingXYZ0(int index){
 
 			double interval = 7;
 			// Thick = 8;
+			Thick =  8;
 
 			InputTree->GetEntry(index);
 			X0 = x_dec;

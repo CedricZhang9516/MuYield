@@ -1,8 +1,4 @@
 #include "MuYield.h"
-#include "MyMuonDecay.h"
-#include "DiffusionModel.h"
-#include "InsideAerogel.h"
-#include "InitializingXYZ0.h"
 
 //void MuYield(
 int main(int argc, char **argv){
@@ -85,13 +81,13 @@ int main(int argc, char **argv){
 
 
 	////////////////////////////////////////
-	treefile = new TFile(Form("./Root/%s_tree_Type%0.0d_D%0.0f_T%0.0f_Nrepeat%0.0d_H_line%d_Thick%0.2f_NewGeo%d.root",
-		name.Data(),MCtype,D,T,Nrepeat,H_line,Thick,flag_newGeo), "recreate");
+	treefile = new TFile(Form("./Root/%s_tree_Type%0.0d_D%0.0f_T%0.0f_Nrepeat%0.0d_H_line_%0.2f_NewGeo%d.root",
+		name.Data(),MCtype,D,T,Nrepeat,H_line,flag_newGeo), "recreate");
 	tree = new TTree("tree","MuYield event");
 	SetTreeBranch(tree);
 
-	cout<<Form("Main Monte Carlo Simulation:\n%s_tree_Type%0.0d_D%0.0f_T%0.0f_Nrepeat%0.0d_H_line%d_Thick%0.2f_NewGeo%d",
-		name.Data(),MCtype,D,T,Nrepeat,H_line,Thick,flag_newGeo)<<endl;
+	cout<<Form("Main Monte Carlo Simulation:\n%s_tree_Type%0.0d_D%0.0f_T%0.0f_Nrepeat%0.0d_H_line_%0.2f_NewGeo%d",
+		name.Data(),MCtype,D,T,Nrepeat,H_line,flag_newGeo)<<endl;
 
 	Nemission = 0;
 	NLaserR = 0;
@@ -113,7 +109,7 @@ int main(int argc, char **argv){
 
 		InitializingXYZ0( index_m );
 
-		if(!InsideAerogel(X0,Y0,Z0) ) continue;
+		if(!InsideAerogel(X0,Y0,Z0, MCtype) ) continue;
 		//Nemission++;
 		Nstopping++;
 		// the continue command only for counting of total stopping instantly

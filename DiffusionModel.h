@@ -7,7 +7,7 @@
 void DiffusionModel(
 		//double* X0, double* Y0, double* Z0,
 		//double Vx0, double Vy0, double Vz0, double theta0, double phi0,
-		bool (*GeometryFunction)(double, double, double))
+		bool (*GeometryFunction)(double, double, double, int))
 		//std::vector<double>* DiffusionVertexX,
 		//std::vector<double>* DiffusionVertexY,
 		//std::vector<double>* DiffusionVertexZ,
@@ -61,7 +61,7 @@ void DiffusionModel(
 		y = y + vy * (L/vel0);
 		z = z + vz * (L/vel0);
 
-		if( GeometryFunction(x, y, z) && (t < DecayT))
+		if( GeometryFunction(x, y, z, MCtype) && (t < DecayT))
 		{
 
 			tempX = TMath::ACos(-1 + 2 * ((double)rand()/(RAND_MAX)) );
@@ -86,7 +86,7 @@ void DiffusionModel(
 		//cout<<"t "<<t<<" DecayT:"<<DecayT<<endl;
 
 
-	}while(GeometryFunction(x,y,z) && (t < DecayT));
+	}while(GeometryFunction(x,y,z,MCtype) && (t < DecayT));
 
 
 	//if( MCtype != 2 && (fabs(y)>130 || fabs(x)>130) ) t = 100000;

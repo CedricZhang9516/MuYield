@@ -1,11 +1,14 @@
-#include "MuYield.h"
+//#include "MuYield.h"
 
-bool InsideAerogel(double x, double y, double z){
+bool InsideAerogel(double x, double y, double z, int MCtype){
 
+	double Thick = 7.12;
 
 	switch (MCtype){
 
 		case 1001:
+
+			Thick =  7.12;
 			if( z<0 && z>-Thick){
 				if(y < 28 && y > -28 && x < 25 && x > -25) return true;
 			}
@@ -13,13 +16,14 @@ bool InsideAerogel(double x, double y, double z){
 
 		case 1002:
 
+			Thick =  7.12;
 			if( z<0 && z>-Thick){
 			if(y < 150 && y > -150 && x < 150 && x > -150) return true;
 			}
 			return false;
 
 		case 3:
-
+			Thick =  7.12;
 			if( z<0 && z>-Thick){
 				if(y < 28 && y > -28 && x < 25 && x > -25) return true;
 			}
@@ -27,7 +31,7 @@ bool InsideAerogel(double x, double y, double z){
 			return false;
 
 		case 5:
-
+			Thick =  25;
 			if( z<0 && z>-Thick){
 				if(y < 20 && y > 12) return true;
 				if(y < 4 && y > -4) return true;
@@ -46,6 +50,7 @@ bool InsideAerogel(double x, double y, double z){
 
 		case 6:
 
+			Thick =  25;
 			if(x>25 || x<-25)return false;
 
 			if( z<0 && z>-Thick){
@@ -67,7 +72,7 @@ bool InsideAerogel(double x, double y, double z){
 
 		case 7:
 
-
+			Thick =  25;
 			if( z<0 && z>-Thick && y < 4 && y > -4) return true;
 
 			if( z>0 && z<Thick){
@@ -90,6 +95,8 @@ bool InsideAerogel(double x, double y, double z){
 
 
 		case 8:
+
+			Thick =  25;
 
 			if(x>25 || x<-25)return false;
 
@@ -121,6 +128,8 @@ bool InsideAerogel(double x, double y, double z){
 
 		case 9:
 
+			Thick =  25;
+
 			if( z>0 && z<Thick){
 				if(y < 20 && y > 12) return true;
 				if(y < 4 && y > -4) return true;
@@ -135,6 +144,8 @@ bool InsideAerogel(double x, double y, double z){
 
 		case 3004:
 		case 3002:
+
+			Thick =  25;
 
 			if( z>0 && z<Thick){
 				if(y < 20 && y > 12) return true;
@@ -151,6 +162,8 @@ bool InsideAerogel(double x, double y, double z){
 
 		case 3005:
 
+			Thick =  25;
+
 			if( z>0 && z<Thick){
 				if(y < 20 && y > 12) return true;
 				if(y < 4 && y > -4) return true;
@@ -165,6 +178,8 @@ bool InsideAerogel(double x, double y, double z){
 
 
 		case 3006:
+
+			Thick =  25;
 
 			if( z<0 && z>-14){
 				if(y < 20 && y > 12) return true;
@@ -184,6 +199,8 @@ bool InsideAerogel(double x, double y, double z){
 
 
 		case 3011:
+
+			Thick =  25;
 
 			if( z>0 && z<Thick){
 				if(y < 18 && y > 14) return true;
@@ -205,6 +222,8 @@ bool InsideAerogel(double x, double y, double z){
 
 
 		case 3012:
+
+			Thick =  25;
 
 			if( z<0 && z>-Thick){
 				//if(y < 26 && y > 22) return true;
@@ -233,6 +252,8 @@ bool InsideAerogel(double x, double y, double z){
 
 
 		case 10:
+
+			Thick =  25;
 
 			if(x>25 || x<-25)return false;
 
@@ -264,6 +285,8 @@ bool InsideAerogel(double x, double y, double z){
 
 		case 12:
 		case 2001:
+
+			Thick =  7.12;
 
 			if(z < 0 && z > -9)return true;
 			if(z < 15 && z > 7)return true;

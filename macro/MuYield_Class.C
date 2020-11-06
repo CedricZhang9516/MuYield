@@ -312,47 +312,6 @@ void MuYield_Class::LaserIonization(double Lasertime = -1, TString Outputfilenam
 
 		LaserE = 0.5 * massMu * 1e-6 * (VX_sf*VX_sf + VY_sf*VY_sf + VZ_sf*VZ_sf);//v:mm/s, Ek: MeV
 
-		//////////////////////////////////////////////////////
-		///////////  DEBUG
-
-/*
-
-
-
-		for(int j = 0; j < nbinT; j++){
-
-			//if(Tstep*j >= delT)break;
-
-			x = x + vx * (Tstep);
-			y = y + vy * (Tstep);
-			z = z + vz * (Tstep);
-			t = t + Tstep;
-
-			hZT2D->Fill(t, z);
-			hZY2D->Fill(z, y);
-			hZX2D->Fill(z, x);
-			hXY2D->Fill(x, y);
-			hXYT3D->Fill(t, x, y);
-			hZXY3D->Fill(z, x, y);
-
-			//if(InsideLaserRegionTDR(x,y,z))hT->Fill(t);
-			if(InsideLaserRegionTDRnoXlimit(x,y,z))hT->Fill(t);
-
-			if( abs(t - lasertime*1e-6)<=Tstep ){
-				//cout<<t<<" "<<lasertime*1e-6<<endl;
-				tZ1 = z;
-				if(InsideLaserRegionTDRnoXlimit(x,y,z)){NLaserRegion++;FNLaserRegion=1;}
-				break;
-			}
-
-		}
-*/
-
-		///////////  DEBUG
-		//////////////////////////////////////////////////////
-
-
-
 		t = DiffusionT + TBeam;
 		x = X_sf;
 		y = Y_sf;
