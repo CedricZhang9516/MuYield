@@ -226,7 +226,7 @@ public :
    virtual void     LoopEvent();
    virtual void     LoopTime();
    virtual TGraph*  Track(Int_t Nevent);
-   virtual void     LaserIonization(double Lasertime = -1, TString Outputfilename = "");
+   virtual void     QuickLaserIonization(double Lasertime = -1, TString Outputfilename = "");
    virtual void     SavePlots();
 
    virtual Bool_t   Notify();
@@ -429,6 +429,60 @@ void MuYield_Class::Init(TTree *tree)
    Nentries = fChain->GetEntriesFast();
 
    c = NewTCanvas("c_intrnl","c_intrnl",1000,1000,2,2);
+}
+
+void MuYield_Class::SetLasertime(double Lasertime){
+   lasertime = Lasertime;
+}
+
+bool MuYield_Class::IsInsideLaserRegion(Int_t Nevent = 1, double Lasertime = -1){
+
+   tree->GetEntry(Nevent);
+
+   lasertime = Lasertime;
+
+   double x, y, z, vx, vy, vz, t, muonid;
+
+   const double mmu = 105.658;
+   const double light = 299792458; // m/s
+   const double massMu = 106.16/light/light; // MeV/c2
+
+   double delT = DecayT - DiffusionT;
+
+
+
+   if(
+         lasertime == -1 ||
+         ( DecayT <= (lasertime*1e-6  - TBeam) )  ||
+         (lasertime*1e-6 - TBeam - DiffusionT) < 0
+   )return false;
+
+
+   t = DiffusionT + TBeam;
+
+   x = X_sf;
+   y = Y_sf;
+   z = Z_sf;
+   vx = VX_sf;
+   vy = VY_sf;
+   vz = VZ_sf;
+
+   LaserE = 0.5 * massMu * 1e-6 * (VX_sf*VX_sf + VY_sf*VY_sf + VZ_sf*VZ_sf);//v:mm/s, Ek: MeV
+
+   t = DiffusionT + TBeam;
+   x = X_sf;
+   y = Y_sf;
+   z = Z_sf;
+
+   x = x + vx * (lasertime*1e-6 - TBeam - DiffusionT);
+   y = y + vy * (lasertime*1e-6 - TBeam - DiffusionT);
+   z = z + vz * (lasertime*1e-6 - TBeam - DiffusionT);
+   t = lasertime*1e-6;
+
+   if(InsideLaserRegion(x,y,z, MCtype))return true;
+
+   return false;
+
 }
 
 Bool_t MuYield_Class::Notify()

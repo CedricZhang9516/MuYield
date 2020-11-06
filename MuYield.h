@@ -2,13 +2,6 @@
 #define _MuYield
 //#include "/Users/zhangce/WorkArea/CZhang/CZhangNew.h"
 #include "../CZhang/CZhangNew.h"
-#include "MuonID.h"
-#include "MyMuonDecay.h"
-#include "DiffusionModel.h"
-#include "InsideAerogel.h"
-#include "InitializingXYZ0.h"
-
-
 
 //bool InsideLaserRegion(double, double, double);
 //bool InsideAerogel(double x, double y, double z);

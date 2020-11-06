@@ -1,27 +1,28 @@
 #include "ReflectionModel.h"
-#include "../InsideAerogel.h"
+
+
 
 void macro_ReflectionModel(TString filename = "MuYield.root", double Lasertime = 1.35){
 
+
 	filename =
-	"../Root/201103_Reflection_3006_tree_Type3006_D87000_T322_Nrepeat3031781_H_line1_Thick25.00_NewGeo0.root";
-
+			//"../Root/201103_Reflectoin/201103_Reflection_3006_tree_Type3006_D87000_T322_Nrepeat3031781_H_line1_Thick25.00_NewGeo0.root"; //MCtype = 3006;
+			//"../Root/201103_Reflectoin/201103_Reflection_3011_tree_Type3011_D87000_T322_Nrepeat3031781_H_line1_Thick25.00_NewGeo0.root"; //MCtype = 3011;
+			"../Root/201103_Reflectoin/201103_Reflection_3012_tree_Type3012_D87000_T322_Nrepeat3031781_H_line1_Thick25.00_NewGeo0.root"; //MCtype = 3012;
 	filename.ReplaceAll(".root","");
-
-	TFile * f = new TFile( (filename + ".root").Data() );
-	TTree * tree = (TTree*) f-> Get("tree");
 
 	lasertime = Lasertime;
 
-	int Nentries = tree->GetEntries();
+	int MCtype = 3012;
 
+	TFile * f = new TFile( (filename + ".root").Data() );
+	TTree * tree = (TTree*) f-> Get("tree");
 	InitTree(tree);
 
-	double x, y, z, vx, vy, vz, t, muonid;
+	double x, y, z, vx, vy, vz, t, muonid,
+		   prev_x, prev_y, prev_z, prev_t;
 
-	const double mmu = 105.658;
-	const double light = 299792458; // m/s
-	const double massMu = 106.16/light/light; // MeV/c2
+	int Nentries = tree->GetEntries();
 
 	for(int i = 0; i<Nentries; i++){
 
@@ -40,6 +41,12 @@ void macro_ReflectionModel(TString filename = "MuYield.root", double Lasertime =
 		vy = VY_sf;
 		vz = VZ_sf;
 
+		prev_x = x;
+		prev_y = y;
+		prev_z = z;
+		prev_t = t;
+
+
 		for(int j = 0; j < nbinT; j++){
 
 			if(Tstep*j >= delT)break;
@@ -51,11 +58,29 @@ void macro_ReflectionModel(TString filename = "MuYield.root", double Lasertime =
 
 			if( InsideLaserRegion(x,y,z,MCtype) ) hT->Fill(t);
 
-			if( InsideAerogel ( x, y, z, MCtype ) ) ReflectionModel( x,y,z, (delT - (Tstep*j) ) )
+			if( InsideAerogel ( x, y, z, MCtype ) && ! InsideAerogel ( prev_x, prev_y, prev_z, MCtype ) ){
 
+				ReflectionModel(
+					x,y,z,t,
+					vx,vy,vz,
+					(delT - (Tstep*j)), MCtype );
+
+
+				j = j + (t-prev_t)/Tstep -1;
+			}
+
+			prev_x = x;
+			prev_y = y;
+			prev_z = z;
+			prev_t = t;
 
 		} // event time loop
+
+
+
 	}
+
+	hT->Draw("");
 
 
 ///////////// Laser ionization

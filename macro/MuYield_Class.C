@@ -259,7 +259,7 @@ void MuYield_Class::LoopTime()
 
 
 
-void MuYield_Class::LaserIonization(double Lasertime = -1, TString Outputfilename = "")
+void MuYield_Class::QuickLaserIonization(double Lasertime = -1, TString Outputfilename = "")
 {
 
 	lasertime = Lasertime;
@@ -395,59 +395,9 @@ void MuYield_Class::LaserIonization(double Lasertime = -1, TString Outputfilenam
 }
 
 
-void MuYield_Class::SetLasertime(double Lasertime){
-	lasertime = Lasertime;
-}
-
-bool MuYield_Class::IsInsideLaserRegion(Int_t Nevent = 1, double Lasertime = -1){
-
-	tree->GetEntry(Nevent);
-
-	lasertime = Lasertime;
-
-	double x, y, z, vx, vy, vz, t, muonid;
-
-	const double mmu = 105.658;
-	const double light = 299792458; // m/s
-	const double massMu = 106.16/light/light; // MeV/c2
-
-	double delT = DecayT - DiffusionT;
 
 
 
-	if(
-			lasertime == -1 ||
-			( DecayT <= (lasertime*1e-6  - TBeam) )  ||
-			(lasertime*1e-6 - TBeam - DiffusionT) < 0
-	)return false;
-
-
-	t = DiffusionT + TBeam;
-
-	x = X_sf;
-	y = Y_sf;
-	z = Z_sf;
-	vx = VX_sf;
-	vy = VY_sf;
-	vz = VZ_sf;
-
-	LaserE = 0.5 * massMu * 1e-6 * (VX_sf*VX_sf + VY_sf*VY_sf + VZ_sf*VZ_sf);//v:mm/s, Ek: MeV
-
-	t = DiffusionT + TBeam;
-	x = X_sf;
-	y = Y_sf;
-	z = Z_sf;
-
-	x = x + vx * (lasertime*1e-6 - TBeam - DiffusionT);
-	y = y + vy * (lasertime*1e-6 - TBeam - DiffusionT);
-	z = z + vz * (lasertime*1e-6 - TBeam - DiffusionT);
-	t = lasertime*1e-6;
-
-	if(InsideLaserRegion(x,y,z, MCtype))return true;
-
-	return false;
-
-}
 
 TGraph* MuYield_Class::Track(Int_t Nevent = 1){
 
@@ -586,7 +536,6 @@ void MuYield_Class::SavePlots(){
 
 	//#endif
 
-
  	//#ifdef saveplot
 
  	c1->SaveAs( Form("%s.pdf(", filename.Data()) );
@@ -596,6 +545,5 @@ void MuYield_Class::SavePlots(){
 
  	//#endif
 
-
-
 }
+
