@@ -33,6 +33,9 @@ void macro_ReflectionModel(TString filename = "MuYield.root", double Lasertime =
 void ReflectionModel(double &x, double &y, double &z, double &T,
 	double &vx, double &vy, double &vz, double delT, int MCtype){
 
+	  /* initialize random seed: */
+  	srand (time(NULL));
+
 	double L = 0;
 	double t = 0;
 
@@ -96,7 +99,7 @@ void ReflectionModel(double &x, double &y, double &z, double &T,
 
 	}while(InsideAerogel(x,y,z,MCtype) && (t < delT));
 
-	if(t>DecayT)t = DecayT;
+	if(t>delT)t = delT;
 
 	T = T + t;
 

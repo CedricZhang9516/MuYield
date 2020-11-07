@@ -29,7 +29,7 @@ void MuYield_Class::Surface()
 		nb = fChain->GetEntry(jentry);
 		nbytes += nb;
 
-		cout<<jentry<<"/"<<nentries<<"\r"<<flush;
+		cout<<"Surface: "<<jentry<<"/"<<nentries<<"\r"<<flush;
 
 		double delT = DecayT - DiffusionT;
 
@@ -96,7 +96,7 @@ void MuYield_Class::LoopEvent()
 		nb = fChain->GetEntry(jentry);
 		nbytes += nb;
 
-		cout<<jentry<<"/"<<nentries<<"\r"<<flush;
+		cout<<"LoopEvent: "<<jentry<<"/"<<nentries<<"\r"<<flush;
 
 		double delT = DecayT - DiffusionT;
 
@@ -183,7 +183,7 @@ void MuYield_Class::LoopEvent()
    } // events loop
 }
 
-void MuYield_Class::LoopEventWithReflection(int N_track_event = -1)
+void MuYield_Class::LoopEventWithReflection(int N_track_event = -1, TString Outputfilename = "")
 {
 //   In a ROOT session, you can do:
 //      root> .L MuYield_Class.C
@@ -209,8 +209,7 @@ void MuYield_Class::LoopEventWithReflection(int N_track_event = -1)
 //    fChain->GetEntry(jentry);       //read all branches
 //by  b_branchname->GetEntry(ientry); //read only this branch
 
-
-
+   const double mmu = 105.658;
 
    if (fChain == 0) return;
 
@@ -222,12 +221,20 @@ void MuYield_Class::LoopEventWithReflection(int N_track_event = -1)
 
    Double_t prev_x, prev_y, prev_z, prev_t;
 
+   ofstream wf(Outputfilename.Data());
+	if(Outputfilename!=""){
+		OutputLaserIonization = 1;
+		cout<<Outputfilename.Data()<<" created"<<endl;
+	}
+
    //if(N_track_event>0 && N_track_event == jentry){
    if(N_track_event>0 ){
 		g_track_reflection = new TGraph();
 		tree->GetEntry(N_track_event);
 		for(int i = 0; i<DiffusionVertexX->size() ;i++)g_track_reflection->SetPoint(i,DiffusionVertexZ->at(i),DiffusionVertexY->at(i));
 	}
+
+   int NLaserRegion3 = 0;
 
    for (Long64_t jentry=0; jentry<nentries;jentry++) {
 
@@ -237,7 +244,7 @@ void MuYield_Class::LoopEventWithReflection(int N_track_event = -1)
 		nb = fChain->GetEntry(jentry);
 		nbytes += nb;
 
-		cout<<jentry<<"/"<<nentries<<"\r"<<flush;
+		cout<<"LoopEventWithReflection: "<<jentry<<"/"<<nentries<<"\r"<<flush;
 
 		double delT = DecayT - DiffusionT;
 
@@ -248,6 +255,8 @@ void MuYield_Class::LoopEventWithReflection(int N_track_event = -1)
 		vx = VX_sf;
 		vy = VY_sf;
 		vz = VZ_sf;
+
+		LaserE = 0.5 * massMu * 1e-6 * (VX_sf*VX_sf + VY_sf*VY_sf + VZ_sf*VZ_sf);//v:mm/s, Ek: MeV
 
 		prev_x = x;
 		prev_y = y;
@@ -284,24 +293,44 @@ void MuYield_Class::LoopEventWithReflection(int N_track_event = -1)
 			hXYT3D->Fill(t, x, y);
 			hZXY3D->Fill(z, x, y);
 
-			//if(InsideLaserRegion_3006(x,y,z)){
-			if(InsideLaserRegion(x,y,z,MCtype)){
+			std::streamsize prev_precision = wf.precision(); // save old precision
 
-				hT->Fill(t);
-				/*
-				hZY2D_0->Fill(z, y);
-				hZX2D_0->Fill(z, x);
-				hXY2D_0->Fill(x, y);
-				*/
-				/*
-				hZT2D->Fill(t, z);
-				hZY2D->Fill(z, y);
-				hZX2D->Fill(z, x);
-				hXY2D->Fill(x, y);
-				hXYT3D->Fill(t, x, y);
-				hZXY3D->Fill(z, x, y);
-				*/
+			if(InsideLaserRegion(x,y,z,MCtype))hT->Fill(t);
+
+			if(InsideLaserRegion(x,y,z,MCtype) && abs(t-lasertime*1e-6)<Tstep/2 && OutputLaserIonization!=0){
+
+				NLaserRegion3++;
+
+				double p = 1.0*sqrt(2.0*LaserE*mmu+LaserE*LaserE);
+				double g = 1.0*(mmu+LaserE)/mmu;
+				double b = 1.0*sqrt(2.0*LaserE*mmu+LaserE*LaserE)/(mmu+LaserE);
+				//cout << g << "\t" << b << endl;
+
+				double xp = VX_sf/VZ_sf;
+				double yp = VY_sf/VZ_sf;
+
+				wf << x*0.1 << " "
+				<< xp*1000 << " "
+				<< y*0.1 << " "
+				<< yp*1000 << " ";
+
+				wf << scientific
+				<< mmu/1000*g*b << " ";
+
+				wf.precision(prev_precision); // restore old precision
+
+				wf << fixed << z << " "
+				<< 0 << " "
+				<< "-1 -1 ";// << endl;
+
+				wf << fixed << setprecision(0) << MUONID
+				<< endl;
+
+				wf.precision(prev_precision); // restore old precision
+
+
 			}
+
 
 			if( InsideAerogel ( x, y, z, MCtype ) && ! InsideAerogel ( prev_x, prev_y, prev_z, MCtype ) ){
 
@@ -330,7 +359,6 @@ void MuYield_Class::LoopEventWithReflection(int N_track_event = -1)
 			#ifdef TrackTime
 
 			//hXY2D->Draw("colz");
-			//hZY2D->Draw("colz");
 			hZXY3D->Draw("lego2");
 			//hXYT3D->Draw("lego2");
 			c->Modified();
@@ -356,6 +384,15 @@ void MuYield_Class::LoopEventWithReflection(int N_track_event = -1)
 		#endif // track event time
 
    } // events loop
+
+   	if(OutputLaserIonization!=0){
+		TString OutputfilenameWithN = Outputfilename;
+		OutputfilenameWithN.ReplaceAll(".dat", Form("_%d.dat",NLaserRegion3) );
+
+		gROOT->ProcessLine( Form(".!mv %s %s",
+			Outputfilename.Data(),OutputfilenameWithN.Data()
+			) );
+	}
 }
 
 void MuYield_Class::LoopTime()
@@ -374,7 +411,7 @@ void MuYield_Class::LoopTime()
 
    for(int j = 0; j < nbinT; j++){
 
-   		cout<<j<<"/"<<nbinT<<"\r"<<flush;
+   		cout<<"LoopTime: "<<j<<"/"<<nbinT<<"\r"<<flush;
 
    		hZT2D->Reset();
 		hZY2D->Reset();
@@ -443,6 +480,7 @@ void MuYield_Class::QuickLaserIonization(double Lasertime = -1, TString Outputfi
 	ofstream wf(Outputfilename.Data());
 	if(Outputfilename!=""){
 		OutputLaserIonization = 1;
+		cout<<Outputfilename.Data()<<" created"<<endl;
 	}
 
 	//int Nentries = tree->GetEntries();
@@ -469,7 +507,7 @@ void MuYield_Class::QuickLaserIonization(double Lasertime = -1, TString Outputfi
 
 		tree->GetEntry(i);
 
-		cout<<i<<"/"<<Nentries<<"\r"<<flush;
+		cout<<"QuickLaserIonization: "<<i<<"/"<<Nentries<<"\r"<<flush;
 
 		double delT = DecayT - DiffusionT;
 
@@ -613,11 +651,6 @@ TGraph* MuYield_Class::Track(Int_t Nevent = 1){
 
 	LaserE = 0.5 * massMu * 1e-6 * (VX_sf*VX_sf + VY_sf*VY_sf + VZ_sf*VZ_sf);//v:mm/s, Ek: MeV
 
-	t = DiffusionT + TBeam;
-	x = X_sf;
-	y = Y_sf;
-	z = Z_sf;
-
 	x = x + vx * (lasertime*1e-6 - TBeam - DiffusionT);
 	y = y + vy * (lasertime*1e-6 - TBeam - DiffusionT);
 	z = z + vz * (lasertime*1e-6 - TBeam - DiffusionT);
@@ -630,6 +663,97 @@ TGraph* MuYield_Class::Track(Int_t Nevent = 1){
 
 }
 
+
+TGraph* MuYield_Class::TrackWithReflection(Int_t Nevent = 1){
+
+	tree->GetEntry(Nevent);
+
+	g_track_reflection = new TGraph();
+	//for(int i = 0; i<DiffusionVertexX->size() ;i++)g_track->SetPoint(i,DiffusionVertexZ->at(i),DiffusionVertexY->at(i));
+	for(int i = 0; i<DiffusionVertexX->size() ;i++)g_track_reflection->SetPoint(i,DiffusionVertexZ->at(i),DiffusionVertexY->at(i));
+
+	/////////// Draw the position at the laser time, remember to set the lasertime first!!!!!
+
+	double x, y, z, vx, vy, vz, t, muonid;
+
+	double prev_x, prev_y, prev_z, prev_t;
+
+	const double mmu = 105.658;
+	const double light = 299792458; // m/s
+	const double massMu = 106.16/light/light; // MeV/c2
+
+	double delT = DecayT - DiffusionT;
+
+
+	if(
+			lasertime == -1 ||
+			( DecayT <= (lasertime*1e-6  - TBeam) )  ||
+			(lasertime*1e-6 - TBeam - DiffusionT) < 0
+	)return g_track_reflection;
+
+
+	t = DiffusionT + TBeam;
+
+	x = X_sf;
+	y = Y_sf;
+	z = Z_sf;
+	vx = VX_sf;
+	vy = VY_sf;
+	vz = VZ_sf;
+
+	LaserE = 0.5 * massMu * 1e-6 * (VX_sf*VX_sf + VY_sf*VY_sf + VZ_sf*VZ_sf);//v:mm/s, Ek: MeV
+
+	prev_x = x;
+	prev_y = y;
+	prev_z = z;
+	prev_t = t;
+
+	for(int j = 0; j < nbinT; j++){
+
+		//if(Tstep*j >= delT)break;
+		if(Tstep*j >= (lasertime*1e-6 - TBeam - DiffusionT) )break;
+
+		x = x + vx * (Tstep);
+		y = y + vy * (Tstep);
+		z = z + vz * (Tstep);
+		t = t + Tstep;
+
+		g_track_reflection->SetPoint(
+			g_track_reflection->GetN(),z,y);
+
+		if( InsideAerogel ( x, y, z, MCtype ) && ! InsideAerogel ( prev_x, prev_y, prev_z, MCtype ) ){
+
+			ReflectionModel(
+				x,y,z,t,
+				vx,vy,vz,
+				(delT - (Tstep*j)), MCtype );
+
+			for(int i = 0; i<ReflectionVertexX->size() ;i++)
+				g_track_reflection->SetPoint(
+					g_track_reflection->GetN(),
+					ReflectionVertexZ->at(i),ReflectionVertexY->at(i)
+				);
+
+			j = j + (t-prev_t)/Tstep -1;
+		}
+
+		prev_x = x;
+		prev_y = y;
+		prev_z = z;
+		prev_t = t;
+
+	}
+
+	//x = x + vx * (lasertime*1e-6 - TBeam - DiffusionT);
+	//y = y + vy * (lasertime*1e-6 - TBeam - DiffusionT);
+	//z = z + vz * (lasertime*1e-6 - TBeam - DiffusionT);
+	//t = lasertime*1e-6;
+
+	//g_track->SetPoint(DiffusionVertexX->size(),z,y);
+
+	return g_track_reflection;
+
+}
 
 
 

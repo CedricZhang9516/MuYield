@@ -71,7 +71,7 @@ public :
 //   Double_t        LaserX;
 //   Double_t        LaserY;
 //   Double_t        LaserZ;
-//   Double_t        LaserE;
+   Double_t        LaserE;
 //   Double_t        LaserXp;
 //   Double_t        LaserYp;
 //   Double_t        MeshEk;
@@ -224,9 +224,11 @@ public :
 
    virtual void     Surface();
    virtual void     LoopEvent();
-   virtual void     LoopEventWithReflection(int N_track_event = -1);
+   virtual void     LoopEventWithReflection(int N_track_event = -1, TString Outputfilename = "");
    virtual void     LoopTime();
    virtual TGraph*  Track(Int_t Nevent);
+   virtual TGraph*  TrackWithReflection(Int_t Nevent = 1);
+
    virtual void     QuickLaserIonization(double Lasertime = -1, TString Outputfilename = "");
    virtual void     SavePlots();
 
@@ -343,6 +345,8 @@ void MuYield_Class::Init(TTree *tree)
    fChain->SetBranchAddress("DecayPositronMomtX", &DecayPositronMomtX, &b_DecayPositronMomtX);
    fChain->SetBranchAddress("DecayPositronMomtY", &DecayPositronMomtY, &b_DecayPositronMomtY);
    fChain->SetBranchAddress("DecayPositronMomtZ", &DecayPositronMomtZ, &b_DecayPositronMomtZ);
+
+   fChain->SetBranchAddress("MUONID",&MUONID);
    //fChain->SetBranchAddress("LaserX", &LaserX, &b_LaserX);
    //fChain->SetBranchAddress("LaserY", &LaserY, &b_LaserY);
    //fChain->SetBranchAddress("LaserZ", &LaserZ, &b_LaserZ);
