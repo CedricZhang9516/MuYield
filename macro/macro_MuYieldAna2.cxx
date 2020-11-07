@@ -7,27 +7,28 @@
 
 //#define drawplot
 //#define saveplot
+using namespace std;
 
 void macro_MuYieldAna2(){//TString filename = "MuYield.root", int MCtype=1002){
 
-	const int Nfile = 3;
+	const int Nfile = 1;
 
 	TString filename [Nfile] = {
 
 
 		//"../Root/201103_Reflectoin/201103_Reflection_3005_tree_Type3005_D87000_T322_Nrepeat3031781_H_line1_Thick25.00_NewGeo0.root", //MCtype = 3005;
-		"../Root/201103_Reflectoin/201103_Reflection_3006_tree_Type3006_D87000_T322_Nrepeat3031781_H_line1_Thick25.00_NewGeo0.root", //MCtype = 3006;
+		//"../Root/201103_Reflectoin/201103_Reflection_3006_tree_Type3006_D87000_T322_Nrepeat3031781_H_line1_Thick25.00_NewGeo0.root", //MCtype = 3006;
 		//"../Root/201103_Reflectoin/201103_Reflection_3006_tree_Type3006_D87000_T322_Nrepeat5182075_H_line1_Thick25.00_NewGeo0.root", //MCtype = 3006;
-		"../Root/201103_Reflectoin/201103_Reflection_3011_tree_Type3011_D87000_T322_Nrepeat3031781_H_line1_Thick25.00_NewGeo0.root", //MCtype = 3011;
+		//"../Root/201103_Reflectoin/201103_Reflection_3011_tree_Type3011_D87000_T322_Nrepeat3031781_H_line1_Thick25.00_NewGeo0.root", //MCtype = 3011;
 		"../Root/201103_Reflectoin/201103_Reflection_3012_tree_Type3012_D87000_T322_Nrepeat3031781_H_line1_Thick25.00_NewGeo0.root" //MCtype = 3012;
 
 	};
 
 	int MCtype [Nfile] = {
 		//3005,
-		3006,
 		//3006,
-		3011,
+		//3006,
+		//3011,
 		3012
 	};
 
@@ -46,30 +47,40 @@ void macro_MuYieldAna2(){//TString filename = "MuYield.root", int MCtype=1002){
 		t[i] = new MuYield_Class(filename[i], MCtype[i]);
 		t[i]->Surface();
 		//t[i]->LoopEvent();
+		//t[i]->LoopEventWithReflection(1);
 		//t[i]->LoopTime();
-		//t[i]->LaserIonization(1.35);
+		//t[i]->QuickLaserIonization(1.35);
 		//t[i]->hT->Draw();
 		//t[i]->hXY2D_0->Draw("colz");
 		//t[i]->SavePlots();
 
+		//double LasertimeAt1 = 1e6* (t[i]->GetTBeam(1) + t[i]->GetDecayT(1) ) * 0.99;
+		//double LasertimeAti = 1e6* (t[i]->GetTBeam(i) + t[i]->GetDecayT(i) ) * 0.99;
+		/// Draw track without reflection
 		t[i]->SetLasertime(lasertime);
+		//t[i]->SetLasertime(LasertimeAti);
 		g[i] = new TGraph*[t[i]->Nentries];
 		for(int j = 0; j<t[i]->Nentries;j++) g[i][j] = t[i]->Track(j);
 		//if(t[1]->IsInsideLaserRegion(i, lasertime))cout<<"MCtype "<<MCtype[1]<<" file "<<1<<" has the event "<<i<<" inside laser region at "<<lasertime<<" us"<<endl;
 
 	}
 
+	//t[0]->hT->Draw();
+	//t[0]->hZY2D_sf->Draw("colz");
+	//t[0]->g_track_reflection->Draw("PLsame");
+	//g[0][1]->Draw("PLsame");
+
+	//// Comparison of the track
+
 	TCanvas * c1 = new TCanvas("c1_comparison","c1_comparison");
-	c1->Divide(2,2);
+	//c1->Divide(2,2);
 	int c_i = 0;
 
 	for(int i = 0; i<Nfile;i++){
-
-		c1->cd(++c_i);
+		//c1->cd(++c_i);
 		t[i]->hZY2D_sf->Draw("colz");
-		for(int j = 0; j<100;j++)g[i][j]->Draw("PLsame");
+		for(int j = 90; j<100;j++){g[i][j]->SetLineColor(j);g[i][j]->Draw("PLsame");}
 	}
-
 
 
 }

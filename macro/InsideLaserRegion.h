@@ -1,3 +1,6 @@
+#ifndef __INSIDELASERREGION_H__
+#define __INSIDELASERREGION_H__
+
 void TRIUMFVacuumRegion(TTree * tree, TCanvas * c = NewTCanvas("c_intrnl","c_intrnl",1000,1000,2,2) )
 {
 	c->cd(1);
@@ -510,3 +513,5 @@ bool InsideLaserRegionNewGeo_8mm_12mmthick(double x, double y, double z){ // t =
 
 }
 */
+
+#endif

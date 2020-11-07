@@ -1,3 +1,6 @@
+//#ifndef _InsideAerogel
+//#define _InsideAerogel
+
 //#include "MuYield.h"
 
 bool InsideAerogel(double x, double y, double z, int MCtype){

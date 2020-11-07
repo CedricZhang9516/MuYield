@@ -4,6 +4,8 @@
 #include <TStyle.h>
 #include <TCanvas.h>
 
+#include "ReflectionModel.h"
+
 
 //#define TrackTime
 //#define TrackEventTime
@@ -149,6 +151,181 @@ void MuYield_Class::LoopEvent()
 				hZXY3D->Fill(z, x, y);
 				*/
 			}
+
+			#ifdef TrackTime
+
+			//hXY2D->Draw("colz");
+			//hZY2D->Draw("colz");
+			hZXY3D->Draw("lego2");
+			//hXYT3D->Draw("lego2");
+			c->Modified();
+			c->Update();
+			//gSystem->Sleep(1);
+			if( gSystem->ProcessEvents()) break;
+
+			#endif
+
+		}  // end of time loop
+
+		#ifdef TrackEventTime
+
+		if( jentry>=100 && jentry % 100 == 0){
+			hZY2D->Draw("colz");
+			c->Modified();
+			c->Update();
+			//gSystem->Sleep(100);
+			if( gSystem->ProcessEvents()) break;
+		}
+		//c->SaveAs(Form("./png/%i.png",i));
+		hZY2D->Reset();
+		#endif // track event time
+
+   } // events loop
+}
+
+void MuYield_Class::LoopEventWithReflection(int N_track_event = -1)
+{
+//   In a ROOT session, you can do:
+//      root> .L MuYield_Class.C
+//      root> MuYield_Class t
+//      root> t.GetEntry(12); // Fill t data members with entry number 12
+//      root> t.Show();       // Show values of entry 12
+//      root> t.Show(16);     // Read and show values of entry 16
+//      root> t.Loop();       // Loop on all entries
+//
+
+//     This is the loop skeleton where:
+//    jentry is the global entry number in the chain
+//    ientry is the entry number in the current Tree
+//  Note that the argument to GetEntry must be:
+//    jentry for TChain::GetEntry
+//    ientry for TTree::GetEntry and TBranch::GetEntry
+//
+//       To read only selected branches, Insert statements like:
+// METHOD1:
+//    fChain->SetBranchStatus("*",0);  // disable all branches
+//    fChain->SetBranchStatus("branchname",1);  // activate branchname
+// METHOD2: replace line
+//    fChain->GetEntry(jentry);       //read all branches
+//by  b_branchname->GetEntry(ientry); //read only this branch
+
+
+
+
+   if (fChain == 0) return;
+
+   Long64_t nentries = fChain->GetEntriesFast();
+
+   Long64_t nbytes = 0, nb = 0;
+
+   Double_t x, y, z, vx, vy, vz, t;
+
+   Double_t prev_x, prev_y, prev_z, prev_t;
+
+   //if(N_track_event>0 && N_track_event == jentry){
+   if(N_track_event>0 ){
+		g_track_reflection = new TGraph();
+		tree->GetEntry(N_track_event);
+		for(int i = 0; i<DiffusionVertexX->size() ;i++)g_track_reflection->SetPoint(i,DiffusionVertexZ->at(i),DiffusionVertexY->at(i));
+	}
+
+   for (Long64_t jentry=0; jentry<nentries;jentry++) {
+
+		Long64_t ientry = LoadTree(jentry);
+		if (ientry < 0) break;
+
+		nb = fChain->GetEntry(jentry);
+		nbytes += nb;
+
+		cout<<jentry<<"/"<<nentries<<"\r"<<flush;
+
+		double delT = DecayT - DiffusionT;
+
+		t = DiffusionT + TBeam;
+		x = X_sf;
+		y = Y_sf;
+		z = Z_sf;
+		vx = VX_sf;
+		vy = VY_sf;
+		vz = VZ_sf;
+
+		prev_x = x;
+		prev_y = y;
+		prev_z = z;
+		prev_t = t;
+
+		hT_sf->Fill(t);
+		hZXY3D_sf->Fill(Z_sf, X_sf, Y_sf);
+
+		if(z>0){
+			hZY2D_sf->Fill(Z_sf, Y_sf);
+			hZX2D_sf->Fill(Z_sf, X_sf);
+			hXY2D_sf->Fill(X_sf, Y_sf);
+		}
+
+		for(int j = 0; j < nbinT; j++){
+
+			if(Tstep*j >= delT)break;
+
+			if(N_track_event>0 && N_track_event == jentry)
+			g_track_reflection->SetPoint(
+				g_track_reflection->GetN(),z,y);
+
+
+			x = x + vx * (Tstep);
+			y = y + vy * (Tstep);
+			z = z + vz * (Tstep);
+			t = t + Tstep;
+
+			hZT2D->Fill(t, z);
+			hZY2D->Fill(z, y);
+			hZX2D->Fill(z, x);
+			hXY2D->Fill(x, y);
+			hXYT3D->Fill(t, x, y);
+			hZXY3D->Fill(z, x, y);
+
+			//if(InsideLaserRegion_3006(x,y,z)){
+			if(InsideLaserRegion(x,y,z,MCtype)){
+
+				hT->Fill(t);
+				/*
+				hZY2D_0->Fill(z, y);
+				hZX2D_0->Fill(z, x);
+				hXY2D_0->Fill(x, y);
+				*/
+				/*
+				hZT2D->Fill(t, z);
+				hZY2D->Fill(z, y);
+				hZX2D->Fill(z, x);
+				hXY2D->Fill(x, y);
+				hXYT3D->Fill(t, x, y);
+				hZXY3D->Fill(z, x, y);
+				*/
+			}
+
+			if( InsideAerogel ( x, y, z, MCtype ) && ! InsideAerogel ( prev_x, prev_y, prev_z, MCtype ) ){
+
+				ReflectionModel(
+					x,y,z,t,
+					vx,vy,vz,
+					(delT - (Tstep*j)), MCtype );
+
+				if(N_track_event>0 && N_track_event == jentry){
+					for(int i = 0; i<ReflectionVertexX->size() ;i++)
+					g_track_reflection->SetPoint(
+						g_track_reflection->GetN(),
+						ReflectionVertexZ->at(i),ReflectionVertexY->at(i)
+					);
+				}
+
+
+				j = j + (t-prev_t)/Tstep -1;
+			}
+
+			prev_x = x;
+			prev_y = y;
+			prev_z = z;
+			prev_t = t;
 
 			#ifdef TrackTime
 
@@ -416,7 +593,6 @@ TGraph* MuYield_Class::Track(Int_t Nevent = 1){
 	const double massMu = 106.16/light/light; // MeV/c2
 
 	double delT = DecayT - DiffusionT;
-
 
 
 	if(

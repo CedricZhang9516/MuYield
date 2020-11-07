@@ -204,7 +204,7 @@ public :
    double lasertime = -1;
 
    TGraph * g_track;// = new TGraph();
-   //TGraph * g_track_laser;// = new TGraph();
+   TGraph * g_track_reflection;// = new TGraph();
 
    TCanvas * c;// = NewTCanvas("c_intrnl","c_intrnl",1000,1000,2,2)
 
@@ -224,6 +224,7 @@ public :
 
    virtual void     Surface();
    virtual void     LoopEvent();
+   virtual void     LoopEventWithReflection(int N_track_event = -1);
    virtual void     LoopTime();
    virtual TGraph*  Track(Int_t Nevent);
    virtual void     QuickLaserIonization(double Lasertime = -1, TString Outputfilename = "");
@@ -231,6 +232,10 @@ public :
 
    virtual Bool_t   Notify();
    virtual void     Show(Long64_t entry = -1);
+
+   virtual double   GetDecayT(int Nevent);
+   virtual double   GetTBeam (int Nevent);
+
 };
 
 #endif
@@ -434,6 +439,17 @@ void MuYield_Class::Init(TTree *tree)
 void MuYield_Class::SetLasertime(double Lasertime){
    lasertime = Lasertime;
 }
+
+double MuYield_Class::GetDecayT(int Nevent){
+   tree->GetEntry(Nevent);
+   return DecayT;
+}
+
+double MuYield_Class::GetTBeam(int Nevent){
+   tree->GetEntry(Nevent);
+   return TBeam;
+}
+
 
 bool MuYield_Class::IsInsideLaserRegion(Int_t Nevent = 1, double Lasertime = -1){
 

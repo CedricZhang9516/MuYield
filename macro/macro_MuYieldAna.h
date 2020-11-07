@@ -1,3 +1,7 @@
+#ifndef __MACRO_MUYIELDANA_H__
+#define __MACRO_MUYIELDANA_H__
+
+
 #include <vector>
 //#include "/Users/zhangce/WorkArea/CZhang/CZhangNew.h"
 #include "../../CZhang/CZhangNew.h"
@@ -273,3 +277,6 @@ bool InsideLaserRegionNewGeo_4mm(double x, double y, double z);//{ // t = t0 + t
 bool InsideLaserRegionNewGeo_yannis(double x, double y, double z);//{ // t = t0 + tbeam
 bool InsideLaserRegionNewGeo_7_4mm(double x, double y, double z);//{ // t = t0 + tbeam
 */
+
+
+#endif

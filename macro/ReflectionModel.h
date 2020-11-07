@@ -1,3 +1,7 @@
+//#ifndef _ReflectionModel
+//#define _ReflectionModel
+
+
 #include "../../CZhang/CZhangNew.h"
 #include "../InsideAerogel.h"
 #include "InsideLaserRegion.h"
@@ -18,6 +22,12 @@ const double mmu = 105.658;
 
 double tempX, tempY, tempZ;
 
+std::vector<Double_t>* ReflectionVertexX;// = new std::vector<double>;//(5,0);
+std::vector<Double_t>* ReflectionVertexY;// = new std::vector<double>;//(5,0);
+std::vector<Double_t>* ReflectionVertexZ;// = new std::vector<double>;//(5,0);
+//std::vector<Double_t>* ReflectionVertexT;// = new std::vector<double>;//(5,0);
+
+
 void macro_ReflectionModel(TString filename = "MuYield.root", double Lasertime = 1.35);
 
 void ReflectionModel(double &x, double &y, double &z, double &T,
@@ -30,7 +40,10 @@ void ReflectionModel(double &x, double &y, double &z, double &T,
 
 	double Lmfp = 12*D/(PI * vel0_avrg);//mm
 
-
+	ReflectionVertexX = new std::vector<double>;
+	ReflectionVertexY = new std::vector<double>;
+	ReflectionVertexZ = new std::vector<double>;
+	//ReflectionVertexT = new std::vector<double>;
 
 	tempX = TMath::ACos(-1 + 2 * ((double)rand()/(RAND_MAX)) );
 	tempY = ((double) rand()/(RAND_MAX)) * 2* PI;
@@ -43,6 +56,11 @@ void ReflectionModel(double &x, double &y, double &z, double &T,
 	vz = vel0 * cos(theta);
 
 	do{
+
+		ReflectionVertexX->push_back(x);
+		ReflectionVertexY->push_back(y);
+		ReflectionVertexZ->push_back(z);
+		//ReflectionVertexT->push_back(t);
 
 		// generate the L step lenth according to Lmfp exp. distri.
 		do {
@@ -73,14 +91,8 @@ void ReflectionModel(double &x, double &y, double &z, double &T,
 
 		//N++;
 
-		//DiffusionVertexX->push_back(x);
-		//DiffusionVertexY->push_back(y);
-		//DiffusionVertexZ->push_back(z);
-		//DiffusionVertexT->push_back(t);
-
 		//cout<<DiffusionVertexX->size()<<endl;
 		//cout<<"t "<<t<<" DecayT:"<<DecayT<<endl;
-
 
 	}while(InsideAerogel(x,y,z,MCtype) && (t < delT));
 
