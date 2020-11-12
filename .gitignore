@@ -12,3 +12,8 @@ macro/Archive/*
 macro/H-line_initialProfile_GM/*
 run.sh
 *.pdf
+macro/LaserOutput/3006_Nrepeat3031781_47673.dat
+*.mp4
+macro/LaserOutput/3012-reflection-Nrepeat3031781_61123.dat
+macro/LaserOutput/3012-reflection-Nrepeat3031781_61161.dat
+macro/LaserOutput/3012-reflection-Nrepeat3031781_61449.dat

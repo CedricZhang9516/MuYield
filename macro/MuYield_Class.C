@@ -79,6 +79,9 @@ void MuYield_Class::LoopEvent()
 //    fChain->GetEntry(jentry);       //read all branches
 //by  b_branchname->GetEntry(ientry); //read only this branch
 
+	//hT->Reset("");
+	hT->Reset("ICESM");
+
 
    if (fChain == 0) return;
 
@@ -181,6 +184,14 @@ void MuYield_Class::LoopEvent()
 		#endif // track event time
 
    } // events loop
+
+   cout<<"Maximum Yield in the laser region "
+		<<hT->GetMaximum()
+		<<" at "
+		<<hT->GetMaximumBin()
+		<<" ns"
+		<<endl;
+
 }
 
 void MuYield_Class::LoopEventWithReflection(int N_track_event = -1, TString Outputfilename = "")
@@ -208,6 +219,9 @@ void MuYield_Class::LoopEventWithReflection(int N_track_event = -1, TString Outp
 // METHOD2: replace line
 //    fChain->GetEntry(jentry);       //read all branches
 //by  b_branchname->GetEntry(ientry); //read only this branch
+
+	//hT->Clear();
+	hT->Reset("ICESM");
 
    const double mmu = 105.658;
 
@@ -297,7 +311,16 @@ void MuYield_Class::LoopEventWithReflection(int N_track_event = -1, TString Outp
 
 			if(InsideLaserRegion(x,y,z,MCtype))hT->Fill(t);
 
-			if(InsideLaserRegion(x,y,z,MCtype) && abs(t-lasertime*1e-6)<Tstep/2 && OutputLaserIonization!=0){
+			if(InsideLaserRegion(x,y,z,MCtype) && abs(t-lasertime*1e-6)<Tstep/2 ){
+
+				hZY2D_laser->Fill(z, y);
+				hZX2D_laser->Fill(z, x);
+				hXY2D_laser->Fill(x, y);
+				hZ1D_laser->Fill(z);
+				hX1D_laser->Fill(x);
+				hY1D_laser->Fill(y);
+
+			 	if(OutputLaserIonization==0) continue;
 
 				NLaserRegion3++;
 
@@ -371,16 +394,18 @@ void MuYield_Class::LoopEventWithReflection(int N_track_event = -1, TString Outp
 		}  // end of time loop
 
 		#ifdef TrackEventTime
-
-		if( jentry>=100 && jentry % 100 == 0){
-			hZY2D->Draw("colz");
+		//if(jentry==100)hZY2D_sf->Draw("colz");
+		if(jentry==1)hZY2D_sf->Draw("colz");
+		//if( jentry>=100 && jentry % 100 == 0){
+		if( jentry>=1 && jentry % 2 == 0){
+			hZY2D->Draw("sameCOLZ");
 			c->Modified();
 			c->Update();
 			//gSystem->Sleep(100);
 			if( gSystem->ProcessEvents()) break;
 		}
 		//c->SaveAs(Form("./png/%i.png",i));
-		hZY2D->Reset();
+		//hZY2D->Reset();
 		#endif // track event time
 
    } // events loop
@@ -393,6 +418,13 @@ void MuYield_Class::LoopEventWithReflection(int N_track_event = -1, TString Outp
 			Outputfilename.Data(),OutputfilenameWithN.Data()
 			) );
 	}
+
+	cout<<"Maximum Yield in the laser region "
+		<<hT->GetMaximum()
+		<<" at "
+		<<hT->GetMaximumBin()
+		<<" ns"
+		<<endl;
 }
 
 void MuYield_Class::LoopTime()
@@ -582,7 +614,8 @@ void MuYield_Class::QuickLaserIonization(double Lasertime = -1, TString Outputfi
 			<< 0 << " "
 			<< "-1 -1 ";// << endl;
 
-			wf << fixed << setprecision(0) << MUONID
+			//wf << fixed << setprecision(0) << MUONID
+			wf << fixed << setprecision(0)
 			<< endl;
 
 
@@ -598,6 +631,7 @@ void MuYield_Class::QuickLaserIonization(double Lasertime = -1, TString Outputfi
 	//cout<<"total NLaserRegion "<<NLaserRegion<<endl;
 	//cout<<"total NLaserRegion2 "<<NLaserRegion2<<endl;
 	//cout<<"total NLaserRegion3 "<<NLaserRegion3<<endl;
+
 	if(OutputLaserIonization!=0){
 		TString OutputfilenameWithN = Outputfilename;
 		OutputfilenameWithN.ReplaceAll(".dat", Form("_%d.dat",NLaserRegion3) );
@@ -794,8 +828,9 @@ void MuYield_Class::SavePlots(){
 	hT->Draw();
 	cout<<"Maximum Yield in the laser region "
 		<<hT->GetMaximum()
-		<<" in the bin "
+		<<" at "
 		<<hT->GetMaximumBin()
+		<<" ns"
 		<<endl;
 
 	/////////////////
@@ -809,6 +844,12 @@ void MuYield_Class::SavePlots(){
 	hZX2D_0->Draw("colz");
 	c3->cd(++c_i);
 	hXY2D_0->Draw("colz");
+	c3->cd(++c_i);
+	hX1D_laser->Draw();
+	c3->cd(++c_i);
+	hY1D_laser->Draw();
+	c3->cd(++c_i);
+	hZ1D_laser->Draw();
 	c3->cd(++c_i);
 	hZY2D_laser->Draw("colz");
 	c3->cd(++c_i);

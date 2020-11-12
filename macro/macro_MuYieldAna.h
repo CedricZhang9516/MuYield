@@ -92,87 +92,91 @@ double BetaGamma;
 
 double MUONID;
 
-int nbinT = 7000; /// 8 us
-double Tstep = 1e-9; /// 1 ns
+//int nbinT = 8000; /// 7 us
+int nbinT = 800; /// 7 us
+//double Tstep = 1e-9; /// 1 ns
+double Tstep = 10e-9; /// 10 ns
 double lasertime = -1;
 
 void InitTree(TTree* tree){
 
-tree->SetBranchAddress("TBeam",&TBeam);//,"TBeam/D");
-tree->SetBranchAddress("DecayT",&DecayT);//,"DecayT/D");
+	tree->SetBranchAddress("TBeam",&TBeam);//,"TBeam/D");
+	tree->SetBranchAddress("DecayT",&DecayT);//,"DecayT/D");
 
-tree->SetBranchAddress("X0",&X0);// = -1;
-tree->SetBranchAddress("Y0",&Y0);// = -1;
-tree->SetBranchAddress("Z0",&Z0);// = -1;
+	tree->SetBranchAddress("X0",&X0);// = -1;
+	tree->SetBranchAddress("Y0",&Y0);// = -1;
+	tree->SetBranchAddress("Z0",&Z0);// = -1;
 
-tree->SetBranchAddress("X_sf",&X_sf);// = -1;
-tree->SetBranchAddress("Y_sf",&Y_sf);// = -1;
-tree->SetBranchAddress("Z_sf",&Z_sf);// = -1;
-tree->SetBranchAddress("VX_sf",&VX_sf);// = -1;
-tree->SetBranchAddress("VY_sf",&VY_sf);// = -1;
-tree->SetBranchAddress("VZ_sf",&VZ_sf);// = -1;
-tree->SetBranchAddress("theta_sf",&theta_sf);// = -1;
-tree->SetBranchAddress("phi_sf",&phi_sf);// = -1;
+	tree->SetBranchAddress("theta0",&theta0);// = -1;
 
-tree->SetBranchAddress("t0",&t0);// = -1;// is not the initial t, but the total time spent inside aerogel
-tree->SetBranchAddress("DiffusionT",&DiffusionT);// = -1;// is not the initial t, but the total time spent inside aerogel
+	tree->SetBranchAddress("X_sf",&X_sf);// = -1;
+	tree->SetBranchAddress("Y_sf",&Y_sf);// = -1;
+	tree->SetBranchAddress("Z_sf",&Z_sf);// = -1;
+	tree->SetBranchAddress("VX_sf",&VX_sf);// = -1;
+	tree->SetBranchAddress("VY_sf",&VY_sf);// = -1;
+	tree->SetBranchAddress("VZ_sf",&VZ_sf);// = -1;
+	tree->SetBranchAddress("theta_sf",&theta_sf);// = -1;
+	tree->SetBranchAddress("phi_sf",&phi_sf);// = -1;
 
-// laser region/decay information
-/*
-tree->SetBranchAddress("LaserX",&LaserX);// = -1;
-tree->SetBranchAddress("LaserY",&LaserY);// = -1;
-tree->SetBranchAddress("LaserZ",&LaserZ);// = -1;
-tree->SetBranchAddress("LaserE",&LaserE);// = -1;
-*/
-tree->SetBranchAddress("DecayX",&DecayX);// = -1;
-tree->SetBranchAddress("DecayY",&DecayY);// = -1;
-tree->SetBranchAddress("DecayZ",&DecayZ);// = -1;
-tree->SetBranchAddress("DecayT",&DecayT);// = -1;
+	tree->SetBranchAddress("t0",&t0);// = -1;// is not the initial t, but the total time spent inside aerogel
+	tree->SetBranchAddress("DiffusionT",&DiffusionT);// = -1;// is not the initial t, but the total time spent inside aerogel
 
-
-tree->SetBranchAddress("DiffusionVertexX", &DiffusionVertexX);//, "DiffusionVertexX/D");// std::vector<double> DiffusionVertexX;
-tree->SetBranchAddress("DiffusionVertexY", &DiffusionVertexY);//, "DiffusionVertexY/D");// std::vector<double> DiffusionVertexY;
-tree->SetBranchAddress("DiffusionVertexZ", &DiffusionVertexZ);//, "DiffusionVertexZ/D");// std::vector<double> DiffusionVertexZ;
-tree->SetBranchAddress("DiffusionVertexT", &DiffusionVertexT);//, "DiffusionVertexT/D");// std::vector<double> DiffusionVertexT;
-
-//tree->SetBranchAddress("DecayX",&DecayX);//,"DecayX/D");
-//tree->SetBranchAddress("DecayY",&DecayY);//,"DecayY/D");
-//tree->SetBranchAddress("DecayZ",&DecayZ);//,"DecayZ/D");
-
-tree->SetBranchAddress("SpinX",&SpinX);//,"SpinX/D");
-tree->SetBranchAddress("SpinY",&SpinY);//,"SpinY/D");
-tree->SetBranchAddress("SpinZ",&SpinZ);//,"SpinZ/D");
-
-tree->SetBranchAddress("DecayPositronMomtX",&DecayPositronMomtX);//,"DecayPositronMomtX/D");
-tree->SetBranchAddress("DecayPositronMomtY",&DecayPositronMomtY);//,"DecayPositronMomtY/D");
-tree->SetBranchAddress("DecayPositronMomtZ",&DecayPositronMomtZ);//,"DecayPositronMomtZ/D");
+	// laser region/decay information
+	/*
+	tree->SetBranchAddress("LaserX",&LaserX);// = -1;
+	tree->SetBranchAddress("LaserY",&LaserY);// = -1;
+	tree->SetBranchAddress("LaserZ",&LaserZ);// = -1;
+	tree->SetBranchAddress("LaserE",&LaserE);// = -1;
+	*/
+	tree->SetBranchAddress("DecayX",&DecayX);// = -1;
+	tree->SetBranchAddress("DecayY",&DecayY);// = -1;
+	tree->SetBranchAddress("DecayZ",&DecayZ);// = -1;
+	tree->SetBranchAddress("DecayT",&DecayT);// = -1;
 
 
+	tree->SetBranchAddress("DiffusionVertexX", &DiffusionVertexX);//, "DiffusionVertexX/D");// std::vector<double> DiffusionVertexX;
+	tree->SetBranchAddress("DiffusionVertexY", &DiffusionVertexY);//, "DiffusionVertexY/D");// std::vector<double> DiffusionVertexY;
+	tree->SetBranchAddress("DiffusionVertexZ", &DiffusionVertexZ);//, "DiffusionVertexZ/D");// std::vector<double> DiffusionVertexZ;
+	tree->SetBranchAddress("DiffusionVertexT", &DiffusionVertexT);//, "DiffusionVertexT/D");// std::vector<double> DiffusionVertexT;
 
-// Mesh plane information
-/*
-tree->SetBranchAddress("MeshEk",&MeshEk);// = -1;
-tree->SetBranchAddress("MeshE",&MeshE);// = -1;
-tree->SetBranchAddress("MeshT",&MeshT);// = -1;
-tree->SetBranchAddress("MeshT_ab",&MeshT_ab);// = -1;
-tree->SetBranchAddress("MeshX",&MeshX);// = -1;
-tree->SetBranchAddress("MeshY",&MeshY);// = -1;
-tree->SetBranchAddress("MeshZ",&MeshZ);// = -1;
-tree->SetBranchAddress("MeshXp",&MeshXp);// = -1;
-tree->SetBranchAddress("MeshYp",&MeshYp);// = -1;
+	//tree->SetBranchAddress("DecayX",&DecayX);//,"DecayX/D");
+	//tree->SetBranchAddress("DecayY",&DecayY);//,"DecayY/D");
+	//tree->SetBranchAddress("DecayZ",&DecayZ);//,"DecayZ/D");
 
-tree->SetBranchAddress("MeshBeta",&MeshBeta);// = -1;
-tree->SetBranchAddress("MeshVY",&MeshVY);// = -1;
-tree->SetBranchAddress("MeshVX",&MeshVX);// = -1;
-tree->SetBranchAddress("MeshVZ",&MeshVZ);// = -1;
+	tree->SetBranchAddress("SpinX",&SpinX);//,"SpinX/D");
+	tree->SetBranchAddress("SpinY",&SpinY);//,"SpinY/D");
+	tree->SetBranchAddress("SpinZ",&SpinZ);//,"SpinZ/D");
 
-tree->SetBranchAddress("DriftT",&DriftT);
-tree->SetBranchAddress("DriftT_ab",&DriftT_ab);
-tree->SetBranchAddress("DriftX",&DriftX);
-tree->SetBranchAddress("DriftY",&DriftY);
-tree->SetBranchAddress("DriftZ",&DriftZ);
-*/
-tree->SetBranchAddress("MUONID",&MUONID);
+	tree->SetBranchAddress("DecayPositronMomtX",&DecayPositronMomtX);//,"DecayPositronMomtX/D");
+	tree->SetBranchAddress("DecayPositronMomtY",&DecayPositronMomtY);//,"DecayPositronMomtY/D");
+	tree->SetBranchAddress("DecayPositronMomtZ",&DecayPositronMomtZ);//,"DecayPositronMomtZ/D");
+
+
+
+	// Mesh plane information
+	/*
+	tree->SetBranchAddress("MeshEk",&MeshEk);// = -1;
+	tree->SetBranchAddress("MeshE",&MeshE);// = -1;
+	tree->SetBranchAddress("MeshT",&MeshT);// = -1;
+	tree->SetBranchAddress("MeshT_ab",&MeshT_ab);// = -1;
+	tree->SetBranchAddress("MeshX",&MeshX);// = -1;
+	tree->SetBranchAddress("MeshY",&MeshY);// = -1;
+	tree->SetBranchAddress("MeshZ",&MeshZ);// = -1;
+	tree->SetBranchAddress("MeshXp",&MeshXp);// = -1;
+	tree->SetBranchAddress("MeshYp",&MeshYp);// = -1;
+
+	tree->SetBranchAddress("MeshBeta",&MeshBeta);// = -1;
+	tree->SetBranchAddress("MeshVY",&MeshVY);// = -1;
+	tree->SetBranchAddress("MeshVX",&MeshVX);// = -1;
+	tree->SetBranchAddress("MeshVZ",&MeshVZ);// = -1;
+
+	tree->SetBranchAddress("DriftT",&DriftT);
+	tree->SetBranchAddress("DriftT_ab",&DriftT_ab);
+	tree->SetBranchAddress("DriftX",&DriftX);
+	tree->SetBranchAddress("DriftY",&DriftY);
+	tree->SetBranchAddress("DriftZ",&DriftZ);
+	*/
+	tree->SetBranchAddress("MUONID",&MUONID);
 
 }
 
@@ -224,21 +228,14 @@ TH1D* hT_sf = new TH1D("hT_sf","hT_sf;T[s];N",nbinT,0,nbinT*Tstep);
 
 TH2D *hZT2D = new TH2D("Z-T-2D","Z-T-2D; t(us);Z (mm)",nbinT,0e-9,nbinT*Tstep,1000,1,10);
 
-//TH2D *hZY2D = new TH2D("Z-Y-2D","Z-Y-2D; Z(mm);Y (mm)",100,-10,10,100,-40,40);
-TH2D *hZY2D = new TH2D("Z-Y-2D","Z-Y-2D; Z(mm);Y (mm)",100,0,30,60,-30,30);
+TH2D *hZY2D = new TH2D("Z-Y-2D","Z-Y-2D; Z(mm);Y (mm)",100,-10,10,100,-40,40);
+//TH2D *hZY2D = new TH2D("Z-Y-2D","Z-Y-2D; Z(mm);Y (mm)",100,0,30,60,-30,30);
 TH2D *hZX2D = new TH2D("Z-X-2D","Z-X-2D; Z(mm);X (mm)",100,-40,40,100,-40,40);
 TH2D *hXY2D = new TH2D("X-Y-2D","X-Y-2D; X(mm);Y (mm)",100,-80,80,60,-30,30);
 
 TH3D *hXYT3D = new TH3D("ZX-T-3D","ZX-T-3D; t(us); x (mm); y (mm)",nbinT,0e-9,nbinT*Tstep,100,-40,40,100,-40,40);
 TH3D *hZXY3D = new TH3D("ZXY-3D","ZXY-3D;   z(mm); x (mm); y (mm)",100,-1,10,100,-40,40,100,-40,40);
 
-
-TH2D *hZT2D_sf = new TH2D("Z-T-2D_sf","Z-T-2D_sf; t(us);Z (mm)",nbinT,0e-9,nbinT*Tstep,1000,1,10);
-
-//TH2D *hZY2D_sf = new TH2D("Z-Y-2D_sf","Z-Y-2D_sf; Z(mm);Y (mm)",100,-10,10,100,-40,40);
-TH2D *hZY2D_sf = new TH2D("Z-Y-2D_sf","Z-Y-2D_sf; Z(mm);Y (mm)",500,-10,40,500,-40,40);
-TH2D *hZX2D_sf = new TH2D("Z-X-2D_sf","Z-X-2D_sf; Z(mm);X (mm)",500,-40,40,500,-40,40);
-TH2D *hXY2D_sf = new TH2D("X-Y-2D_sf","X-Y-2D_sf; X(mm);Y (mm)",500,-40,40,500,-40,40);
 
 TH3D *hXYT3D_sf = new TH3D("ZX-T-3D_sf","ZX-T-3D_sf; t(us); x (mm); y (mm)",nbinT,0e-9,nbinT*Tstep,100,-40,40,100,-40,40);
 TH3D *hZXY3D_sf = new TH3D("ZXY-3D_sf","ZXY-3D_sf;   z(mm); x (mm); y (mm)",100,-1,10,100,-40,40,100,-40,40);
@@ -250,6 +247,75 @@ TH2D *hXY2D_0 = new TH2D("X-Y-2D-0","X-Y-2D-0; X(mm);Y (mm)",100,-80,80,60,-30,3
 TH2D *hZY2D_laser = new TH2D("Z-Y-2D-laser","Z-Y-2D-laser; Z(mm);Y (mm)",100,0,30,60,-30,30);
 TH2D *hZX2D_laser = new TH2D("Z-X-2D-laser","Z-X-2D-laser; Z(mm);X (mm)",100,-40,40,100,-40,40);
 TH2D *hXY2D_laser = new TH2D("X-Y-2D-laser","X-Y-2D-laser; X(mm);Y (mm)",100,-80,80,60,-30,30);
+
+////////////////////// changed due to the reflection model
+
+TH1D* hX1D_sf;
+TH1D* hY1D_sf;
+TH1D* hZ1D_sf;
+TH1D* hCosTheta1D_sf;
+
+TH1D* hVX1D_sf;
+TH1D* hVY1D_sf;
+TH1D* hVZ1D_sf;
+TH1D* hV_sf;
+
+TH2D *hZT2D_sf = new TH2D("Z-T-2D_sf","Z-T-2D_sf; t(us);Z (mm)",nbinT,0e-9,nbinT*Tstep,1000,1,10);
+//TH2D *hZY2D_sf = new TH2D("Z-Y-2D_sf","Z-Y-2D_sf; Z(mm);Y (mm)",100,-10,10,100,-40,40);
+TH2D *hZY2D_sf = new TH2D("Z-Y-2D_sf","Z-Y-2D_sf; Z(mm);Y (mm)",500,-10,40,500,-15,15);
+TH2D *hZX2D_sf = new TH2D("Z-X-2D_sf","Z-X-2D_sf; Z(mm);X (mm)",500,-40,40,500,-40,40);
+TH2D *hXY2D_sf = new TH2D("X-Y-2D_sf","X-Y-2D_sf; X(mm);Y (mm)",500,-40,40,500,-40,40);
+
+TH1D* hX1D_decay;
+TH1D* hY1D_decay;
+TH1D* hZ1D_decay;
+TH1D* hCosTheta1D_decay;
+
+TH2D *hZY2D_decay;
+TH2D *hZX2D_decay;
+TH2D *hXY2D_decay;
+
+TH1D* hVX1D_decay;
+TH1D* hVY1D_decay;
+TH1D* hVZ1D_decay;
+TH1D* hV_decay;
+
+
+TH1D* hX1D_reflected;
+TH1D* hY1D_reflected;
+TH1D* hZ1D_reflected;
+TH1D* hCosTheta1D_reflected;
+
+TH2D *hZY2D_reflected;
+TH2D *hZX2D_reflected;
+TH2D *hXY2D_reflected;
+
+TH1D* hVX1D_reflected;
+TH1D* hVY1D_reflected;
+TH1D* hVZ1D_reflected;
+TH1D* hV_reflected;
+
+TH1D* hX1D_reflectedOnce;
+TH1D* hY1D_reflectedOnce;
+TH1D* hZ1D_reflectedOnce;
+TH1D* hCosTheta1D_reflectedOnce;
+
+TH2D *hZY2D_reflectedOnce;
+TH2D *hZX2D_reflectedOnce;
+TH2D *hXY2D_reflectedOnce;
+
+TH1D* hVX1D_reflectedOnce;
+TH1D* hVY1D_reflectedOnce;
+TH1D* hVZ1D_reflectedOnce;
+TH1D* hV_reflectedOnce;
+
+TH1D* NofReflection = new TH1D("NofReflection","N of Reflection (all events);N",10,0,10);
+TH1D* NofReflectionGrtT1 = new TH1D("NofReflectionGrtT1","N of Reflection (all events);N",10,0,10);
+TH1D* NofReflectionAndFailed = new TH1D("NofReflectionAndFailed","N of Reflection (failed);N",10,0,10);
+
+
+
+//TGraph*** g = new TGraph**[Nfile];
 
 
 //if(flag_Newgeo==1){

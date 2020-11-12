@@ -179,7 +179,9 @@ public :
    TH2D *hZY2D_laser;// = new TH2D("Z-Y-2D-laser","Z-Y-2D-laser; Z(mm);Y (mm)",100,0,30,60,-30,30);
    TH2D *hZX2D_laser;// = new TH2D("Z-X-2D-laser","Z-X-2D-laser; Z(mm);X (mm)",100,-40,40,100,-40,40);
    TH2D *hXY2D_laser;// = new TH2D("X-Y-2D-laser","X-Y-2D-laser; X(mm);Y (mm)",100,-80,80,60,-30,30);
-
+   TH1D *hZ1D_laser;
+   TH1D *hX1D_laser;
+   TH1D *hY1D_laser;
    //// currently not used in the new class
 
    TH1D* hXXp;// = new TH1D("hXXp","hXXp",100,-16,16);
@@ -400,7 +402,7 @@ void MuYield_Class::Init(TTree *tree)
    hY2 = new TH1D("hY2","hY2",100,0,1e4);
    hBetaGamma = new TH1D("hBetaGamma","hBetaGamma",100,0.0012,0.0019);
 
-   hT = new TH1D("hT","hT;T[s];N",nbinT,0,nbinT*Tstep);
+   hT = new TH1D("hT","# in the laser region;T[s];N",nbinT,0,nbinT*Tstep);
    hT_sf = new TH1D("hT_sf","hT_sf;T[s];N",nbinT,0,nbinT*Tstep);
 
 
@@ -411,13 +413,14 @@ void MuYield_Class::Init(TTree *tree)
 
    hZT2D = new TH2D("Z-T-2D","Z-T-2D; t(us);Z (mm)",nbinT,0e-9,nbinT*Tstep,1000,1,10);
 
-   hZY2D = new TH2D("Z-Y-2D","Z-Y-2D; Z(mm);Y (mm)",100,0,30,60,-30,30);
+   hZY2D = new TH2D("Z-Y-2D","Z-Y-2D; Z(mm);Y (mm)",1000,0,30,200,-30,30);
    hZX2D = new TH2D("Z-X-2D","Z-X-2D; Z(mm);X (mm)",100,-40,40,100,-40,40);
    hXY2D = new TH2D("X-Y-2D","X-Y-2D; X(mm);Y (mm)",100,-80,80,60,-30,30);
 
    hZT2D_sf = new TH2D("Z-T-2D_sf","Z-T-2D_sf; t(us);Z (mm)",nbinT,0e-9,nbinT*Tstep,1000,1,10);
 
    hZY2D_sf = new TH2D("Z-Y-2D_sf","Z-Y-2D_sf; Z(mm);Y (mm)",500,-10,40,500,-40,40);
+   //hZY2D_sf = new TH2D("Z-Y-2D_sf","Z-Y-2D_sf; Z(mm);Y (mm)",200,-5,30,200,-15,15);
    hZX2D_sf = new TH2D("Z-X-2D_sf","Z-X-2D_sf; Z(mm);X (mm)",500,-40,40,500,-40,40);
    hXY2D_sf = new TH2D("X-Y-2D_sf","X-Y-2D_sf; X(mm);Y (mm)",500,-40,40,500,-40,40);
    hZY2D_0 = new TH2D("Z-Y-2D-0","Z-Y-2D-0; Z(mm);Y (mm)",100,0,30,60,-30,30);
@@ -425,8 +428,12 @@ void MuYield_Class::Init(TTree *tree)
    hXY2D_0 = new TH2D("X-Y-2D-0","X-Y-2D-0; X(mm);Y (mm)",100,-80,80,60,-30,30);
 
    hZY2D_laser = new TH2D("Z-Y-2D-laser","Z-Y-2D-laser; Z(mm);Y (mm)",100,0,30,60,-30,30);
-   hZX2D_laser = new TH2D("Z-X-2D-laser","Z-X-2D-laser; Z(mm);X (mm)",100,-40,40,100,-40,40);
-   hXY2D_laser = new TH2D("X-Y-2D-laser","X-Y-2D-laser; X(mm);Y (mm)",100,-80,80,60,-30,30);
+   hZX2D_laser = new TH2D("Z-X-2D-laser","Z-X-2D-laser; Z(mm);X (mm)",100,-5,30,100,-40,40);
+   hXY2D_laser = new TH2D("X-Y-2D-laser","X-Y-2D-laser; X(mm);Y (mm)",100,-40,40,60,-30,30);
+
+   hX1D_laser = new TH1D("X-1D-laser","X-1D-laser; ;Z(mm)",100,-40,40);
+   hY1D_laser = new TH1D("Y-1D-laser","Y-1D-laser; ;Z(mm)",100,-30,30);
+   hZ1D_laser = new TH1D("Z-1D-laser","Z-1D-laser; ;Z(mm)",100,-5,30);
 
    hXYT3D_sf = new TH3D("ZX-T-3D_sf","ZX-T-3D_sf; t(us); x (mm); y (mm)",nbinT,0e-9,nbinT*Tstep,100,-40,40,100,-40,40);
    hZXY3D_sf = new TH3D("ZXY-3D_sf","ZXY-3D_sf;   z(mm); x (mm); y (mm)",100,-1,10,100,-40,40,100,-40,40);
