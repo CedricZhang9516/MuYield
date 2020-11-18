@@ -5,6 +5,7 @@
 #include <TCanvas.h>
 
 #include "ReflectionModel.h"
+#include "ReInitializaingSurfaceXYZ0.h"
 
 
 //#define TrackTime
@@ -45,6 +46,9 @@ void MuYield_Class::Surface()
 		hZXY3D_sf->Fill(Z_sf, X_sf, Y_sf);
 
 		if(z>0){
+
+			ReInitializaingSurfaceXYZ0(X_sf,Y_sf,Z_sf, MCtype);
+
 			hZY2D_sf->Fill(Z_sf, Y_sf);
 			hZX2D_sf->Fill(Z_sf, X_sf);
 			hXY2D_sf->Fill(X_sf, Y_sf);
@@ -261,6 +265,9 @@ void MuYield_Class::LoopEventWithReflection(int N_track_event = -1, TString Outp
 		cout<<"LoopEventWithReflection: "<<jentry<<"/"<<nentries<<"\r"<<flush;
 
 		double delT = DecayT - DiffusionT;
+
+		if(MCtype>4000 && !(Y_sf>-7 && Y_sf<7)  )continue;
+		ReInitializaingSurfaceXYZ0(X_sf,Y_sf,Z_sf, MCtype);
 
 		t = DiffusionT + TBeam;
 		x = X_sf;

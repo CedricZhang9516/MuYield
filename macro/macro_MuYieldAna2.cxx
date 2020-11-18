@@ -30,7 +30,8 @@ void macro_MuYieldAna2(){//TString filename = "MuYield.root", int MCtype=1002){
 		//3006,
 		//3011,
 		//3006
-		3012
+		//3012
+		4006
 	};
 
 	//SetPalette();
@@ -48,7 +49,7 @@ void macro_MuYieldAna2(){//TString filename = "MuYield.root", int MCtype=1002){
 		filename[i].ReplaceAll(".root","");
 
 		t[i] = new MuYield_Class(filename[i], MCtype[i]);
-		t[i]->Surface();
+		//t[i]->Surface();
 		t[i]->SetLasertime(lasertime);
 		//t[i]->LoopEvent();
 		//t[i]->LoopEventWithReflection(1,"3006-reflection.dat");
@@ -64,25 +65,30 @@ void macro_MuYieldAna2(){//TString filename = "MuYield.root", int MCtype=1002){
 		g[i] = new TGraph*[t[i]->Nentries];
 		g_reflection[i] = new TGraph*[t[i]->Nentries];
 		double LasertimeAti = 1e6* (t[i]->GetTBeam(i) + t[i]->GetDecayT(i) ) * 0.99;
-		//t[i]->SetLasertime(LasertimeAti);
+		t[i]->SetLasertime(LasertimeAti);
 		//for(int j = 0; j<t[i]->Nentries;j++) g[i][j] = t[i]->Track(j);
-		//for(int j = 90; j<100;j++) g[i][j] = t[i]->Track(j);
-		//for(int j = 0; j<20;j++){
-		//	g_reflection[i][j] = t[i]->TrackWithReflection(j);
+		for(int j = 0; j<20;j++) g[i][j] = t[i]->Track(j);
+		for(int j = 0; j<20;j++){
+			g_reflection[i][j] = t[i]->TrackWithReflection(j);
 			//if(t[1]->IsInsideLaserRegion(i, lasertime))cout<<"MCtype "<<MCtype[1]<<" file "<<1<<" has the event "<<i<<" inside laser region at "<<lasertime<<" us"<<endl;
-		//}
+		}
 
 	}
 
 	//// draw preliminary
-	TCanvas * c1 = new TCanvas("c1_reflection","c1_reflection");
-	//t[0]->hT->Draw();
+	TCanvas * c1 = new TCanvas("c1_reflection","c1_reflection",1400,500);
+	c1->Divide(2,1);
+	c1->cd(1);
+	t[0]->hT->Draw();
+	c1->cd(2);
+	t[0]->hZY2D_sf->Draw("colz");
 	//t[i]->hT->Draw();
 	//t[i]->hXY2D_0->Draw("colz");
-	t[0]->hZY2D_sf->Draw("colz");
+	//t[0]->hZY2D_sf->Draw("colz");
 	//t[0]->g_track_reflection->Draw("PLsame");
 	//g[0][1]->Draw("PLsame");
 	//for(int j = 0; j<100;j++){g[0][j]->SetLineColor(j);g[0][j]->Draw("PLsame");}
+	c1->SaveAs(Form("/Users/zhangce/WorkArea/MuYield/macro/20-11-19-reflection-itv-scan/%d.pdf",MCtype[0]));
 
 	//// Comparison of the track
 
@@ -93,11 +99,11 @@ void macro_MuYieldAna2(){//TString filename = "MuYield.root", int MCtype=1002){
 		c2->cd(++c_i);
 		t[i]->hZY2D_sf->Draw("colz");
 		//for(int j = 0; j<100;j++){g[i][j]->SetLineColor(j);g[i][j]->Draw("PLsame");}
-		//for(int j = 0; j<20;j++){g[i][j]->SetLineColor(j);g[i][j]->Draw("PLsame");}
+		for(int j = 0; j<20;j++){g[i][j]->SetLineColor(j);g[i][j]->Draw("PLsame");}
 
 		c2->cd(++c_i);
 		t[i]->hZY2D_sf->Draw("colz");
-		//for(int j = 0; j<20;j++){g_reflection[i][j]->SetLineColor(j);g_reflection[i][j]->Draw("PLsame");}
+		for(int j = 0; j<20;j++){g_reflection[i][j]->SetLineColor(j);g_reflection[i][j]->Draw("PLsame");}
 	}
 
 	TCanvas * c3 = new TCanvas("c3_comparison","c3_comparison");
