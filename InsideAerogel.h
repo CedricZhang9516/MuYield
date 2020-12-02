@@ -462,8 +462,6 @@ bool InsideAerogel(double x, double y, double z, int MCtype){
 			return false;
 
 
-
-
 		default:
 
 			if( ( z <= 0 && z >= -7.12 ) ) return true;

@@ -40,13 +40,6 @@ void macro_MuYieldAna2(){//TString filename = "MuYield.root", int MCtype=1002){
 		//"../Root/201202_Reflection/201202_Reflection_3021_tree_Type3021_D87000_T322_Nrepeat3031781_NewGeo0.root"
 		//"../Root/201202_Reflection/201202_Reflection_3022_tree_Type3022_D87000_T322_Nrepeat3031781_NewGeo0.root"
 		//"../Root/201202_Reflection/201202_Reflection_3022_tree_Type3023_D87000_T322_Nrepeat3031781_NewGeo0.root"
-
-		//"../Root/201103_Reflectoin/201103_Reflection_3005_tree_Type3005_D87000_T322_Nrepeat3031781_H_line1_Thick25.00_NewGeo0.root", //MCtype = 3005;
-		//"../Root/201103_Reflectoin/201103_Reflection_3006_tree_Type3006_D87000_T322_Nrepeat3031781_H_line1_Thick25.00_NewGeo0.root", //MCtype = 3006;
-		//"../Root/201103_Reflectoin/201103_Reflection_3006_tree_Type3006_D87000_T322_Nrepeat5182075_H_line1_Thick25.00_NewGeo0.root", //MCtype = 3006;
-		//"../Root/201103_Reflectoin/201103_Reflection_3011_tree_Type3011_D87000_T322_Nrepeat3031781_H_line1_Thick25.00_NewGeo0.root", //MCtype = 3011;
-		//"../Root/201103_Reflectoin/201103_Reflection_3012_tree_Type3012_D87000_T322_Nrepeat3031781_H_line1_Thick25.00_NewGeo0.root" //MCtype = 3012;
-
 	};
 
 	int MCtype [Nfile] = {
@@ -69,10 +62,7 @@ void macro_MuYieldAna2(){//TString filename = "MuYield.root", int MCtype=1002){
 		4007,
 		4008
 */
-		3012
-		//3021
-		//3022
-		//3023
+		3021
 	};
 
 	//SetPalette();
@@ -90,18 +80,13 @@ void macro_MuYieldAna2(){//TString filename = "MuYield.root", int MCtype=1002){
 
 		t[i] = new MuYield_Class(filename[i], MCtype[i]);
 		t[i]->Surface();
-		t[i]->SetLasertime(lasertime);
+		//t[i]->SetLasertime(lasertime);
 		//t[i]->LoopEvent();
 		//t[i]->LoopEventWithReflection(1,"testOutput-reflection.dat");
 		t[i]->LoopEventWithReflection(1);
 		//t[i]->LoopTime();
-
 		//t[i]->QuickLaserIonization(lasertime,Form("LaserOutput/%s.dat",MCtype) );
-		//t[i]->QuickLaserIonization(lasertime);
-
-		//t[i]->QuickLaserIonization(lasertime,"testOutput.dat");
-
-		//t[i]->SavePlots();
+		t[i]->SavePlots();
 
 		//double LasertimeAti = 1e6* (t[i]->GetTBeam(i) + t[i]->GetDecayT(i) ) * 0.99;
 		//t[i]->SetLasertime(LasertimeAti);

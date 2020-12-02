@@ -208,6 +208,7 @@ bool InsideLaserRegion(double x, double y, double z, int MCtype){
 			}
 
 			return false;
+
 		case 3022:
 
 			Thick = 25;
