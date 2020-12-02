@@ -13,7 +13,7 @@ static const double h_Planck      = 6.62606896e-34 * joule*s;
 static const double hbar_Planck   = h_Planck/twopi;
 static const double hbarc         = hbar_Planck * c_light;
 static const double e_squared = eplus * eplus;
-static const double mu0      = 4*pi*1.e-7 * henry/m;
+static const double mu0      = 4*psi*1.e-7 * henry/m;
 static const double epsilon0 = 1./(c_squared*mu0);
 static const double elm_coupling           = e_squared/(4*pi*epsilon0);
 */

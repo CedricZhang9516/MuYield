@@ -176,6 +176,12 @@ void InitializingXYZ0(int index){
 		case 3011:
 		case 3012:
 		case 3006:
+		case 4001:
+		case 4002:
+		case 4003:
+		case 4005:
+		case 4006:
+		case 4007:
 
 			InputTree->GetEntry(index);
 			X0 = x_dec;

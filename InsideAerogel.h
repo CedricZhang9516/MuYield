@@ -133,8 +133,8 @@ bool InsideAerogel(double x, double y, double z){
 
 			return false;
 
-		case 3004:
 		case 3002:
+		case 3004:
 
 			if( z>0 && z<Thick){
 				if(y < 20 && y > 12) return true;
@@ -151,6 +151,8 @@ bool InsideAerogel(double x, double y, double z){
 
 		case 3005:
 
+			Thick = 25;
+
 			if( z>0 && z<Thick){
 				if(y < 20 && y > 12) return true;
 				if(y < 4 && y > -4) return true;
@@ -165,6 +167,129 @@ bool InsideAerogel(double x, double y, double z){
 
 
 		case 3006:
+
+			Thick = 25;
+
+			if( z<0 && z>-14){
+				if(y < 20 && y > 12) return true;
+				if(y < 4 && y > -4) return true;
+				if(y < -12 && y > -20) return true;
+			}
+
+			if( z>0 && z<Thick){
+
+				if(y < 28 && y > 20)return true;
+				if(y < 12 && y > 4)return true;
+				if(y < -4 && y > -12)return true;
+				if(y < -20 && y > -28)return true;
+			}
+
+			return false;
+
+
+		case 4001:
+
+			Thick = 25;
+
+			if( z<0 && z>-14){
+				if(y < 20 && y > 12) return true;
+				if(y < 4 && y > -4) return true;
+				if(y < -12 && y > -20) return true;
+			}
+
+			if( z>0 && z<Thick){
+
+				if(y < 28 && y > 20)return true;
+				if(y < 4.5 && y > 0.5)return true;
+				if(y < -0.5 && y > -4.5)return true;
+				if(y < -20 && y > -28)return true;
+			}
+
+			return false;
+
+		case 4002:
+
+			Thick = 25;
+
+			if( z<0 && z>-14){
+				if(y < 20 && y > 12) return true;
+				if(y < 4 && y > -4) return true;
+				if(y < -12 && y > -20) return true;
+			}
+
+			if( z>0 && z<Thick){
+
+				if(y < 28 && y > 20)return true;
+				if(y < 12 && y > 4)return true;
+				if(y < -4 && y > -12)return true;
+				if(y < -20 && y > -28)return true;
+			}
+
+			return false;
+
+		case 4003:
+
+			Thick = 25;
+
+			if( z<0 && z>-14){
+				if(y < 20 && y > 12) return true;
+				if(y < 4 && y > -4) return true;
+				if(y < -12 && y > -20) return true;
+			}
+
+			if( z>0 && z<Thick){
+
+				if(y < 28 && y > 20)return true;
+				if(y < 12 && y > 4)return true;
+				if(y < -4 && y > -12)return true;
+				if(y < -20 && y > -28)return true;
+			}
+
+			return false;
+
+		case 4005:
+
+			Thick = 25;
+
+			if( z<0 && z>-14){
+				if(y < 20 && y > 12) return true;
+				if(y < 4 && y > -4) return true;
+				if(y < -12 && y > -20) return true;
+			}
+
+			if( z>0 && z<Thick){
+
+				if(y < 28 && y > 20)return true;
+				if(y < 12 && y > 4)return true;
+				if(y < -4 && y > -12)return true;
+				if(y < -20 && y > -28)return true;
+			}
+
+			return false;
+
+		case 4006:
+
+			Thick = 25;
+
+			if( z<0 && z>-14){
+				if(y < 20 && y > 12) return true;
+				if(y < 4 && y > -4) return true;
+				if(y < -12 && y > -20) return true;
+			}
+
+			if( z>0 && z<Thick){
+
+				if(y < 28 && y > 20)return true;
+				if(y < 12 && y > 4)return true;
+				if(y < -4 && y > -12)return true;
+				if(y < -20 && y > -28)return true;
+			}
+
+			return false;
+
+		case 4007:
+
+			Thick = 25;
 
 			if( z<0 && z>-14){
 				if(y < 20 && y > 12) return true;
