@@ -351,10 +351,10 @@ void MuYield_Class::LoopEventWithReflection(int N_track_event = -1, TString Outp
 
 				wf << fixed << z << " "
 				<< 0 << " "
-				<< "-1 -1 ";// << endl;
+				<< "-1 -1 " << endl;
 
-				wf << fixed << setprecision(0) << MUONID
-				<< endl;
+				//wf << fixed << setprecision(0) << MUONID
+				//<< endl;
 
 				wf.precision(prev_precision); // restore old precision
 
@@ -604,6 +604,10 @@ void MuYield_Class::QuickLaserIonization(double Lasertime = -1, TString Outputfi
 			hZX2D_0->Fill(Z0, X0);
 			hXY2D_0->Fill(X0, Y0);
 
+			hX1D_0->Fill(X0);
+			hY1D_0->Fill(Y0);
+			hZ1D_0->Fill(Z0);
+
 			if(OutputLaserIonization==0) continue;
 
 
@@ -806,6 +810,7 @@ void MuYield_Class::SavePlots(){
 	c1 = NewTCanvas("c1","c1_surface",1000,1000,3,3);
 	c2 = NewTCanvas("c2","c2_accumulation_yield",1000,1000,3,3);
 	c3 = NewTCanvas("c3_laser","c3_laser",1000,1000,3,3);
+	c4 = NewTCanvas("c4_laser","c4_laser",1000,1000,3,3);
 
 	/////////////////
 	// Yield on the surface
@@ -864,6 +869,14 @@ void MuYield_Class::SavePlots(){
 	c3->cd(++c_i);
 	hXY2D_laser->Draw("colz");
 
+	c_i = 0;
+	c4->cd(++c_i);
+	hZ1D_0->Draw();
+	c4->cd(++c_i);
+	hX1D_0->Draw();
+	c4->cd(++c_i);
+	hY1D_0->Draw();
+
 	/////////////////
 	///// Draw other 2D and 3D plots
 	/////////////////
@@ -888,7 +901,8 @@ void MuYield_Class::SavePlots(){
 
  	c1->SaveAs( Form("%s.pdf(", filename.Data()) );
  	c2->SaveAs( Form("%s.pdf", filename.Data()) );
- 	c3->SaveAs( Form("%s.pdf)", filename.Data()) );
+ 	c3->SaveAs( Form("%s.pdf", filename.Data()) );
+ 	c4->SaveAs( Form("%s.pdf)", filename.Data()) );
 
 
  	//#endif

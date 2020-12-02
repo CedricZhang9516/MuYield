@@ -22,6 +22,20 @@ void macro_MuYieldAna2(){//TString filename = "MuYield.root", int MCtype=1002){
 		//"../Root/201103_Reflection/201103_Reflection_3011_tree_Type3011_D87000_T322_Nrepeat3031781_H_line1_Thick25.00_NewGeo0.root", //MCtype = 3011;
 		"../Root/201103_Reflection/201103_Reflection_3012_tree_Type3012_D87000_T322_Nrepeat3031781_H_line1_Thick25.00_NewGeo0.root" //MCtype = 3012;
 
+		//"../Root/1002_TDR_Xfree0.38Reproduction/200420_TDR_unlimited_X150Y150_singlePiece_tree_Type1002_D87000_T322_Nrepeat1352113_H_line1_Thick7.12_NewGeo0.root", //MCtype = 3012;
+		//"../Root/2001_Multi-piece-3piece/200418_Mutipiece_tree_Type12_D87000_T322_Nrepeat3031781_H_line1_Thick8.00_NewGeo0.root"
+
+		// for scan of itv
+		/*
+		"../Root/201103_Reflection/201103_Reflection_3012_tree_Type3012_D87000_T322_Nrepeat3031781_H_line1_Thick25.00_NewGeo0.root", //MCtype = 3012;
+		"../Root/201103_Reflection/201103_Reflection_3012_tree_Type3012_D87000_T322_Nrepeat3031781_H_line1_Thick25.00_NewGeo0.root", //MCtype = 3012;
+		"../Root/201103_Reflection/201103_Reflection_3012_tree_Type3012_D87000_T322_Nrepeat3031781_H_line1_Thick25.00_NewGeo0.root", //MCtype = 3012;
+		"../Root/201103_Reflection/201103_Reflection_3012_tree_Type3012_D87000_T322_Nrepeat3031781_H_line1_Thick25.00_NewGeo0.root", //MCtype = 3012;
+		"../Root/201103_Reflection/201103_Reflection_3012_tree_Type3012_D87000_T322_Nrepeat3031781_H_line1_Thick25.00_NewGeo0.root", //MCtype = 3012;
+		"../Root/201103_Reflection/201103_Reflection_3012_tree_Type3012_D87000_T322_Nrepeat3031781_H_line1_Thick25.00_NewGeo0.root", //MCtype = 3012;
+		"../Root/201103_Reflection/201103_Reflection_3012_tree_Type3012_D87000_T322_Nrepeat3031781_H_line1_Thick25.00_NewGeo0.root" //MCtype = 3012;
+		*/
+
 	};
 
 	int MCtype [Nfile] = {
@@ -30,8 +44,20 @@ void macro_MuYieldAna2(){//TString filename = "MuYield.root", int MCtype=1002){
 		//3006,
 		//3011,
 		//3006
-		//3012
-		4006
+		3012
+		//4006
+
+		//1002,
+		//2001
+/*
+		4002,
+		4003,
+		4004,
+		4005,
+		4006,
+		4007,
+		4008
+*/
 	};
 
 	//SetPalette();
@@ -49,13 +75,14 @@ void macro_MuYieldAna2(){//TString filename = "MuYield.root", int MCtype=1002){
 		filename[i].ReplaceAll(".root","");
 
 		t[i] = new MuYield_Class(filename[i], MCtype[i]);
-		//t[i]->Surface();
-		t[i]->SetLasertime(lasertime);
+		t[i]->Surface();
+		//t[i]->SetLasertime(lasertime);
 		//t[i]->LoopEvent();
 		//t[i]->LoopEventWithReflection(1,"3006-reflection.dat");
-		t[i]->LoopEventWithReflection(1);
+		//t[i]->LoopEventWithReflection(1);
 		//t[i]->LoopTime();
 		//t[i]->QuickLaserIonization(lasertime,Form("LaserOutput/%s.dat",MCtype) );
+		t[i]->QuickLaserIonization(lasertime);
 		t[i]->SavePlots();
 
 		//double LasertimeAti = 1e6* (t[i]->GetTBeam(i) + t[i]->GetDecayT(i) ) * 0.99;
@@ -76,10 +103,16 @@ void macro_MuYieldAna2(){//TString filename = "MuYield.root", int MCtype=1002){
 	}
 
 	//// draw preliminary
+	TLegend *tl = new TLegend(0.7,0.7,0.9,0.9);
 	TCanvas * c1 = new TCanvas("c1_reflection","c1_reflection",1400,500);
 	c1->Divide(2,1);
 	c1->cd(1);
-	t[0]->hT->Draw();
+	//t[6]->hT->Draw();
+	//t[6]->hT->SetLineColor(1);
+	//tl->AddEntry(t[6]->hT,Form("%d mm",6+2),"L");
+	//for(int i = 5; i>=0;i--){t[i]->hT->SetLineColor(7-i);t[i]->hT->Draw("same");tl->AddEntry(t[i]->hT,Form("%d mm",i+2),"L");}
+	tl->Draw();
+
 	c1->cd(2);
 	t[0]->hZY2D_sf->Draw("colz");
 	//t[i]->hT->Draw();
@@ -88,7 +121,8 @@ void macro_MuYieldAna2(){//TString filename = "MuYield.root", int MCtype=1002){
 	//t[0]->g_track_reflection->Draw("PLsame");
 	//g[0][1]->Draw("PLsame");
 	//for(int j = 0; j<100;j++){g[0][j]->SetLineColor(j);g[0][j]->Draw("PLsame");}
-	c1->SaveAs(Form("/Users/zhangce/WorkArea/MuYield/macro/20-11-19-reflection-itv-scan/%d.pdf",MCtype[0]));
+
+	//c1->SaveAs(Form("/Users/zhangce/WorkArea/MuYield/macro/20-11-19-reflection-itv-scan/%d.pdf",MCtype[0]));
 
 	//// Comparison of the track
 

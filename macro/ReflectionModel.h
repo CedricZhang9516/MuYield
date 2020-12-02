@@ -10,7 +10,7 @@
 
 
 //double D = 87000;// diffussion coefficient mm^2/s
-double D = 8700;// diffussion coefficient mm^2/s
+double D = 870000;// diffussion coefficient mm^2/s
 double T = 322; //K
 double lifeMu = 2.2e-6; //s
 double k = 8.62e-11 ; //Boltzmann constant, MeV/K
