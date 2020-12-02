@@ -1,11 +1,17 @@
-#include "MuYield.h"
+//#ifndef _InsideAerogel
+//#define _InsideAerogel
 
-bool InsideAerogel(double x, double y, double z){
+//#include "MuYield.h"
 
+bool InsideAerogel(double x, double y, double z, int MCtype){
+
+	double Thick = 7.12;
 
 	switch (MCtype){
 
 		case 1001:
+
+			Thick =  7.12;
 			if( z<0 && z>-Thick){
 				if(y < 28 && y > -28 && x < 25 && x > -25) return true;
 			}
@@ -13,13 +19,14 @@ bool InsideAerogel(double x, double y, double z){
 
 		case 1002:
 
+			Thick =  7.12;
 			if( z<0 && z>-Thick){
 			if(y < 150 && y > -150 && x < 150 && x > -150) return true;
 			}
 			return false;
 
 		case 3:
-
+			Thick =  7.12;
 			if( z<0 && z>-Thick){
 				if(y < 28 && y > -28 && x < 25 && x > -25) return true;
 			}
@@ -27,7 +34,7 @@ bool InsideAerogel(double x, double y, double z){
 			return false;
 
 		case 5:
-
+			Thick =  25;
 			if( z<0 && z>-Thick){
 				if(y < 20 && y > 12) return true;
 				if(y < 4 && y > -4) return true;
@@ -46,6 +53,7 @@ bool InsideAerogel(double x, double y, double z){
 
 		case 6:
 
+			Thick =  25;
 			if(x>25 || x<-25)return false;
 
 			if( z<0 && z>-Thick){
@@ -67,7 +75,7 @@ bool InsideAerogel(double x, double y, double z){
 
 		case 7:
 
-
+			Thick =  25;
 			if( z<0 && z>-Thick && y < 4 && y > -4) return true;
 
 			if( z>0 && z<Thick){
@@ -90,6 +98,8 @@ bool InsideAerogel(double x, double y, double z){
 
 
 		case 8:
+
+			Thick =  25;
 
 			if(x>25 || x<-25)return false;
 
@@ -121,6 +131,8 @@ bool InsideAerogel(double x, double y, double z){
 
 		case 9:
 
+			Thick =  25;
+
 			if( z>0 && z<Thick){
 				if(y < 20 && y > 12) return true;
 				if(y < 4 && y > -4) return true;
@@ -135,6 +147,8 @@ bool InsideAerogel(double x, double y, double z){
 
 		case 3002:
 		case 3004:
+
+			Thick =  25;
 
 			if( z>0 && z<Thick){
 				if(y < 20 && y > 12) return true;
@@ -151,7 +165,7 @@ bool InsideAerogel(double x, double y, double z){
 
 		case 3005:
 
-			Thick = 25;
+			Thick =  25;
 
 			if( z>0 && z<Thick){
 				if(y < 20 && y > 12) return true;
@@ -310,6 +324,8 @@ bool InsideAerogel(double x, double y, double z){
 
 		case 3011:
 
+			Thick =  25;
+
 			if( z>0 && z<Thick){
 				if(y < 18 && y > 14) return true;
 				if(y < 10 && y > 6) return true;
@@ -330,6 +346,8 @@ bool InsideAerogel(double x, double y, double z){
 
 
 		case 3012:
+
+			Thick =  25;
 
 			if( z<0 && z>-Thick){
 				//if(y < 26 && y > 22) return true;
@@ -358,6 +376,8 @@ bool InsideAerogel(double x, double y, double z){
 
 
 		case 10:
+
+			Thick =  25;
 
 			if(x>25 || x<-25)return false;
 
@@ -390,11 +410,138 @@ bool InsideAerogel(double x, double y, double z){
 		case 12:
 		case 2001:
 
+			Thick =  7.12;
+
 			if(z < 0 && z > -9)return true;
 			if(z < 15 && z > 7)return true;
 			if(z < 30 && z > 22)return true;
 
 			return false;
+
+
+		case 4001:
+
+			Thick =  25;
+
+			if( z>0 && z<Thick){
+
+				if(y < 4.5 && y > 0.5)return true;
+				if(y < -0.5 && y > -4.5)return true;
+
+			}
+
+			return false;
+
+		case 4002:
+
+			Thick =  25;
+
+			if( z>0 && z<Thick){
+
+				if(y < 5 && y > 1)return true;
+				if(y < -1 && y > -5)return true;
+
+			}
+
+			return false;
+		case 4003:
+
+			Thick =  25;
+
+			if( z>0 && z<Thick){
+
+				if(y < 5.5 && y > 1.5)return true;
+				if(y < -1.5 && y > -5.5)return true;
+
+			}
+
+			return false;
+		case 4004:
+
+			Thick =  25;
+
+			if( z>0 && z<Thick){
+
+				if(y < 6 && y > 2)return true;
+				if(y < -2 && y > -6)return true;
+
+			}
+
+			return false;
+		case 4005:
+
+			Thick =  25;
+
+			if( z>0 && z<Thick){
+
+				if(y < 6.5 && y > 2.5)return true;
+				if(y < -2.5 && y > -6.5)return true;
+
+			}
+
+			return false;
+		case 4006:
+
+			Thick =  25;
+
+			if( z>0 && z<Thick){
+
+				if(y < 7 && y > 3)return true;
+				if(y < -3 && y > -7)return true;
+
+			}
+
+			return false;
+		case 4007:
+
+			Thick =  25;
+
+			if( z>0 && z<Thick){
+
+				if(y < 7.5 && y > 3.5)return true;
+				if(y < -3.5 && y > -7.5)return true;
+
+			}
+
+			return false;
+		case 4008:
+
+			Thick =  25;
+
+			if( z>0 && z<Thick){
+
+				if(y < 8 && y > 4)return true;
+				if(y < -4 && y > -8)return true;
+
+			}
+
+			return false;
+
+		case 3021:
+
+			Thick =  25;
+
+			if( z>0 && z<Thick){
+				//if(y < 26 && y > 22) return true;
+				if(y < 18 && y > 14) return true;
+				if(y < 10 && y > 6) return true;
+				if(y < 2 && y > -2) return true;
+				if(y < -6 && y > -10) return true;
+				if(y < -14 && y > -18) return true;
+				//if(y < -22 && y > -26) return true;
+			}
+
+			if( z<0 && z>-Thick){
+				return true;
+
+			}
+
+			return false;
+
+		case 3022:
+
+		case 3023:
+
 
 		default:
 

@@ -71,7 +71,7 @@ public :
 //   Double_t        LaserX;
 //   Double_t        LaserY;
 //   Double_t        LaserZ;
-//   Double_t        LaserE;
+   Double_t        LaserE;
 //   Double_t        LaserXp;
 //   Double_t        LaserYp;
 //   Double_t        MeshEk;
@@ -175,11 +175,16 @@ public :
    TH2D *hZY2D_0;// = new TH2D("Z-Y-2D-0","Z-Y-2D-0; Z(mm);Y (mm)",100,0,30,60,-30,30);
    TH2D *hZX2D_0;// = new TH2D("Z-X-2D-0","Z-X-2D-0; Z(mm);X (mm)",100,-40,40,100,-40,40);
    TH2D *hXY2D_0;// = new TH2D("X-Y-2D-0","X-Y-2D-0; X(mm);Y (mm)",100,-80,80,60,-30,30);
+   TH1D *hZ1D_0;
+   TH1D *hX1D_0;
+   TH1D *hY1D_0;
 
    TH2D *hZY2D_laser;// = new TH2D("Z-Y-2D-laser","Z-Y-2D-laser; Z(mm);Y (mm)",100,0,30,60,-30,30);
    TH2D *hZX2D_laser;// = new TH2D("Z-X-2D-laser","Z-X-2D-laser; Z(mm);X (mm)",100,-40,40,100,-40,40);
    TH2D *hXY2D_laser;// = new TH2D("X-Y-2D-laser","X-Y-2D-laser; X(mm);Y (mm)",100,-80,80,60,-30,30);
-
+   TH1D *hZ1D_laser;
+   TH1D *hX1D_laser;
+   TH1D *hY1D_laser;
    //// currently not used in the new class
 
    TH1D* hXXp;// = new TH1D("hXXp","hXXp",100,-16,16);
@@ -204,13 +209,14 @@ public :
    double lasertime = -1;
 
    TGraph * g_track;// = new TGraph();
-   //TGraph * g_track_laser;// = new TGraph();
+   TGraph * g_track_reflection;// = new TGraph();
 
    TCanvas * c;// = NewTCanvas("c_intrnl","c_intrnl",1000,1000,2,2)
 
    TCanvas * c1;
    TCanvas * c2;
    TCanvas * c3;
+   TCanvas * c4;
 
    MuYield_Class(TString name = "MuYield.root", int mctype = 1002);
    virtual ~MuYield_Class();
@@ -224,13 +230,20 @@ public :
 
    virtual void     Surface();
    virtual void     LoopEvent();
+   virtual void     LoopEventWithReflection(int N_track_event = -1, TString Outputfilename = "");
    virtual void     LoopTime();
    virtual TGraph*  Track(Int_t Nevent);
-   virtual void     LaserIonization(double Lasertime = -1, TString Outputfilename = "");
+   virtual TGraph*  TrackWithReflection(Int_t Nevent = 1);
+
+   virtual void     QuickLaserIonization(double Lasertime = -1, TString Outputfilename = "");
    virtual void     SavePlots();
 
    virtual Bool_t   Notify();
    virtual void     Show(Long64_t entry = -1);
+
+   virtual double   GetDecayT(int Nevent);
+   virtual double   GetTBeam (int Nevent);
+
 };
 
 #endif
@@ -338,6 +351,8 @@ void MuYield_Class::Init(TTree *tree)
    fChain->SetBranchAddress("DecayPositronMomtX", &DecayPositronMomtX, &b_DecayPositronMomtX);
    fChain->SetBranchAddress("DecayPositronMomtY", &DecayPositronMomtY, &b_DecayPositronMomtY);
    fChain->SetBranchAddress("DecayPositronMomtZ", &DecayPositronMomtZ, &b_DecayPositronMomtZ);
+
+   fChain->SetBranchAddress("MUONID",&MUONID);
    //fChain->SetBranchAddress("LaserX", &LaserX, &b_LaserX);
    //fChain->SetBranchAddress("LaserY", &LaserY, &b_LaserY);
    //fChain->SetBranchAddress("LaserZ", &LaserZ, &b_LaserZ);
@@ -391,7 +406,7 @@ void MuYield_Class::Init(TTree *tree)
    hY2 = new TH1D("hY2","hY2",100,0,1e4);
    hBetaGamma = new TH1D("hBetaGamma","hBetaGamma",100,0.0012,0.0019);
 
-   hT = new TH1D("hT","hT;T[s];N",nbinT,0,nbinT*Tstep);
+   hT = new TH1D("hT","# in the laser region;T[s];N",nbinT,0,nbinT*Tstep);
    hT_sf = new TH1D("hT_sf","hT_sf;T[s];N",nbinT,0,nbinT*Tstep);
 
 
@@ -402,22 +417,32 @@ void MuYield_Class::Init(TTree *tree)
 
    hZT2D = new TH2D("Z-T-2D","Z-T-2D; t(us);Z (mm)",nbinT,0e-9,nbinT*Tstep,1000,1,10);
 
-   hZY2D = new TH2D("Z-Y-2D","Z-Y-2D; Z(mm);Y (mm)",100,0,30,60,-30,30);
+   hZY2D = new TH2D("Z-Y-2D","Z-Y-2D; Z(mm);Y (mm)",1000,0,30,200,-30,30);
    hZX2D = new TH2D("Z-X-2D","Z-X-2D; Z(mm);X (mm)",100,-40,40,100,-40,40);
    hXY2D = new TH2D("X-Y-2D","X-Y-2D; X(mm);Y (mm)",100,-80,80,60,-30,30);
 
    hZT2D_sf = new TH2D("Z-T-2D_sf","Z-T-2D_sf; t(us);Z (mm)",nbinT,0e-9,nbinT*Tstep,1000,1,10);
 
    hZY2D_sf = new TH2D("Z-Y-2D_sf","Z-Y-2D_sf; Z(mm);Y (mm)",500,-10,40,500,-40,40);
+   //hZY2D_sf = new TH2D("Z-Y-2D_sf","Z-Y-2D_sf; Z(mm);Y (mm)",200,-5,30,200,-15,15);
    hZX2D_sf = new TH2D("Z-X-2D_sf","Z-X-2D_sf; Z(mm);X (mm)",500,-40,40,500,-40,40);
    hXY2D_sf = new TH2D("X-Y-2D_sf","X-Y-2D_sf; X(mm);Y (mm)",500,-40,40,500,-40,40);
    hZY2D_0 = new TH2D("Z-Y-2D-0","Z-Y-2D-0; Z(mm);Y (mm)",100,0,30,60,-30,30);
    hZX2D_0 = new TH2D("Z-X-2D-0","Z-X-2D-0; Z(mm);X (mm)",100,-40,40,100,-40,40);
    hXY2D_0 = new TH2D("X-Y-2D-0","X-Y-2D-0; X(mm);Y (mm)",100,-80,80,60,-30,30);
 
+   hX1D_0 = new TH1D("X-1D-0","X-1D-0; ;X(mm)",100,-40,40);
+   hY1D_0 = new TH1D("Y-1D-0","Y-1D-0; ;Y(mm)",100,0,10);
+   hZ1D_0 = new TH1D("Z-1D-0","Z-1D-0; ;Z(mm)",100,-5,30);
+
+
    hZY2D_laser = new TH2D("Z-Y-2D-laser","Z-Y-2D-laser; Z(mm);Y (mm)",100,0,30,60,-30,30);
-   hZX2D_laser = new TH2D("Z-X-2D-laser","Z-X-2D-laser; Z(mm);X (mm)",100,-40,40,100,-40,40);
-   hXY2D_laser = new TH2D("X-Y-2D-laser","X-Y-2D-laser; X(mm);Y (mm)",100,-80,80,60,-30,30);
+   hZX2D_laser = new TH2D("Z-X-2D-laser","Z-X-2D-laser; Z(mm);X (mm)",100,-5,30,100,-40,40);
+   hXY2D_laser = new TH2D("X-Y-2D-laser","X-Y-2D-laser; X(mm);Y (mm)",100,-40,40,60,-30,30);
+
+   hX1D_laser = new TH1D("X-1D-laser","X-1D-laser; ;X(mm)",100,-40,40);
+   hY1D_laser = new TH1D("Y-1D-laser","Y-1D-laser; ;Y(mm)",100,-30,30);
+   hZ1D_laser = new TH1D("Z-1D-laser","Z-1D-laser; ;Z(mm)",100,-5,30);
 
    hXYT3D_sf = new TH3D("ZX-T-3D_sf","ZX-T-3D_sf; t(us); x (mm); y (mm)",nbinT,0e-9,nbinT*Tstep,100,-40,40,100,-40,40);
    hZXY3D_sf = new TH3D("ZXY-3D_sf","ZXY-3D_sf;   z(mm); x (mm); y (mm)",100,-1,10,100,-40,40,100,-40,40);
@@ -429,6 +454,71 @@ void MuYield_Class::Init(TTree *tree)
    Nentries = fChain->GetEntriesFast();
 
    c = NewTCanvas("c_intrnl","c_intrnl",1000,1000,2,2);
+}
+
+void MuYield_Class::SetLasertime(double Lasertime){
+   lasertime = Lasertime;
+}
+
+double MuYield_Class::GetDecayT(int Nevent){
+   tree->GetEntry(Nevent);
+   return DecayT;
+}
+
+double MuYield_Class::GetTBeam(int Nevent){
+   tree->GetEntry(Nevent);
+   return TBeam;
+}
+
+
+bool MuYield_Class::IsInsideLaserRegion(Int_t Nevent = 1, double Lasertime = -1){
+
+   tree->GetEntry(Nevent);
+
+   lasertime = Lasertime;
+
+   double x, y, z, vx, vy, vz, t, muonid;
+
+   const double mmu = 105.658;
+   const double light = 299792458; // m/s
+   const double massMu = 106.16/light/light; // MeV/c2
+
+   double delT = DecayT - DiffusionT;
+
+
+
+   if(
+         lasertime == -1 ||
+         ( DecayT <= (lasertime*1e-6  - TBeam) )  ||
+         (lasertime*1e-6 - TBeam - DiffusionT) < 0
+   )return false;
+
+
+   t = DiffusionT + TBeam;
+
+   x = X_sf;
+   y = Y_sf;
+   z = Z_sf;
+   vx = VX_sf;
+   vy = VY_sf;
+   vz = VZ_sf;
+
+   LaserE = 0.5 * massMu * 1e-6 * (VX_sf*VX_sf + VY_sf*VY_sf + VZ_sf*VZ_sf);//v:mm/s, Ek: MeV
+
+   t = DiffusionT + TBeam;
+   x = X_sf;
+   y = Y_sf;
+   z = Z_sf;
+
+   x = x + vx * (lasertime*1e-6 - TBeam - DiffusionT);
+   y = y + vy * (lasertime*1e-6 - TBeam - DiffusionT);
+   z = z + vz * (lasertime*1e-6 - TBeam - DiffusionT);
+   t = lasertime*1e-6;
+
+   if(InsideLaserRegion(x,y,z, MCtype))return true;
+
+   return false;
+
 }
 
 Bool_t MuYield_Class::Notify()

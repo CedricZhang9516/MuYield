@@ -2,8 +2,6 @@
 #define _MuYield
 //#include "/Users/zhangce/WorkArea/CZhang/CZhangNew.h"
 #include "../CZhang/CZhangNew.h"
-#include "MuonID.h"
-
 
 //bool InsideLaserRegion(double, double, double);
 //bool InsideAerogel(double x, double y, double z);
@@ -19,7 +17,7 @@ int flag_newGeo = 0; ///// NOT USED NOW
 int Nrepeat = 1e5;
 //double Thick = 7.12;
 //double Thick = 14;
-double Thick = 25;
+//double Thick = 25;
 //double Thick = 8;
 int H_line = 0;
 int S_line = 0;

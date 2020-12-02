@@ -2,7 +2,7 @@
 
 
 
-void macro_ReflectionModel(TString filename = "MuYield.root", double Lasertime = 1.35){
+void macro_ReflectionModel_dyn(TString filename = "MuYield.root", double Lasertime = 1.35){
 
 
 	filename =
@@ -46,21 +46,19 @@ void macro_ReflectionModel(TString filename = "MuYield.root", double Lasertime =
 	hV_sf = new TH1D("hV_sf","hV_sf;V (mm/us)",100,0,25);
 
 	hZT2D_sf = new TH2D("Z-T-2D_sf","Z-T-2D_sf; t(us);Z (mm)",nbinT,0e-9,nbinT*Tstep,1000,1,10);
-	hZY2D_sf = new TH2D("Z-Y-2D_sf","Z-Y-2D_sf; Z(mm);Y (mm)",1000,-10,40,2000,-40,40);
-	//hZY2D_sf = new TH2D("Z-Y-2D_sf","Z-Y-2D_sf; Z(mm);Y (mm)",1000,-5,30,1000,-8,8);
+	//hZY2D_sf = new TH2D("Z-Y-2D_sf","Z-Y-2D_sf; Z(mm);Y (mm)",1000,-10,40,2000,-40,40);
+	hZY2D_sf = new TH2D("Z-Y-2D_sf","Z-Y-2D_sf; Z(mm);Y (mm)",1000,-5,30,1000,-8,8);
 	hZX2D_sf = new TH2D("Z-X-2D_sf","Z-X-2D_sf; Z(mm);X (mm)",500,-10,40,500,-40,40);
 	hXY2D_sf = new TH2D("X-Y-2D_sf","X-Y-2D_sf; X(mm);Y (mm)",500,-40,40,500,-40,40);
 
 	hX1D_decay = new TH1D("X-1D_decay","X-1D_decay_InVac; X(mm);N",60,-45,45);
-	hY1D_decay = new TH1D("Y-1D_decay","Y-1D_decay_InVac; Y(mm);N",100,-30,30);
+	hY1D_decay = new TH1D("Y-1D_decay","Y-1D_decay_InVac; Y(mm);N",100,-3,3);
 	hZ1D_decay = new TH1D("Z-1D_decay","Z-1D_decay_InVac; Z(mm);N",50,-5,30);
 	hCosTheta1D_decay = new TH1D("CosTheta-1D_decay","CosTheta-1D_decay; CosTheta;N",100,0,1);
 
-	//hZY2D_decay = new TH2D("Z-Y-2D_decay","Z-Y-2D_decay; Z(mm);Y (mm)",100,-5,30,100,-15,15);
-	hZY2D_decay = new TH2D("Z-Y-2D_decay","Z-Y-2D_decay; Z(mm);Y (mm)",100,-5,30,100,-40,40);
+	hZY2D_decay = new TH2D("Z-Y-2D_decay","Z-Y-2D_decay; Z(mm);Y (mm)",100,-5,30,100,-15,15);
 	hZX2D_decay = new TH2D("Z-X-2D_decay","Z-X-2D_decay; Z(mm);X (mm)",100,-5,30,100,-40,40);
-	//hXY2D_decay = new TH2D("X-Y-2D_decay","X-Y-2D_decay; X(mm);Y (mm)",100,-40,40,100,-15,15);
-	hXY2D_decay = new TH2D("X-Y-2D_decay","X-Y-2D_decay; X(mm);Y (mm)",100,-40,40,100,-40,40);
+	hXY2D_decay = new TH2D("X-Y-2D_decay","X-Y-2D_decay; X(mm);Y (mm)",100,-40,40,100,-15,15);
 
 	hVX1D_decay = new TH1D("hVX1D_decay","hVX1D_decay;VX (mm/us)",100,0,25);
 	hVY1D_decay = new TH1D("hVY1D_decay","hVY1D_decay;VY (mm/us)",100,0,25);
@@ -100,9 +98,9 @@ void macro_ReflectionModel(TString filename = "MuYield.root", double Lasertime =
 
 	TGraph * g_track_reflection = new TGraph();
 
-	//const int N_dyn = 200;
-	//TH2D** hZY2D_dyn = new TH2D*[N_dyn];
-	//for(int i = 0;i<N_dyn;i++)hZY2D_dyn[i] = new TH2D(Form("Z-Y-2D-dyn-%d",i),Form("Z-Y-2D-dyn-%d;Z(mm);Y (mm)",i),5000,-5,30,5000,-15,15);
+	const int N_dyn = 200;
+	TH2D** hZY2D_dyn = new TH2D*[N_dyn];
+	for(int i = 0;i<N_dyn;i++)hZY2D_dyn[i] = new TH2D(Form("Z-Y-2D-dyn-%d",i),Form("Z-Y-2D-dyn-%d;Z(mm);Y (mm)",i),5000,-5,30,5000,-15,15);
 
 
 	int N_track_event = 319967;
@@ -112,8 +110,9 @@ void macro_ReflectionModel(TString filename = "MuYield.root", double Lasertime =
 	for(int i = 0; i<DiffusionVertexX->size() ;i++)g_track_reflection->SetPoint(i,DiffusionVertexZ->at(i),DiffusionVertexY->at(i));
 
 
-	for(int i = 0; i<Nentries; i++){
-	//for(int i = 0; i<1000; i++){
+	//for(int i = 0; i<Nentries; i++){
+	for(int i = 0; i<80000; i++){
+	//for(int i = 0; i<2; i++){
 
 
 		tree->GetEntry(i);
@@ -140,18 +139,21 @@ void macro_ReflectionModel(TString filename = "MuYield.root", double Lasertime =
 		double IsReflectedAnddFailed = 0;
 
 		//if(X_sf>150 || X_sf<-150) continue;
-/*
+
+		//this line below is only for the plotting the dynamic png!!!
+		if( (Z_sf>0.5 && Z_sf<24.5 && Y_sf<3 && Y_sf>0) )hZY2D_sf->Fill(Z_sf,Y_sf);
+
 		if(!(
 			//3012
 			(Z_sf>0.5 && Z_sf<24.5 && Y_sf<0 && Y_sf>-3)
-			|| (Z_sf>0.5 && Z_sf<24.5 && Y_sf<3 && Y_sf>0)
+			//|| (Z_sf>0.5 && Z_sf<24.5 && Y_sf<3 && Y_sf>0)
 
 			//3006
 			//(Z_sf>0.5 && Z_sf<24.5 && Y_sf<0 && Y_sf>-5)
 			//|| (Z_sf>0.5 && Z_sf<24.5 && Y_sf<5 && Y_sf>0)
 
 		))continue;
-*/
+
 		//double CosTheta = cos(theta_sf);
 
 
@@ -166,9 +168,9 @@ void macro_ReflectionModel(TString filename = "MuYield.root", double Lasertime =
 
 			//cout<<int((t*1e7) /10)<<endl;
 
-			//if(   int((t*1e8) /10)<200 &&z>0 ){
-			//	hZY2D_dyn[ int((t*1e8) /10)]->Fill(z,y);
-			//}
+			if(   int((t*1e8) /10)<200 &&z>0 ){
+				hZY2D_dyn[ int((t*1e8) /10)]->Fill(z,y);
+			}
 
 			if(N_track_event>0 && N_track_event == i)
 				g_track_reflection->SetPoint(
@@ -330,8 +332,7 @@ void macro_ReflectionModel(TString filename = "MuYield.root", double Lasertime =
 	c_i = 0;
 
 
-	c2->cd(++c_i);//hX1D_decay->GetYaxis()->SetRangeUser(0,800);
-	hX1D_decay->Draw();hX1D_reflected->Draw("same");TH1Style1(hX1D_reflected,2);hX1D_reflectedOnce->Draw("same");TH1Style1(hX1D_reflectedOnce,4);
+	c2->cd(++c_i);hX1D_decay->GetYaxis()->SetRangeUser(0,800);hX1D_decay->Draw();hX1D_reflected->Draw("same");TH1Style1(hX1D_reflected,2);hX1D_reflectedOnce->Draw("same");TH1Style1(hX1D_reflectedOnce,4);
 	c2->cd(++c_i);hY1D_decay->Draw();hY1D_reflected->Draw("same");TH1Style1(hY1D_reflected,2);hY1D_reflectedOnce->Draw("same");TH1Style1(hY1D_reflectedOnce,4);
 	c2->cd(++c_i);hZ1D_decay->Draw();hZ1D_reflected->Draw("same");TH1Style1(hZ1D_reflected,2);hZ1D_reflectedOnce->Draw("same");TH1Style1(hZ1D_reflectedOnce,4);
 
@@ -394,14 +395,14 @@ void macro_ReflectionModel(TString filename = "MuYield.root", double Lasertime =
 	c5->cd(++c_i);hZX2D_decay->Draw("colz");TH2Style(hZX2D_decay);
 	c5->cd(++c_i);hXY2D_decay->Draw("colz");TH2Style(hXY2D_decay);
 
-/*
-	for(int i = 0;i<80;i++){
+
+	for(int i = 0;i< N_dyn;i++){
 		TCanvas * c6=NewTCanvas("c6","c6",700,500);
 		hZY2D_sf->Draw("colz");
 		hZY2D_dyn[i]->Draw("same");
-		c6->SaveAs(Form("dyn/Z_Y_2D_dyn_%d.png",i) ); //= new TH2D(Form("Z-Y-2D-dyn-%d",i),Form("Z-Y-2D-dyn-%d;Z(mm);Y (mm)",i),100,-5,30,100,-15,15);
+		c6->SaveAs(Form("20-11-12-Reflec_dyn/Z_Y_2D_dyn_%d.png",i) ); //= new TH2D(Form("Z-Y-2D-dyn-%d",i),Form("Z-Y-2D-dyn-%d;Z(mm);Y (mm)",i),100,-5,30,100,-15,15);
 	}
-*/
+
 
 	//hZY2D_dyn[0]->Draw("colz");
 

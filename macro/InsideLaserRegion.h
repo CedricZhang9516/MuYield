@@ -1,3 +1,6 @@
+#ifndef __INSIDELASERREGION_H__
+#define __INSIDELASERREGION_H__
+
 void TRIUMFVacuumRegion(TTree * tree, TCanvas * c = NewTCanvas("c_intrnl","c_intrnl",1000,1000,2,2) )
 {
 	c->cd(1);
@@ -119,6 +122,82 @@ bool InsideLaserRegion(double x, double y, double z, int MCtype){
 			}
 
 			return false;
+
+		case 4001:
+
+			Thick =  25;
+
+			if( z>0 && z<Thick){
+				if(y > -0.5 && y < 0.5)return true;
+			}
+
+			return false;
+
+		case 4002:
+
+			Thick =  25;
+
+			if( z>0 && z<Thick){
+				if(y > -1 && y < 1)return true;
+			}
+
+			return false;
+		case 4003:
+
+			Thick =  25;
+
+			if( z>0 && z<Thick){
+				if(y > -1.5 && y < 1.5)return true;
+			}
+
+			return false;
+		case 4004:
+
+			Thick =  25;
+
+			if( z>0 && z<Thick){
+				if(y > -2 && y < 2)return true;
+			}
+
+			return false;
+		case 4005:
+
+			Thick =  25;
+
+			if( z>0 && z<Thick){
+				if(y > -2.5 && y < 2.5)return true;
+			}
+
+			return false;
+		case 4006:
+
+			Thick =  25;
+
+			if( z>0 && z<Thick){
+				if(y > -3 && y < 3)return true;
+			}
+
+			return false;
+		case 4007:
+
+			Thick =  25;
+
+			if( z>0 && z<Thick){
+				if(y > -3.5 && y < 3.5)return true;
+			}
+
+			return false;
+		case 4008:
+
+			Thick =  25;
+
+			if( z>0 && z<Thick){
+				if(y > -4 && y < 4)return true;
+			}
+
+			return false;
+
+
 
 		default:
 			if( z <= 6 && z>= 1 && y<20 && y>-20 && x<20 && x>-20)return true;
@@ -510,3 +589,5 @@ bool InsideLaserRegionNewGeo_8mm_12mmthick(double x, double y, double z){ // t =
 
 }
 */
+
+#endif
