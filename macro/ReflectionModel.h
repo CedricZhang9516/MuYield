@@ -9,13 +9,14 @@
 #include "macro_MuYieldAna.h"
 
 
+
 //double D = 87000;// diffussion coefficient mm^2/s
 double D = 870000;// diffussion coefficient mm^2/s
 double T = 322; //K
 double lifeMu = 2.2e-6; //s
 double k = 8.62e-11 ; //Boltzmann constant, MeV/K
 double PI = 3.1415926;
-double vel0_avrg = 1000*sqrt(8*k*T/(PI*massMu)); //mm/s
+double vel0_avrg = 1000*sqrt(8*k*T/(PI*massMu));
 
 const double mmu = 105.658;
 //const double light = 299792458; // m/s

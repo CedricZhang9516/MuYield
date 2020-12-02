@@ -41,6 +41,11 @@ void macro_MuYieldAna2(){//TString filename = "MuYield.root", int MCtype=1002){
 		//"../Root/201202_Reflection/201202_Reflection_3022_tree_Type3022_D87000_T322_Nrepeat3031781_NewGeo0.root"
 		//"../Root/201202_Reflection/201202_Reflection_3022_tree_Type3023_D87000_T322_Nrepeat3031781_NewGeo0.root"
 
+		//"../Root/201103_Reflectoin/201103_Reflection_3005_tree_Type3005_D87000_T322_Nrepeat3031781_H_line1_Thick25.00_NewGeo0.root", //MCtype = 3005;
+		//"../Root/201103_Reflectoin/201103_Reflection_3006_tree_Type3006_D87000_T322_Nrepeat3031781_H_line1_Thick25.00_NewGeo0.root", //MCtype = 3006;
+		//"../Root/201103_Reflectoin/201103_Reflection_3006_tree_Type3006_D87000_T322_Nrepeat5182075_H_line1_Thick25.00_NewGeo0.root", //MCtype = 3006;
+		//"../Root/201103_Reflectoin/201103_Reflection_3011_tree_Type3011_D87000_T322_Nrepeat3031781_H_line1_Thick25.00_NewGeo0.root", //MCtype = 3011;
+		//"../Root/201103_Reflectoin/201103_Reflection_3012_tree_Type3012_D87000_T322_Nrepeat3031781_H_line1_Thick25.00_NewGeo0.root" //MCtype = 3012;
 
 	};
 
@@ -71,14 +76,13 @@ void macro_MuYieldAna2(){//TString filename = "MuYield.root", int MCtype=1002){
 	};
 
 	//SetPalette();
-	//SetOptStat("0000");
+	//SetOptStat();
 
 	MuYield_Class * t[Nfile];
 	TGraph*** g = new TGraph**[Nfile];
 	TGraph*** g_reflection = new TGraph**[Nfile];
 
 	lasertime = 1.35;
-	//lasertime = 3;
 
 	for(int i = 0; i< Nfile; i++){
 
@@ -88,11 +92,15 @@ void macro_MuYieldAna2(){//TString filename = "MuYield.root", int MCtype=1002){
 		t[i]->Surface();
 		t[i]->SetLasertime(lasertime);
 		//t[i]->LoopEvent();
-		//t[i]->LoopEventWithReflection(1,"3006-reflection.dat");
+		//t[i]->LoopEventWithReflection(1,"testOutput-reflection.dat");
 		t[i]->LoopEventWithReflection(1);
 		//t[i]->LoopTime();
+
 		//t[i]->QuickLaserIonization(lasertime,Form("LaserOutput/%s.dat",MCtype) );
 		//t[i]->QuickLaserIonization(lasertime);
+
+		//t[i]->QuickLaserIonization(lasertime,"testOutput.dat");
+
 		//t[i]->SavePlots();
 
 		//double LasertimeAti = 1e6* (t[i]->GetTBeam(i) + t[i]->GetDecayT(i) ) * 0.99;
@@ -101,6 +109,7 @@ void macro_MuYieldAna2(){//TString filename = "MuYield.root", int MCtype=1002){
 		/// Draw track without reflection
 		g[i] = new TGraph*[t[i]->Nentries];
 		g_reflection[i] = new TGraph*[t[i]->Nentries];
+
 		double LasertimeAti = 1e6* (t[i]->GetTBeam(i) + t[i]->GetDecayT(i) ) * 0.99;
 		t[i]->SetLasertime(LasertimeAti);
 		//for(int j = 0; j<t[i]->Nentries;j++) g[i][j] = t[i]->Track(j);
@@ -109,6 +118,12 @@ void macro_MuYieldAna2(){//TString filename = "MuYield.root", int MCtype=1002){
 			g_reflection[i][j] = t[i]->TrackWithReflection(j);
 			//if(t[1]->IsInsideLaserRegion(i, lasertime))cout<<"MCtype "<<MCtype[1]<<" file "<<1<<" has the event "<<i<<" inside laser region at "<<lasertime<<" us"<<endl;
 		}
+
+		//for(int j = 0; j<t[i]->Nentries;j++) g[i][j] = t[i]->Track(j);
+		//for(int j = 90; j<100;j++) g[i][j] = t[i]->Track(j);
+		//for(int j = 90; j<100;j++) g_reflection[i][j] = t[i]->TrackWithReflection(j);
+		//if(t[1]->IsInsideLaserRegion(i, lasertime))cout<<"MCtype "<<MCtype[1]<<" file "<<1<<" has the event "<<i<<" inside laser region at "<<lasertime<<" us"<<endl;
+
 
 	}
 
@@ -129,8 +144,9 @@ void macro_MuYieldAna2(){//TString filename = "MuYield.root", int MCtype=1002){
 	//t[i]->hXY2D_0->Draw("colz");
 	//t[0]->hZY2D_sf->Draw("colz");
 	//t[0]->g_track_reflection->Draw("PLsame");
+	//t[0]->hZY2D_sf->Draw("colz");
+	t[0]->g_track_reflection->Draw("PLsame");
 	//g[0][1]->Draw("PLsame");
-	//for(int j = 0; j<100;j++){g[0][j]->SetLineColor(j);g[0][j]->Draw("PLsame");}
 
 	//c1->SaveAs(Form("/Users/zhangce/WorkArea/MuYield/macro/20-11-19-reflection-itv-scan/%d.pdf",MCtype[0]));
 
@@ -148,13 +164,8 @@ void macro_MuYieldAna2(){//TString filename = "MuYield.root", int MCtype=1002){
 		c2->cd(++c_i);
 		t[i]->hZY2D_sf->Draw("colz");
 		for(int j = 0; j<20;j++){g_reflection[i][j]->SetLineColor(j);g_reflection[i][j]->Draw("PLsame");}
+
 	}
-
-	TCanvas * c3 = new TCanvas("c3_comparison","c3_comparison");
-
-	//t[0]->hZ1D_laser->Draw();
-	t[0]->hZY2D_sf->Draw("colz");
-	//for(int j = 50; j<100;j++){g_reflection[0][j]->SetLineColor(j);g_reflection[0][j]->Draw("PLsame");}
 
 
 }
