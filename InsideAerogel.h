@@ -422,7 +422,44 @@ bool InsideAerogel(double x, double y, double z, int MCtype){
 
 		case 3022:
 
+			Thick =  25;
+
+			if( z>0 && z<Thick){
+				//if(y < 26 && y > 22) return true;
+				if(y < 7 && y > 3) return true;
+				if(y < 17 && y > 13) return true;
+				//if(y < 2 && y > -2) return true;
+				if(y < -3 && y > -7) return true;
+				if(y < -13 && y > -17) return true;
+				//if(y < -22 && y > -26) return true;
+			}
+
+			if( z<0 && z>-Thick){
+				return true;
+
+			}
+
+			return false;
+
 		case 3023:
+
+			Thick = 25;
+
+			if( z<0 && z>-14){
+				return true;
+				//if(y < 4 && y > -4) return true;
+				//if(y < -12 && y > -20) return true;
+			}
+
+			if( z>0 && z<Thick){
+
+				if(y < 20 && y > 16)return true;
+				if(y < 8 && y > 4)return true;
+				if(y < -4 && y > -8)return true;
+				if(y < -16 && y > -20)return true;
+			}
+
+			return false;
 
 
 		default:
