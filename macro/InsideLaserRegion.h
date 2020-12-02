@@ -208,6 +208,31 @@ bool InsideLaserRegion(double x, double y, double z, int MCtype){
 			}
 
 			return false;
+		case 3022:
+
+			Thick = 25;
+			if( z>=0 && z<=(Thick+1)){
+
+				//if(y < 17 && y > 15) return true;
+				if(y < 12 && y > 8) return true;
+				if(y < 2 && y > -2) return true;
+				if(y < -8 && y > -12) return true;
+				//if(y < -15 && y > -17) return true;
+
+			}
+
+			return false;
+		case 3023:
+
+			Thick = 25;
+			if( z>=0 && z<=(Thick+1)){
+
+				if(y < 15 && y > 9) return true;
+				if(y < 3 && y > -3) return true;
+				if(y < -9 && y > -15) return true;
+			}
+
+			return false;
 
 		default:
 			if( z <= 6 && z>= 1 && y<20 && y>-20 && x<20 && x>-20)return true;

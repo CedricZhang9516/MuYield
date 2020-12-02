@@ -35,7 +35,12 @@ void macro_MuYieldAna2(){//TString filename = "MuYield.root", int MCtype=1002){
 		"../Root/201103_Reflection/201103_Reflection_3012_tree_Type3012_D87000_T322_Nrepeat3031781_H_line1_Thick25.00_NewGeo0.root", //MCtype = 3012;
 		"../Root/201103_Reflection/201103_Reflection_3012_tree_Type3012_D87000_T322_Nrepeat3031781_H_line1_Thick25.00_NewGeo0.root" //MCtype = 3012;
 		*/
-		"../Root/201202_Reflection/201202_Reflection_3021_tree_Type3021_D87000_T322_Nrepeat3031781_NewGeo0.root"
+
+		"../Root/201103_Reflection/201103_Reflection_3012_tree_Type3012_D87000_T322_Nrepeat3031781_H_line1_Thick25.00_NewGeo0.root" //MCtype = 3012;
+		//"../Root/201202_Reflection/201202_Reflection_3021_tree_Type3021_D87000_T322_Nrepeat3031781_NewGeo0.root"
+		//"../Root/201202_Reflection/201202_Reflection_3022_tree_Type3022_D87000_T322_Nrepeat3031781_NewGeo0.root"
+		//"../Root/201202_Reflection/201202_Reflection_3022_tree_Type3023_D87000_T322_Nrepeat3031781_NewGeo0.root"
+
 
 	};
 
@@ -59,7 +64,10 @@ void macro_MuYieldAna2(){//TString filename = "MuYield.root", int MCtype=1002){
 		4007,
 		4008
 */
-		3021
+		3012
+		//3021
+		//3022
+		//3023
 	};
 
 	//SetPalette();
@@ -78,14 +86,14 @@ void macro_MuYieldAna2(){//TString filename = "MuYield.root", int MCtype=1002){
 
 		t[i] = new MuYield_Class(filename[i], MCtype[i]);
 		t[i]->Surface();
-		//t[i]->SetLasertime(lasertime);
+		t[i]->SetLasertime(lasertime);
 		//t[i]->LoopEvent();
 		//t[i]->LoopEventWithReflection(1,"3006-reflection.dat");
 		t[i]->LoopEventWithReflection(1);
 		//t[i]->LoopTime();
 		//t[i]->QuickLaserIonization(lasertime,Form("LaserOutput/%s.dat",MCtype) );
 		//t[i]->QuickLaserIonization(lasertime);
-		t[i]->SavePlots();
+		//t[i]->SavePlots();
 
 		//double LasertimeAti = 1e6* (t[i]->GetTBeam(i) + t[i]->GetDecayT(i) ) * 0.99;
 		//t[i]->SetLasertime(LasertimeAti);
@@ -109,7 +117,7 @@ void macro_MuYieldAna2(){//TString filename = "MuYield.root", int MCtype=1002){
 	TCanvas * c1 = new TCanvas("c1_reflection","c1_reflection",1400,500);
 	c1->Divide(2,1);
 	c1->cd(1);
-	//t[6]->hT->Draw();
+	t[0]->hT->Draw();
 	//t[6]->hT->SetLineColor(1);
 	//tl->AddEntry(t[6]->hT,Form("%d mm",6+2),"L");
 	//for(int i = 5; i>=0;i--){t[i]->hT->SetLineColor(7-i);t[i]->hT->Draw("same");tl->AddEntry(t[i]->hT,Form("%d mm",i+2),"L");}
