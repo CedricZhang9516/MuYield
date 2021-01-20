@@ -123,6 +123,17 @@ bool InsideLaserRegion(double x, double y, double z, int MCtype){
 
 			return false;
 
+		case 5001:
+		case 5002:
+		case 5003:
+
+			Thick = 25;
+			if( z>=1 && z<=(Thick+1)){
+
+				if( ( (y)*(y)+(z-12.5)*(z-12.5) )<1.5*1.5 ) return true;
+			}
+			return false;
+
 		case 4001:
 
 			Thick =  25;

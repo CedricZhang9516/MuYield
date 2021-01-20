@@ -9,24 +9,35 @@
 //#define saveplot
 using namespace std;
 
+
+
 void macro_MuYieldAna2(){//TString filename = "MuYield.root", int MCtype=1002){
 
-	const int Nfile = 8;
+	const int Nfile = 4;//8;
 
 	TString filename [Nfile] = {
+
+
+		"../Root/210113_Reflection/210113_Reflection_3012_stopping360_tree_Type3012_D87000_T322_Nrepeat139907_NewGeo0.root",
+		"../Root/210113_Reflection/210113_Reflection_3012_stopping400_tree_Type3012_D87000_T322_Nrepeat160677_NewGeo0.root",
+		"../Root/210113_Reflection/210113_Reflection_3012_stopping450_tree_Type3012_D87000_T322_Nrepeat163165_NewGeo0.root",
+		//"../Root/210113_Reflection/210113_Reflection_3012_stopping500_tree_Type3012_D87000_T322_Nrepeat133583_NewGeo0.root",
+
+		//"../Root/210113_Reflection/210113_Reflection_5003_stopping450_tree_Type5003_D87000_T322_Nrepeat163165_NewGeo0.root"
 
 
 		//"../Root/201103_Reflection/201103_Reflection_3005_tree_Type3005_D87000_T322_Nrepeat3031781_H_line1_Thick25.00_NewGeo0.root", //MCtype = 3005;
 		//"../Root/201103_Reflection/201103_Reflection_3006_tree_Type3006_D87000_T322_Nrepeat3031781_H_line1_Thick25.00_NewGeo0.root" //MCtype = 3006;
 		//"../Root/201103_Reflection/201103_Reflection_3006_tree_Type3006_D87000_T322_Nrepeat5182075_H_line1_Thick25.00_NewGeo0.root", //MCtype = 3006;
 		//"../Root/201103_Reflection/201103_Reflection_3011_tree_Type3011_D87000_T322_Nrepeat3031781_H_line1_Thick25.00_NewGeo0.root", //MCtype = 3011;
-		//"../Root/201103_Reflection/201103_Reflection_3012_tree_Type3012_D87000_T322_Nrepeat3031781_H_line1_Thick25.00_NewGeo0.root" //MCtype = 3012;
+		"../Root/201103_Reflection/201103_Reflection_3012_tree_Type3012_D87000_T322_Nrepeat3031781_H_line1_Thick25.00_NewGeo0.root" //MCtype = 3012;
 
-		"../Root/1002_TDR_Xfree0.38Reproduction/200420_TDR_unlimited_X150Y150_singlePiece_tree_Type1002_D87000_T322_Nrepeat1352113_H_line1_Thick7.12_NewGeo0.root", //MCtype = 3012;
+		//"../Root/1002_TDR_Xfree0.38Reproduction/200420_TDR_unlimited_X150Y150_singlePiece_tree_Type1002_D87000_T322_Nrepeat1352113_H_line1_Thick7.12_NewGeo0.root", //MCtype = 3012;
 		//"../Root/2001_Multi-piece-3piece/200418_Mutipiece_tree_Type12_D87000_T322_Nrepeat3031781_H_line1_Thick8.00_NewGeo0.root"
 
-		// for scan of itv
 
+		// for scan of itv
+		/*
 		"../Root/201103_Reflection/201103_Reflection_3012_tree_Type3012_D87000_T322_Nrepeat3031781_H_line1_Thick25.00_NewGeo0.root", //MCtype = 3012;
 		"../Root/201103_Reflection/201103_Reflection_3012_tree_Type3012_D87000_T322_Nrepeat3031781_H_line1_Thick25.00_NewGeo0.root", //MCtype = 3012;
 		"../Root/201103_Reflection/201103_Reflection_3012_tree_Type3012_D87000_T322_Nrepeat3031781_H_line1_Thick25.00_NewGeo0.root", //MCtype = 3012;
@@ -34,12 +45,14 @@ void macro_MuYieldAna2(){//TString filename = "MuYield.root", int MCtype=1002){
 		"../Root/201103_Reflection/201103_Reflection_3012_tree_Type3012_D87000_T322_Nrepeat3031781_H_line1_Thick25.00_NewGeo0.root", //MCtype = 3012;
 		"../Root/201103_Reflection/201103_Reflection_3012_tree_Type3012_D87000_T322_Nrepeat3031781_H_line1_Thick25.00_NewGeo0.root", //MCtype = 3012;
 		"../Root/201103_Reflection/201103_Reflection_3012_tree_Type3012_D87000_T322_Nrepeat3031781_H_line1_Thick25.00_NewGeo0.root" //MCtype = 3012;
-
+		*/
 
 		//"../Root/201103_Reflection/201103_Reflection_3012_tree_Type3012_D87000_T322_Nrepeat3031781_H_line1_Thick25.00_NewGeo0.root" //MCtype = 3012;
 		//"../Root/201202_Reflection/201202_Reflection_3021_tree_Type3021_D87000_T322_Nrepeat3031781_NewGeo0.root"
 		//"../Root/201202_Reflection/201202_Reflection_3022_tree_Type3022_D87000_T322_Nrepeat3031781_NewGeo0.root"
 		//"../Root/201202_Reflection/201202_Reflection_3022_tree_Type3023_D87000_T322_Nrepeat3031781_NewGeo0.root"
+
+		//"../Root/210113_Reflection/210113_Reflection_3012_tree_Type3012_D87000_T322_Nrepeat139907_NewGeo0.root"
 	};
 
 	int MCtype [Nfile] = {
@@ -48,12 +61,17 @@ void macro_MuYieldAna2(){//TString filename = "MuYield.root", int MCtype=1002){
 		//3006,
 		//3011,
 		//3006
-		//3012
+		3012,
+		3012,
+		//3012,
+		3012,
+		3012
 		//4006
+		//5003
 
-		1002,
+		//1002,
 		//2001
-
+/*
 		4002,
 		4003,
 		4004,
@@ -61,7 +79,7 @@ void macro_MuYieldAna2(){//TString filename = "MuYield.root", int MCtype=1002){
 		4006,
 		4007,
 		4008
-
+*/
 		//3021
 	};
 
@@ -82,10 +100,11 @@ void macro_MuYieldAna2(){//TString filename = "MuYield.root", int MCtype=1002){
 		t[i]->Surface();
 		t[i]->SetLasertime(lasertime);
 		//t[i]->LoopEvent();
-		//t[i]->LoopEventWithReflection(1,"testOutput-reflection-3012.dat");
+		//t[i]->LoopEventWithReflection(1,Form("Output-210113-reflection-3012-%d.dat",i) );
 		t[i]->LoopEventWithReflection(1);
 		//t[i]->LoopTime();
 		//t[i]->QuickLaserIonization(lasertime,Form("LaserOutput/%s.dat",MCtype) );
+		//t[i]->QuickLaserIonization(lasertime);
 		//t[i]->SavePlots();
 
 		//double LasertimeAti = 1e6* (t[i]->GetTBeam(i) + t[i]->GetDecayT(i) ) * 0.99;
@@ -107,15 +126,20 @@ void macro_MuYieldAna2(){//TString filename = "MuYield.root", int MCtype=1002){
 	}
 
 	//// draw preliminary
+	EColor ci[4] = {kBlack, kRed, kOrange, kYellow};//kYellow, kGreen};
+
 	TLegend *tl = new TLegend(0.7,0.7,0.9,0.9);
 	TCanvas * c1 = new TCanvas("c1_reflection","c1_reflection",1400,500);
 	c1->Divide(2,1);
 	c1->cd(1);
+	t[Nfile-1]->hT->SetNormFactor(0.1*t[Nfile-1]->hT->GetEntries());
+	t[Nfile-1]->hT->GetYaxis()->SetRangeUser(0,62000);
 	t[Nfile-1]->hT->Draw();
 	t[Nfile-1]->hT->SetLineColor(1);
 	t[Nfile-1]->hT->SetLineWidth(2);
 	tl->AddEntry(t[Nfile-1]->hT,Form("%d mm",6+2),"L");
-	for(int i = Nfile-2; i>=0;i--){t[i]->hT->SetLineColor(Nfile+1-i);t[i]->hT->SetLineWidth(2);t[i]->hT->Draw("same");tl->AddEntry(t[i]->hT,Form("%d mm",i+2),"L");}
+	//for(int i = Nfile-2; i>=0;i--){t[i]->hT->SetLineColor(Nfile+1-i);t[i]->hT->SetLineWidth(2);t[i]->hT->Draw("same");tl->AddEntry(t[i]->hT,Form("%d mm",i+2),"L");}
+	for(int i = Nfile-2; i>=0;i--){t[i]->hT->SetLineColor(ci[i+1]);t[i]->hT->SetLineWidth(2);t[i]->hT->Draw("same");tl->AddEntry(t[i]->hT,Form("%d mm",i+2),"L");}
 	tl->Draw();
 
 	c1->cd(2);
@@ -146,6 +170,9 @@ void macro_MuYieldAna2(){//TString filename = "MuYield.root", int MCtype=1002){
 		for(int j = 0; j<20;j++){g_reflection[i][j]->SetLineColor(j);g_reflection[i][j]->Draw("PLsame");}
 
 	}
+
+	c2->cd(3);
+	t[0]->hZY2D_laser->Draw("colz");
 
 
 }
