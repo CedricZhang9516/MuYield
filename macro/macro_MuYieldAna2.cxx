@@ -13,14 +13,14 @@ using namespace std;
 
 void macro_MuYieldAna2(){//TString filename = "MuYield.root", int MCtype=1002){
 
-	const int Nfile = 4;//8;
+	const int Nfile = 1;//4;//8;
 
 	TString filename [Nfile] = {
 
 
-		"../Root/210113_Reflection/210113_Reflection_3012_stopping360_tree_Type3012_D87000_T322_Nrepeat139907_NewGeo0.root",
-		"../Root/210113_Reflection/210113_Reflection_3012_stopping400_tree_Type3012_D87000_T322_Nrepeat160677_NewGeo0.root",
-		"../Root/210113_Reflection/210113_Reflection_3012_stopping450_tree_Type3012_D87000_T322_Nrepeat163165_NewGeo0.root",
+		//"../Root/210113_Reflection/210113_Reflection_3012_stopping360_tree_Type3012_D87000_T322_Nrepeat139907_NewGeo0.root",
+		//"../Root/210113_Reflection/210113_Reflection_3012_stopping400_tree_Type3012_D87000_T322_Nrepeat160677_NewGeo0.root",
+		//"../Root/210113_Reflection/210113_Reflection_3012_stopping450_tree_Type3012_D87000_T322_Nrepeat163165_NewGeo0.root",
 		//"../Root/210113_Reflection/210113_Reflection_3012_stopping500_tree_Type3012_D87000_T322_Nrepeat133583_NewGeo0.root",
 
 		//"../Root/210113_Reflection/210113_Reflection_5003_stopping450_tree_Type5003_D87000_T322_Nrepeat163165_NewGeo0.root"
@@ -30,7 +30,10 @@ void macro_MuYieldAna2(){//TString filename = "MuYield.root", int MCtype=1002){
 		//"../Root/201103_Reflection/201103_Reflection_3006_tree_Type3006_D87000_T322_Nrepeat3031781_H_line1_Thick25.00_NewGeo0.root" //MCtype = 3006;
 		//"../Root/201103_Reflection/201103_Reflection_3006_tree_Type3006_D87000_T322_Nrepeat5182075_H_line1_Thick25.00_NewGeo0.root", //MCtype = 3006;
 		//"../Root/201103_Reflection/201103_Reflection_3011_tree_Type3011_D87000_T322_Nrepeat3031781_H_line1_Thick25.00_NewGeo0.root", //MCtype = 3011;
-		"../Root/201103_Reflection/201103_Reflection_3012_tree_Type3012_D87000_T322_Nrepeat3031781_H_line1_Thick25.00_NewGeo0.root" //MCtype = 3012;
+		//"../Root/201103_Reflection/201103_Reflection_3012_tree_Type3012_D87000_T322_Nrepeat3031781_H_line1_Thick25.00_NewGeo0.root" //MCtype = 3012;
+		"../Root/210202_Reflection/210202_Reflection_5003_stopping255_tree_Type5003_D87000_T322_Nrepeat14585_NewGeo0.root" //MCtype = 3012;
+
+
 
 		//"../Root/1002_TDR_Xfree0.38Reproduction/200420_TDR_unlimited_X150Y150_singlePiece_tree_Type1002_D87000_T322_Nrepeat1352113_H_line1_Thick7.12_NewGeo0.root", //MCtype = 3012;
 		//"../Root/2001_Multi-piece-3piece/200418_Mutipiece_tree_Type12_D87000_T322_Nrepeat3031781_H_line1_Thick8.00_NewGeo0.root"
@@ -61,13 +64,13 @@ void macro_MuYieldAna2(){//TString filename = "MuYield.root", int MCtype=1002){
 		//3006,
 		//3011,
 		//3006
-		3012,
-		3012,
 		//3012,
-		3012,
-		3012
+		//3012,
+		//3012,
+		//3012,
+		//3012
 		//4006
-		//5003
+		5003
 
 		//1002,
 		//2001
@@ -101,7 +104,7 @@ void macro_MuYieldAna2(){//TString filename = "MuYield.root", int MCtype=1002){
 		t[i]->SetLasertime(lasertime);
 		//t[i]->LoopEvent();
 		//t[i]->LoopEventWithReflection(1,Form("Output-210113-reflection-3012-%d.dat",i) );
-		t[i]->LoopEventWithReflection(1);
+		//t[i]->LoopEventWithReflection(1);
 		//t[i]->LoopTime();
 		//t[i]->QuickLaserIonization(lasertime,Form("LaserOutput/%s.dat",MCtype) );
 		//t[i]->QuickLaserIonization(lasertime);
