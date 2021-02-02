@@ -31,7 +31,7 @@ void macro_MuYieldAna2(){//TString filename = "MuYield.root", int MCtype=1002){
 		//"../Root/201103_Reflection/201103_Reflection_3006_tree_Type3006_D87000_T322_Nrepeat5182075_H_line1_Thick25.00_NewGeo0.root", //MCtype = 3006;
 		//"../Root/201103_Reflection/201103_Reflection_3011_tree_Type3011_D87000_T322_Nrepeat3031781_H_line1_Thick25.00_NewGeo0.root", //MCtype = 3011;
 		//"../Root/201103_Reflection/201103_Reflection_3012_tree_Type3012_D87000_T322_Nrepeat3031781_H_line1_Thick25.00_NewGeo0.root" //MCtype = 3012;
-		"../Root/210202_Reflection/210202_Reflection_5003_stopping255_tree_Type5003_D87000_T322_Nrepeat14585_NewGeo0.root" //MCtype = 3012;
+		"../Root/210202_Reflection/210202_Reflection_5003_stopping255_tot_tree_Type5003_D87000_T322_Nrepeat2918562_NewGeo0.root" //MCtype = 3012;
 
 
 
@@ -104,11 +104,11 @@ void macro_MuYieldAna2(){//TString filename = "MuYield.root", int MCtype=1002){
 		t[i]->SetLasertime(lasertime);
 		//t[i]->LoopEvent();
 		//t[i]->LoopEventWithReflection(1,Form("Output-210113-reflection-3012-%d.dat",i) );
-		//t[i]->LoopEventWithReflection(1);
+		t[i]->LoopEventWithReflection(1);
 		//t[i]->LoopTime();
 		//t[i]->QuickLaserIonization(lasertime,Form("LaserOutput/%s.dat",MCtype) );
 		//t[i]->QuickLaserIonization(lasertime);
-		//t[i]->SavePlots();
+		t[i]->SavePlots();
 
 		//double LasertimeAti = 1e6* (t[i]->GetTBeam(i) + t[i]->GetDecayT(i) ) * 0.99;
 		//t[i]->SetLasertime(LasertimeAti);

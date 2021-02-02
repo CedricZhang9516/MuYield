@@ -118,7 +118,7 @@ int main(int argc, char **argv){
 
 		if(!InsideAerogel(X0,Y0,Z0, MCtype) ) continue;
 		//Nemission++;
-		Nstopping++;
+
 		// the continue command only for counting of total stopping instantly
 		//continue;
 		//////////////////////
