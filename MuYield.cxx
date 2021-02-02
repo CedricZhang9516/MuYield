@@ -70,6 +70,8 @@ int main(int argc, char **argv){
 		InputTree->SetBranchAddress("z", &z_dec);
 
 
+		cout<<x_dec<<" "<<y_dec<<z_dec<<endl;
+
 	}
 
 	if(S_line){//MCtype == 4){

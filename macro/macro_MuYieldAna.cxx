@@ -1,5 +1,5 @@
 #include "macro_MuYieldAna.h"
-#include "macro_InsideLaserRegion.h"
+#include "InsideLaserRegion.h"
 #include "macro_DrawAerogelGeo.h"
 //#include "/Users/zhangce/WorkArea/CZhang/CZhangNew.h"
 //#include "../../CZhang/CZhangNew.h"
@@ -97,11 +97,12 @@ void macro_MuYieldAna(TString filename = "MuYield.root"){
 	//"../Root/3006-200728study/200728_test1_tree_Type3006_D87000_T322_Nrepeat5182075_H_line1_Thick25.00_NewGeo0";
 	//"../Root/3006-200728study/200728_test2_tree_Type3006_D87000_T322_Nrepeat2150294_H_line1_Thick25.00_NewGeo0";
 	//"../Root/3006-200728study/200728_test2_tree_Type3006_D87000_T322_Nrepeat3031781_H_line1_Thick25.00_NewGeo0";
-	"../Root/1002_hline_SimBeamStop_GM_7.12mm_tree_Type1002_D87000_T322_Nrepeat1352113_H_line1_Thick25.00_NewGeo0";
+	//"../Root/1002_hline_SimBeamStop_GM_7.12mm_tree_Type1002_D87000_T322_Nrepeat1352113_H_line1_Thick25.00_NewGeo0";
+	"../Root/201103_Reflection/201103_Reflection_3012_tree_Type3012_D87000_T322_Nrepeat3031781_H_line1_Thick25.00_NewGeo0";
 
 	filename.ReplaceAll(".root","");
 
-	MCtype = 1002;
+	MCtype = 4009;//3012;
 
 	SetPalette();
 	//SetOptStat();
@@ -781,7 +782,8 @@ void LaserIonization(TTree * tree, TString Outputfilename = "LaserIonization.dat
 
 		std::streamsize prev_precision = wf.precision(); // save old precision
 
-		if(InsideLaserRegionTDRnoXlimit(x,y,z)){
+		//if(InsideLaserRegionTDRnoXlimit(x,y,z)){
+		if(InsideLaserRegion(x,y,z,MCtype)){
 
 			double p = 1.0*sqrt(2.0*LaserE*mmu+LaserE*LaserE);
 			double g = 1.0*(mmu+LaserE)/mmu;
@@ -909,7 +911,8 @@ void LaserIonization_noOutput(TTree * tree)
 
 		//std::streamsize prev_precision = wf.precision(); // save old precision
 
-		if(InsideLaserRegion_3006(x,y,z)){
+		//if(InsideLaserRegion_3006(x,y,z)){
+		if(InsideLaserRegion(x,y,z,MCtype)){
 
 			double p = 1.0*sqrt(2.0*LaserE*mmu+LaserE*LaserE);
 			double g = 1.0*(mmu+LaserE)/mmu;
