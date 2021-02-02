@@ -70,7 +70,7 @@ int main(int argc, char **argv){
 		InputTree->SetBranchAddress("z", &z_dec);
 
 
-		cout<<x_dec<<" "<<y_dec<<z_dec<<endl;
+		//
 
 	}
 
@@ -118,8 +118,8 @@ int main(int argc, char **argv){
 
 		if(!InsideAerogel(X0,Y0,Z0, MCtype) ) continue;
 		//Nemission++;
+
 		Nstopping++;
-		//Nstopping++; cout<<Nstopping<<endl;
 		// the continue command only for counting of total stopping instantly
 		//continue;
 		//////////////////////
