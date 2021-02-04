@@ -32,8 +32,8 @@ void macro_MuYieldAna2(){//TString filename = "MuYield.root", int MCtype=1002){
 		//"../Root/201103_Reflection/201103_Reflection_3011_tree_Type3011_D87000_T322_Nrepeat3031781_H_line1_Thick25.00_NewGeo0.root", //MCtype = 3011;
 		//"../Root/201103_Reflection/201103_Reflection_3012_tree_Type3012_D87000_T322_Nrepeat3031781_H_line1_Thick25.00_NewGeo0.root" //MCtype = 3012;
 
-		//"/home/had/zhangce/g-2_tape/Mu1S2S/MuYield/MuYield_210120_HighStat_total_tree_Type1001_D87000_T322_H_line0_Thick8.80_NewGeo0.root"
-		"../Root/210202_Reflection/210202_Reflection_5003_stopping255_tot_tree_Type5003_D87000_T322_Nrepeat2918562_NewGeo0.root" //MCtype = 3012;
+		//"/home/had/zhangce/g-2_tape/Mu1S2S/MuYield/MuYield_210120_HighStat_total_tree_Type1001_D87000_T322_H_line0_Thick8.80_NewGeo0_TBEAM_0.root"
+		"../Root/210202_Reflection/210202_Reflection_5003_stopping255_tot_tree_Type5003_D87000_T322_Nrepeat2918562_NewGeo0_TBEAM_0.root" //MCtype = 3012;
 
 
 
@@ -138,6 +138,9 @@ void macro_MuYieldAna2(){//TString filename = "MuYield.root", int MCtype=1002){
 	t[Nfile-1]->hT->SetLineColor(1);
 	t[Nfile-1]->hT->SetLineWidth(2);
 	t[Nfile-1]->hT->Draw();
+
+	c0->SaveAs("210204_Reflection/210204_bottomNoreflction.C");
+	c0->SaveAs("210204_Reflection/210204_bottomNoreflction.pdf");
 
 	TCanvas * c1 = new TCanvas("c1_reflection","c1_reflection",1400,500);
 	c1->Divide(2,1);

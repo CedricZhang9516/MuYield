@@ -7,14 +7,14 @@ void macro_ModYieldfile(){
 		//"../Root/hline_ATH475_BEAMG-2EDM_output_1e6_gendat_afterfit_SEPON_sum.root"
 		//"../Root/hline_SimBeamStop_GM_7.12mm.root"
 
-		//"/home/had/zhangce/g-2_tape/Mu1S2S/MuYield/MuYield_210120_HighStat_total_tree_Type1001_D87000_T322_H_line0_Thick8.80_NewGeo0.root"
-		"../Root/210202_Reflection/210202_Reflection_5003_stopping255_tot_tree_Type5003_D87000_T322_Nrepeat2918562_NewGeo0.root" //MCtype = 3012;
+		"/home/had/zhangce/g-2_tape/Mu1S2S/MuYield/MuYield_210120_HighStat_total_tree_Type1001_D87000_T322_H_line0_Thick8.80_NewGeo0.root"
+		//"../Root/210202_Reflection/210202_Reflection_5003_stopping255_tot_tree_Type5003_D87000_T322_Nrepeat2918562_NewGeo0.root" //MCtype = 3012;
 
 		);
 	TFile * f1 = new TFile(FileName.Data());
 
 	TTree * t1 = (TTree*)f1->Get("tree");
-	const auto nentries = t1->GetEntries();
+	const int nentries = t1->GetEntriesFast();
 
 	//double x, y, z;
 	Double_t        TBeam;
@@ -118,29 +118,30 @@ void macro_ModYieldfile(){
 	t1->SetBranchAddress("VZ_sf", &VZ_sf, &b_VZ_sf);
 	t1->SetBranchAddress("theta_sf", &theta_sf, &b_theta_sf);
 	t1->SetBranchAddress("phi_sf", &phi_sf, &b_phi_sf);
-	t1->SetBranchAddress("DiffusionVertexX", &DiffusionVertexX, &b_DiffusionVertexX);
-	t1->SetBranchAddress("DiffusionVertexY", &DiffusionVertexY, &b_DiffusionVertexY);
-	t1->SetBranchAddress("DiffusionVertexZ", &DiffusionVertexZ, &b_DiffusionVertexZ);
-	t1->SetBranchAddress("DiffusionVertexT", &DiffusionVertexT, &b_DiffusionVertexT);
+	//t1->SetBranchAddress("DiffusionVertexX", &DiffusionVertexX, &b_DiffusionVertexX);
+	//t1->SetBranchAddress("DiffusionVertexY", &DiffusionVertexY, &b_DiffusionVertexY);
+	//t1->SetBranchAddress("DiffusionVertexZ", &DiffusionVertexZ, &b_DiffusionVertexZ);
+	//t1->SetBranchAddress("DiffusionVertexT", &DiffusionVertexT, &b_DiffusionVertexT);
 	t1->SetBranchAddress("DecayX", &DecayX, &b_DecayX);
 	t1->SetBranchAddress("DecayY", &DecayY, &b_DecayY);
 	t1->SetBranchAddress("DecayZ", &DecayZ, &b_DecayZ);
 	t1->SetBranchAddress("SpinX", &SpinX, &b_SpinX);
 	t1->SetBranchAddress("SpinY", &SpinY, &b_SpinY);
 	t1->SetBranchAddress("SpinZ", &SpinZ, &b_SpinZ);
-	t1->SetBranchAddress("DecayPositronMomtX", &DecayPositronMomtX, &b_DecayPositronMomtX);
-	t1->SetBranchAddress("DecayPositronMomtY", &DecayPositronMomtY, &b_DecayPositronMomtY);
-	t1->SetBranchAddress("DecayPositronMomtZ", &DecayPositronMomtZ, &b_DecayPositronMomtZ);
+	//t1->SetBranchAddress("DecayPositronMomtX", &DecayPositronMomtX, &b_DecayPositronMomtX);
+	//t1->SetBranchAddress("DecayPositronMomtY", &DecayPositronMomtY, &b_DecayPositronMomtY);
+	//t1->SetBranchAddress("DecayPositronMomtZ", &DecayPositronMomtZ, &b_DecayPositronMomtZ);
 
 	//t1->SetBranchAddress("MUONID",&MUONID);
 
 	FileName.ReplaceAll(".root","_TBEAM_0.root");
 	TFile newfile(FileName.Data(), "recreate");
-	auto newtree = t1->CloneTree(0);
+	TTree* newtree = t1->CloneTree(0);
 
-	for (auto i : ROOT::TSeqI(nentries)) {
+	//cout<<nentries<<endl;
+	for (int i = 0; i< nentries; i++) {
 		t1->GetEntry(i);
-		if(TBeam<0.3)newtree->Fill();
+		if(TBeam<0.3e-6)newtree->Fill();
 	}
 
 	newtree->Print();
