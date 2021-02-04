@@ -119,6 +119,7 @@ int main(int argc, char **argv){
 		if(!InsideAerogel(X0,Y0,Z0, MCtype) ) continue;
 		//Nemission++;
 
+		Nstopping++;
 		// the continue command only for counting of total stopping instantly
 		//continue;
 		//////////////////////
@@ -218,6 +219,9 @@ int main(int argc, char **argv){
 		if(DecayT > DiffusionT){
 			//cout<<__LINE__<<endl;
 			Nemission++;
+
+			//cout<<X_sf<<endl;
+
 			MUONID = MuonID();
 			tree->Fill();
 			continue;
