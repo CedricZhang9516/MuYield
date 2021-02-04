@@ -31,6 +31,8 @@ void macro_MuYieldAna2(){//TString filename = "MuYield.root", int MCtype=1002){
 		//"../Root/201103_Reflection/201103_Reflection_3006_tree_Type3006_D87000_T322_Nrepeat5182075_H_line1_Thick25.00_NewGeo0.root", //MCtype = 3006;
 		//"../Root/201103_Reflection/201103_Reflection_3011_tree_Type3011_D87000_T322_Nrepeat3031781_H_line1_Thick25.00_NewGeo0.root", //MCtype = 3011;
 		//"../Root/201103_Reflection/201103_Reflection_3012_tree_Type3012_D87000_T322_Nrepeat3031781_H_line1_Thick25.00_NewGeo0.root" //MCtype = 3012;
+
+		//"/home/had/zhangce/g-2_tape/Mu1S2S/MuYield/MuYield_210120_HighStat_total_tree_Type1001_D87000_T322_H_line0_Thick8.80_NewGeo0.root"
 		"../Root/210202_Reflection/210202_Reflection_5003_stopping255_tot_tree_Type5003_D87000_T322_Nrepeat2918562_NewGeo0.root" //MCtype = 3012;
 
 
@@ -102,9 +104,9 @@ void macro_MuYieldAna2(){//TString filename = "MuYield.root", int MCtype=1002){
 		t[i] = new MuYield_Class(filename[i], MCtype[i]);
 		t[i]->Surface();
 		t[i]->SetLasertime(lasertime);
-		//t[i]->LoopEvent();
+		t[i]->LoopEvent();
 		//t[i]->LoopEventWithReflection(1,Form("Output-210113-reflection-3012-%d.dat",i) );
-		t[i]->LoopEventWithReflection(1);
+		//t[i]->LoopEventWithReflection(1);
 		//t[i]->LoopTime();
 		//t[i]->QuickLaserIonization(lasertime,Form("LaserOutput/%s.dat",MCtype) );
 		//t[i]->QuickLaserIonization(lasertime);
@@ -132,14 +134,19 @@ void macro_MuYieldAna2(){//TString filename = "MuYield.root", int MCtype=1002){
 	EColor ci[4] = {kBlack, kRed, kOrange, kYellow};//kYellow, kGreen};
 
 	TLegend *tl = new TLegend(0.7,0.7,0.9,0.9);
+	TCanvas * c0 = new TCanvas("c0_reflection_hT","c0_hT_reflection",700,500);
+	t[Nfile-1]->hT->SetLineColor(1);
+	t[Nfile-1]->hT->SetLineWidth(2);
+	t[Nfile-1]->hT->Draw();
+
 	TCanvas * c1 = new TCanvas("c1_reflection","c1_reflection",1400,500);
 	c1->Divide(2,1);
 	c1->cd(1);
-	t[Nfile-1]->hT->SetNormFactor(0.1*t[Nfile-1]->hT->GetEntries());
-	t[Nfile-1]->hT->GetYaxis()->SetRangeUser(0,62000);
+	//t[Nfile-1]->hT->SetNormFactor(0.1*t[Nfile-1]->hT->GetEntries());
+	//t[Nfile-1]->hT->GetYaxis()->SetRangeUser(0,62000);
 	t[Nfile-1]->hT->Draw();
-	t[Nfile-1]->hT->SetLineColor(1);
-	t[Nfile-1]->hT->SetLineWidth(2);
+	//t[Nfile-1]->hT->SetLineColor(1);
+	//t[Nfile-1]->hT->SetLineWidth(2);
 	tl->AddEntry(t[Nfile-1]->hT,Form("%d mm",6+2),"L");
 	//for(int i = Nfile-2; i>=0;i--){t[i]->hT->SetLineColor(Nfile+1-i);t[i]->hT->SetLineWidth(2);t[i]->hT->Draw("same");tl->AddEntry(t[i]->hT,Form("%d mm",i+2),"L");}
 	for(int i = Nfile-2; i>=0;i--){t[i]->hT->SetLineColor(ci[i+1]);t[i]->hT->SetLineWidth(2);t[i]->hT->Draw("same");tl->AddEntry(t[i]->hT,Form("%d mm",i+2),"L");}

@@ -104,6 +104,8 @@ void MuYield_Class::LoopEvent()
 
 		double delT = DecayT - DiffusionT;
 
+		if(MCtype>4000 && !(Y_sf>-7 && Y_sf<7)  )continue;
+
 		t = DiffusionT + TBeam;
 		x = X_sf;
 		y = Y_sf;
@@ -253,6 +255,7 @@ void MuYield_Class::LoopEventWithReflection(int N_track_event = -1, TString Outp
 		double delT = DecayT - DiffusionT;
 
 		if(MCtype>4000 && !(Y_sf>-7 && Y_sf<7)  )continue;
+
 		ReInitializaingSurfaceXYZ0(X_sf,Y_sf,Z_sf, MCtype);
 
 		t = DiffusionT + TBeam;

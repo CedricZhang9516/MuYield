@@ -132,7 +132,8 @@ bool InsideLaserRegion(double x, double y, double z, int MCtype){
 
 				//if(y > -1.5 && y < 1.5)return true;
 				//if( ( (y)*(y)+(z-12.5)*(z-12.5) )<1.5*1.5 ) return true;
-				if( ( (y)*(y)+(z-3)*(z-3) )<1.5*1.5 ) return true;
+				if( ( (y)*(y)+(z-5)*(z-5) )<1.5*1.5 ) return true;
+				//if( ( (y)*(y)+(z-3)*(z-3) )<1.5*1.5 ) return true;
 			//}
 			return false;
 
