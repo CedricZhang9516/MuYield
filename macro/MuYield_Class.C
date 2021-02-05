@@ -140,7 +140,7 @@ void MuYield_Class::LoopEvent()
 			hZXY3D->Fill(z, x, y);
 
 			//if(InsideLaserRegion_3006(x,y,z)){
-			if(InsideLaserRegion(x,y,z,MCtype)){
+			if(InsideLaserRegion(x,y,z,MCtype,laser_center)){
 
 				hT->Fill(t);
 				/*
@@ -305,9 +305,9 @@ void MuYield_Class::LoopEventWithReflection(int N_track_event = -1, TString Outp
 
 			std::streamsize prev_precision = wf.precision(); // save old precision
 
-			if(InsideLaserRegion(x,y,z,MCtype))hT->Fill(t);
+			if(InsideLaserRegion(x,y,z,MCtype,laser_center))hT->Fill(t);
 
-			if(InsideLaserRegion(x,y,z,MCtype) && abs(t-lasertime*1e-6)<Tstep/2 && OutputLaserIonization!=0){
+			if(InsideLaserRegion(x,y,z,MCtype,laser_center) && abs(t-lasertime*1e-6)<Tstep/2 && OutputLaserIonization!=0){
 
 				NLaserRegion3++;
 
@@ -448,7 +448,7 @@ void MuYield_Class::LoopTime()
 			y = Y_sf + VY_sf * delT;
 			z = Z_sf + VZ_sf * delT;
 
-			if(InsideLaserRegion(x,y,z,MCtype)){
+			if(InsideLaserRegion(x,y,z,MCtype,laser_center)){
 				hZT2D->Fill(t, z);
 				hZY2D->Fill(z, y);
 				hZX2D->Fill(z, x);
@@ -549,7 +549,7 @@ void MuYield_Class::QuickLaserIonization(double Lasertime = -1, TString Outputfi
 
 		std::streamsize prev_precision = wf.precision(); // save old precision
 
-		if(InsideLaserRegion(x,y,z, MCtype)){
+		if(InsideLaserRegion(x,y,z, MCtype,laser_center)){
 
 			double p = 1.0*sqrt(2.0*LaserE*mmu+LaserE*LaserE);
 			double g = 1.0*(mmu+LaserE)/mmu;
@@ -771,11 +771,14 @@ TGraph* MuYield_Class::TrackWithReflection(Int_t Nevent = 1){
 
 
 
-void MuYield_Class::SavePlots(){
+void MuYield_Class::SavePlots(TString  FILENAME =""){
 
 	//#ifdef drawplot
+	TString SaveFileName;
+	if(FILENAME=="")SaveFileName = filename;
+	else SaveFileName = FILENAME;
 
-	//TCanvas * c0 = NewTCanvas("c0","c0",800,800,1,1);
+
 	c1 = NewTCanvas("c1","c1_surface",1000,1000,3,3);
 	c2 = NewTCanvas("c2","c2_accumulation_yield",1000,1000,3,3);
 	c3 = NewTCanvas("c3_laser","c3_laser",1000,1000,3,3);
@@ -861,13 +864,25 @@ void MuYield_Class::SavePlots(){
 
  	//#ifdef saveplot
 
- 	c1->SaveAs( Form("%s.pdf(", filename.Data()) );
- 	c2->SaveAs( Form("%s.pdf", filename.Data()) );
- 	c3->SaveAs( Form("%s.pdf", filename.Data()) );
- 	c4->SaveAs( Form("%s.pdf)", filename.Data()) );
+	TCanvas * c0 = new TCanvas("c0_reflection_hT","c0_hT_reflection",700,500);
+ 	hT->SetLineColor(1);
+	hT->SetLineWidth(2);
+	hT->Draw();
+
+
+ 	c1->SaveAs( Form("%s.pdf(", SaveFileName.Data()) );
+ 	c2->SaveAs( Form("%s.pdf", SaveFileName.Data()) );
+ 	c0->SaveAs( Form("%s.pdf", SaveFileName.Data()) );
+ 	c3->SaveAs( Form("%s.pdf", SaveFileName.Data()) );
+ 	c4->SaveAs( Form("%s.pdf)", SaveFileName.Data()) );
+
+ 	c0->SaveAs( Form("%s_hT_reflection_%1f.C", SaveFileName.Data(), laser_center) );
 
 
  	//#endif
+
+ 	//TCanvas * c0 = NewTCanvas("c0","c0",800,800,1,1);
+
 
 }
 

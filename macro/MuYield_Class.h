@@ -209,6 +209,8 @@ public :
    double Tstep = 1e-9; /// 1 ns
    double lasertime = -1;
 
+   double laser_center = 1;
+
    TGraph * g_track;// = new TGraph();
    TGraph * g_track_reflection;// = new TGraph();
 
@@ -227,6 +229,7 @@ public :
    virtual void     Init(TTree *tree);
 
    virtual void     SetLasertime(double Lasertime);
+   virtual void     SetLaserCenter(double LaserCenter);
    virtual bool     IsInsideLaserRegion(Int_t Nevent = 1, double Lasertime = -1);
 
    virtual void     Surface();
@@ -237,7 +240,7 @@ public :
    virtual TGraph*  TrackWithReflection(Int_t Nevent = 1);
 
    virtual void     QuickLaserIonization(double Lasertime = -1, TString Outputfilename = "");
-   virtual void     SavePlots();
+   virtual void     SavePlots(TString FILENAME ="");
 
    virtual Bool_t   Notify();
    virtual void     Show(Long64_t entry = -1);
@@ -459,6 +462,10 @@ void MuYield_Class::Init(TTree *tree)
 
 void MuYield_Class::SetLasertime(double Lasertime){
    lasertime = Lasertime;
+}
+
+void MuYield_Class::SetLaserCenter(double LaserCenter){
+   laser_center = LaserCenter;
 }
 
 double MuYield_Class::GetDecayT(int Nevent){
