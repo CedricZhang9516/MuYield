@@ -206,6 +206,11 @@ void InitializingXYZ0(int index){
 		case 5002://3012
 		case 5003://3012
 		case 5004://3012
+		case 5005://3012
+		case 5006://3012
+		case 5007://3012
+		case 5008://3012
+		case 5009://3012
 
 			InputTree->GetEntry(index);
 			X0 = x_dec;
