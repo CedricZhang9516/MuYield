@@ -7,8 +7,16 @@ void macro_ModYieldfile(){
 		//"../Root/hline_ATH475_BEAMG-2EDM_output_1e6_gendat_afterfit_SEPON_sum.root"
 		//"../Root/hline_SimBeamStop_GM_7.12mm.root"
 
-		"/home/had/zhangce/g-2_tape/Mu1S2S/MuYield/MuYield_210120_HighStat_total_tree_Type1001_D87000_T322_H_line0_Thick8.80_NewGeo0.root"
+		//"/home/had/zhangce/g-2_tape/Mu1S2S/MuYield/MuYield_210120_HighStat_total_tree_Type1001_D87000_T322_H_line0_Thick8.80_NewGeo0.root"
 		//"../Root/210202_Reflection/210202_Reflection_5003_stopping255_tot_tree_Type5003_D87000_T322_Nrepeat2918562_NewGeo0.root" //MCtype = 3012;
+		//"/home/had/zhangce/MuYield/Root/Root_tape/210205_Reflection/S2areaMuYield_Sline_210205/S2areaMuYield_Sline_210205_tot-Itv-4_Type5003_D87000_T322_NewGeo0.root"
+
+		//"/home/had/zhangce/g-2_tape/Mu1S2S/zhangce/MuYield/Root/210205_Reflection/S2areaMuYield_SlineItvScan_210205-sus-Itv-4/S2areaMuYield_SlineItvScan_210205_tot-Itv-4.root"
+		//"/home/had/zhangce/g-2_tape/Mu1S2S/zhangce/MuYield/Root/210205_Reflection/S2areaMuYield_SlineItvScan_210205-sus-Itv-5/S2areaMuYield_SlineItvScan_210205_tot-Itv-5.root"
+		//"/home/had/zhangce/g-2_tape/Mu1S2S/zhangce/MuYield/Root/210205_Reflection/S2areaMuYield_SlineItvScan_210205-sus-Itv-6/S2areaMuYield_SlineItvScan_210205_tot-Itv-6.root"
+		//"/home/had/zhangce/g-2_tape/Mu1S2S/zhangce/MuYield/Root/210205_Reflection/S2areaMuYield_SlineItvScan_210205-sus-Itv-7/S2areaMuYield_SlineItvScan_210205_tot-Itv-7.root"
+		//"/home/had/zhangce/g-2_tape/Mu1S2S/zhangce/MuYield/Root/210205_Reflection/S2areaMuYield_SlineItvScan_210205-sus-Itv-8/S2areaMuYield_SlineItvScan_210205_tot-Itv-8.root"
+		"/home/had/zhangce/g-2_tape/Mu1S2S/zhangce/MuYield/Root/210205_Reflection/S2areaMuYield_SlineItvScan_210205-sus-Itv-9/S2areaMuYield_SlineItvScan_210205_tot-Itv-9.root"
 
 		);
 	TFile * f1 = new TFile(FileName.Data());

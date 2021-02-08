@@ -126,6 +126,11 @@ bool InsideLaserRegion(double x, double y, double z, int MCtype, double laser_ce
 		case 5001:
 		case 5002:
 		case 5003:
+		case 5004:
+		case 5005:
+		case 5006:
+		case 5007:
+		case 5008:
 
 			Thick = 25;
 			//if( z>=1 && z<=(Thick+1)){

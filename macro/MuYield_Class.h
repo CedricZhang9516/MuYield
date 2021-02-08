@@ -209,7 +209,7 @@ public :
    double Tstep = 1e-9; /// 1 ns
    double lasertime = -1;
 
-   double laser_center = 1;
+   double laser_center = 5;
 
    TGraph * g_track;// = new TGraph();
    TGraph * g_track_reflection;// = new TGraph();
@@ -221,7 +221,7 @@ public :
    TCanvas * c3;
    TCanvas * c4;
 
-   MuYield_Class(TString name = "MuYield.root", int mctype = 1002);
+   MuYield_Class(TString name = "MuYield.root", int mctype = 1002, int startfile = 0, int stopfile =0);
    virtual ~MuYield_Class();
    virtual Int_t    Cut(Long64_t entry);
    virtual Int_t    GetEntry(Long64_t entry);
@@ -254,20 +254,28 @@ public :
 
 #ifdef MuYield_Class_cxx
 //MuYield_Class::MuYield_Class(TTree *tree) : fChain(0)
-MuYield_Class::MuYield_Class(TString name = "MuYield.root", int mctype = 1002) : fChain(0)
+MuYield_Class::MuYield_Class(TString name = "MuYield.root", int mctype = 1002, int startfile = 0, int stopfile =0) : fChain(0)
 {
 // if parameter tree is not specified (or zero), connect the file
 // used to generate this class and read the Tree.
-   filename = name;
-   filename.ReplaceAll(".root","");
+   if(startfile == stopfile){
+      filename = name;
+      filename.ReplaceAll(".root","");
 
-   TFile * f = new TFile( (filename + ".root").Data() );
+      TFile * f = new TFile( (filename + ".root").Data() );
 
-   if (!f || !f->IsOpen()) {
-      cout<<"no files found, using MuYield.root"<<endl;
-      f = new TFile("MuYield.root");
+      if (!f || !f->IsOpen()) {
+         cout<<"no files found, using MuYield.root"<<endl;
+         f = new TFile("MuYield.root");
+      }
+      f->GetObject("tree",tree);
    }
-   f->GetObject("tree",tree);
+
+   else {
+      filename = name;
+      TChain * treechain = new TChain("tree","tree");
+      for(int i = startfile;i<stopfile;i++)treechain->Add( filename.ReplaceAll(Form("_%d-",startfile),Form("_%d-",stopfile)) );
+   }
 
    MCtype = mctype;
 

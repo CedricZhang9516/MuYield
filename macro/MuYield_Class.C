@@ -30,7 +30,7 @@ void MuYield_Class::Surface()
 		nb = fChain->GetEntry(jentry);
 		nbytes += nb;
 
-		cout<<"Surface: "<<jentry<<"/"<<nentries<<"\r"<<flush;
+		//cout<<"Surface: "<<jentry<<"/"<<nentries<<"\r"<<flush;
 
 		double delT = DecayT - DiffusionT;
 
@@ -100,7 +100,7 @@ void MuYield_Class::LoopEvent()
 		nb = fChain->GetEntry(jentry);
 		nbytes += nb;
 
-		cout<<"LoopEvent: "<<jentry<<"/"<<nentries<<"\r"<<flush;
+		//cout<<"LoopEvent: "<<jentry<<"/"<<nentries<<"\r"<<flush;
 
 		double delT = DecayT - DiffusionT;
 
@@ -250,7 +250,7 @@ void MuYield_Class::LoopEventWithReflection(int N_track_event = -1, TString Outp
 		nb = fChain->GetEntry(jentry);
 		nbytes += nb;
 
-		cout<<"LoopEventWithReflection: "<<jentry<<"/"<<nentries<<"\r"<<flush;
+		//cout<<"LoopEventWithReflection: "<<jentry<<"/"<<nentries<<"\r"<<flush;
 
 		double delT = DecayT - DiffusionT;
 
@@ -421,7 +421,7 @@ void MuYield_Class::LoopTime()
 
    for(int j = 0; j < nbinT; j++){
 
-   		cout<<"LoopTime: "<<j<<"/"<<nbinT<<"\r"<<flush;
+   		//cout<<"LoopTime: "<<j<<"/"<<nbinT<<"\r"<<flush;
 
    		hZT2D->Reset();
 		hZY2D->Reset();
@@ -810,7 +810,7 @@ void MuYield_Class::SavePlots(TString  FILENAME =""){
 	hZX2D->Draw("colz");
 	c2->cd(4);
 	hT->Draw();
-	cout<<"Maximum Yield in the laser region "
+	cout<<"(Internal) maximum Yield in the laser region "
 		<<hT->GetMaximum()
 		<<" in the bin "
 		<<hT->GetMaximumBin()
@@ -876,7 +876,8 @@ void MuYield_Class::SavePlots(TString  FILENAME =""){
  	c3->SaveAs( Form("%s.pdf", SaveFileName.Data()) );
  	c4->SaveAs( Form("%s.pdf)", SaveFileName.Data()) );
 
- 	c0->SaveAs( Form("%s_hT_reflection_%1f.C", SaveFileName.Data(), laser_center) );
+ 	c0->SaveAs( Form("%s_hT_reflection_%.1f.C", SaveFileName.Data(), laser_center) );
+ 	c0->SaveAs( Form("%s_hT_reflection_%.1f.root", SaveFileName.Data(), laser_center) );
 
 
  	//#endif
