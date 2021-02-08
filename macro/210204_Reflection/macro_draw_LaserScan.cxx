@@ -1,9 +1,10 @@
+#include "../../../CZhang/CZhangNew.h"
 void macro_draw_LaserScan(){
 
 	TString nameVar[9] = {"laser_center","yield_noReflection","time_noReflection","err_noReflection","yield_withReflection","time_withReflection","Ratio","err_withReflection","zero"};
 
   	TTree * t = TxtToTree(
-    "/Users/zhangce/WorkArea/MuYield/macro/210204_Reflection/210204_LaserCenterScan_total.txt",
+    "210204_LaserCenterScan_total.txt",
     nameVar,9,22);
 
 	TGraphErrors * g_noReflection = TreeToTGraphErrors(t,"laser_center","yield_noReflection","err_noReflection");

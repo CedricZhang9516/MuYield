@@ -1,3 +1,4 @@
+#include "../../CZhang/CZhangNew.h"
 void macro_draw_reflelction_itv(){
 
 	TCanvas *c1 = new TCanvas("c1","hists with different scales",600,400);
@@ -6,7 +7,7 @@ void macro_draw_reflelction_itv(){
 	TString nameVar[10] = {"itv","N","density","err_N","err_density","err_0","area","laser_power","laser_power2","N_scaled"};
 
   TTree * t = TxtToTree(
-    "/Users/zhangce/WorkArea/MuYield/macro/macro_draw_reflelction_itv2.txt",
+    "macro_draw_reflelction_itv.txt",
     nameVar,10,7);
 
   TGraphErrors * g2 = TreeToTGraphErrors(t,"itv","N","err_N");

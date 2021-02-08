@@ -1,0 +1,46 @@
+
+Processing macro_MuYieldAna_LaserPositionScan.cxx...
+(Internal) maximum Yield in the laser region 1074 in the bin 1092
+Maximum Yield in the laser region (Without Reflection) 1074 in the bin 1092 when laser position is z = 2 mm with interval 9
+(Internal) maximum Yield in the laser region 1260 in the bin 1058
+Maximum Yield in the laser region (Without Reflection) 1260 in the bin 1058 when laser position is z = 3 mm with interval 9
+(Internal) maximum Yield in the laser region 1423 in the bin 1009
+Maximum Yield in the laser region (Without Reflection) 1423 in the bin 1009 when laser position is z = 4 mm with interval 9
+(Internal) maximum Yield in the laser region 1535 in the bin 1015
+Maximum Yield in the laser region (Without Reflection) 1535 in the bin 1015 when laser position is z = 5 mm with interval 9
+(Internal) maximum Yield in the laser region 1540 in the bin 1091
+Maximum Yield in the laser region (Without Reflection) 1540 in the bin 1091 when laser position is z = 6 mm with interval 9
+(Internal) maximum Yield in the laser region 1579 in the bin 1241
+Maximum Yield in the laser region (Without Reflection) 1579 in the bin 1241 when laser position is z = 7 mm with interval 9
+(Internal) maximum Yield in the laser region 1572 in the bin 987
+Maximum Yield in the laser region (Without Reflection) 1572 in the bin 987 when laser position is z = 8 mm with interval 9
+(Internal) maximum Yield in the laser region 1480 in the bin 972
+Maximum Yield in the laser region (Without Reflection) 1480 in the bin 972 when laser position is z = 9 mm with interval 9
+(Internal) maximum Yield in the laser region 1352 in the bin 1090
+Maximum Yield in the laser region (Without Reflection) 1352 in the bin 1090 when laser position is z = 10 mm with interval 9
+(Internal) maximum Yield in the laser region 1254 in the bin 1165
+Maximum Yield in the laser region (Without Reflection) 1254 in the bin 1165 when laser position is z = 11 mm with interval 9
+(Internal) maximum Yield in the laser region 1155 in the bin 1101
+Maximum Yield in the laser region (Without Reflection) 1155 in the bin 1101 when laser position is z = 12 mm with interval 9
+(Internal) maximum Yield in the laser region 1083 in the bin 1242
+Maximum Yield in the laser region (Without Reflection) 1083 in the bin 1242 when laser position is z = 13 mm with interval 9
+(Internal) maximum Yield in the laser region 995 in the bin 1231
+Maximum Yield in the laser region (Without Reflection) 995 in the bin 1231 when laser position is z = 14 mm with interval 9
+(Internal) maximum Yield in the laser region 944 in the bin 1209
+Maximum Yield in the laser region (Without Reflection) 944 in the bin 1209 when laser position is z = 15 mm with interval 9
+(Internal) maximum Yield in the laser region 905 in the bin 1210
+Maximum Yield in the laser region (Without Reflection) 905 in the bin 1210 when laser position is z = 16 mm with interval 9
+(Internal) maximum Yield in the laser region 852 in the bin 1012
+Maximum Yield in the laser region (Without Reflection) 852 in the bin 1012 when laser position is z = 17 mm with interval 9
+(Internal) maximum Yield in the laser region 811 in the bin 962
+Maximum Yield in the laser region (Without Reflection) 811 in the bin 962 when laser position is z = 18 mm with interval 9
+(Internal) maximum Yield in the laser region 755 in the bin 924
+Maximum Yield in the laser region (Without Reflection) 755 in the bin 924 when laser position is z = 19 mm with interval 9
+(Internal) maximum Yield in the laser region 736 in the bin 1159
+Maximum Yield in the laser region (Without Reflection) 736 in the bin 1159 when laser position is z = 20 mm with interval 9
+(Internal) maximum Yield in the laser region 708 in the bin 1176
+Maximum Yield in the laser region (Without Reflection) 708 in the bin 1176 when laser position is z = 21 mm with interval 9
+(Internal) maximum Yield in the laser region 681 in the bin 1009
+Maximum Yield in the laser region (Without Reflection) 681 in the bin 1009 when laser position is z = 22 mm with interval 9
+(Internal) maximum Yield in the laser region 590 in the bin 1060
+Maximum Yield in the laser region (Without Reflection) 590 in the bin 1060 when laser position is z = 23 mm with interval 9

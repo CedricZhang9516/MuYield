@@ -13,7 +13,7 @@ using namespace std;
 
 void macro_MuYieldAna_LaserPositionScan(){//TString filename = "MuYield.root", int MCtype=1002){
 
-	const int Nfile = 6;//4;//8;
+	const int Nfile = 1;//4;//8;
 
 	TString filename [Nfile] = {
 
@@ -35,11 +35,11 @@ void macro_MuYieldAna_LaserPositionScan(){//TString filename = "MuYield.root", i
 		//"/home/had/zhangce/g-2_tape/Mu1S2S/MuYield/MuYield_210120_HighStat_total_tree_Type1001_D87000_T322_H_line0_Thick8.80_NewGeo0_TBEAM_0.root"
 		//"../Root/210202_Reflection/210202_Reflection_5003_stopping255_tot_tree_Type5003_D87000_T322_Nrepeat2918562_NewGeo0_TBEAM_0.root" //MCtype = 3012;
 		//"/home/had/zhangce/MuYield/Root/Root_tape/210205_Reflection/S2areaMuYield_Sline_210205/S2areaMuYield_Sline_210205_tot-Itv-4_Type5003_D87000_T322_NewGeo0_TBEAM_0.root"
-		"/home/had/zhangce/MuYield/Root/Root_tape/210205_Reflection/S2areaMuYield_SlineItvScan_210205-sus-Itv-4/S2areaMuYield_SlineItvScan_210205_tot-Itv-4_TBEAM_0.root",
-		"/home/had/zhangce/MuYield/Root/Root_tape/210205_Reflection/S2areaMuYield_SlineItvScan_210205-sus-Itv-5/S2areaMuYield_SlineItvScan_210205_tot-Itv-5_TBEAM_0.root",
-		"/home/had/zhangce/MuYield/Root/Root_tape/210205_Reflection/S2areaMuYield_SlineItvScan_210205-sus-Itv-6/S2areaMuYield_SlineItvScan_210205_tot-Itv-6_TBEAM_0.root",
-		"/home/had/zhangce/MuYield/Root/Root_tape/210205_Reflection/S2areaMuYield_SlineItvScan_210205-sus-Itv-7/S2areaMuYield_SlineItvScan_210205_tot-Itv-7_TBEAM_0.root",
-		"/home/had/zhangce/MuYield/Root/Root_tape/210205_Reflection/S2areaMuYield_SlineItvScan_210205-sus-Itv-8/S2areaMuYield_SlineItvScan_210205_tot-Itv-8_TBEAM_0.root",
+		//"/home/had/zhangce/MuYield/Root/Root_tape/210205_Reflection/S2areaMuYield_SlineItvScan_210205-sus-Itv-4/S2areaMuYield_SlineItvScan_210205_tot-Itv-4_TBEAM_0.root"
+		//"/home/had/zhangce/MuYield/Root/Root_tape/210205_Reflection/S2areaMuYield_SlineItvScan_210205-sus-Itv-5/S2areaMuYield_SlineItvScan_210205_tot-Itv-5_TBEAM_0.root",
+		//"/home/had/zhangce/MuYield/Root/Root_tape/210205_Reflection/S2areaMuYield_SlineItvScan_210205-sus-Itv-6/S2areaMuYield_SlineItvScan_210205_tot-Itv-6_TBEAM_0.root"
+		//"/home/had/zhangce/MuYield/Root/Root_tape/210205_Reflection/S2areaMuYield_SlineItvScan_210205-sus-Itv-7/S2areaMuYield_SlineItvScan_210205_tot-Itv-7_TBEAM_0.root",
+		//"/home/had/zhangce/MuYield/Root/Root_tape/210205_Reflection/S2areaMuYield_SlineItvScan_210205-sus-Itv-8/S2areaMuYield_SlineItvScan_210205_tot-Itv-8_TBEAM_0.root"
 		"/home/had/zhangce/MuYield/Root/Root_tape/210205_Reflection/S2areaMuYield_SlineItvScan_210205-sus-Itv-9/S2areaMuYield_SlineItvScan_210205_tot-Itv-9_TBEAM_0.root"
 
 
@@ -79,11 +79,11 @@ void macro_MuYieldAna_LaserPositionScan(){//TString filename = "MuYield.root", i
 		//3012,
 		//3012
 		//4006
-		5003,
-		5004,
-		5005,
-		5006,
-		5007,
+		//5003
+		//5004
+		//5005
+		//5006
+		//5007
 		5008
 
 		//1002,
@@ -120,22 +120,22 @@ void macro_MuYieldAna_LaserPositionScan(){//TString filename = "MuYield.root", i
 		t[i] = new MuYield_Class(filename[i], MCtype[i]);
 
 		for(int j = 2; j<24; j++){
-			TString savefilename = filename[i] + Form("WithReflection_%1d",j); //("TBEAM_0",Form("TBEAM_0_%d",j) )
+			TString savefilename = filename[i] + Form("WithoutReflection_%1d",j); //("TBEAM_0",Form("TBEAM_0_%d",j) )
 			t[i]->Init(t[i]->tree);
 			t[i]->Surface();
 			t[i]->SetLasertime(lasertime);
 			t[i]->SetLaserCenter(j);
-			//t[i]->LoopEvent();
-			t[i]->LoopEventWithReflection(1);
+			t[i]->LoopEvent();
+			//t[i]->LoopEventWithReflection(1);
 			t[i]->SavePlots(savefilename.Data() );
-			cout<<"Maximum Yield in the laser region "
+			cout<<"Maximum Yield in the laser region (Without Reflection) "
 			<<t[i]->hT->GetMaximum()
 			<<" in the bin "
 			<<t[i]->hT->GetMaximumBin()
 			<<" when laser position is z = "
 			<<j<<" mm"
 			<<" with interval "
-			<<i+4
+			<<i+9
 			<<endl;
 
 			g_YieldWithLaserPosition[i]->SetPoint(j-2,j,t[i]->hT->GetMaximum());
@@ -160,7 +160,7 @@ void macro_MuYieldAna_LaserPositionScan(){//TString filename = "MuYield.root", i
 
 	//// draw preliminary
 
-
+/*
 	TLegend *tl = new TLegend(0.7,0.7,0.9,0.9);
 	tl->AddEntry(g_YieldWithLaserPosition[0],"itv = 4 mm","l");
 	tl->AddEntry(g_YieldWithLaserPosition[1],"itv = 5 mm","l");
@@ -172,7 +172,7 @@ void macro_MuYieldAna_LaserPositionScan(){//TString filename = "MuYield.root", i
 	c0->SaveAs("210207-itvScan.C");
 	c0->SaveAs("210207-itvScan.pdf");
 	c0->SaveAs("210207-itvScan.root");
-
+*/
 
 	//c0->SaveAs("210204_Reflection/210204_bottomNoreflction.C");
 	//c0->SaveAs("210204_Reflection/210204_bottomNoreflction.pdf");

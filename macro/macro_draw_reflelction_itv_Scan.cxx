@@ -21,7 +21,7 @@ void macro_draw_reflelction_itv_Scan(){
   for(int i = 4;i<10;i++){
 
     t[i] = TxtToTree(
-      Form("210208-ItvScan-%d.txt",i),
+      Form("210208_Reflection_data/210208-ItvScan-%d.txt",i),
       nameVar,4,22);
 
     g_YieldWithLaserPosition[i] = TreeToTGraph(t[i],"LaserPosition","N");
@@ -33,16 +33,16 @@ void macro_draw_reflelction_itv_Scan(){
   }
 
   TLegend *tl = new TLegend(0.7,0.7,0.9,0.9);
-  tl->AddEntry(g_YieldWithLaserPosition[0],"itv = 6 mm");
-  tl->AddEntry(g_YieldWithLaserPosition[1],"itv = 7 mm");
-  tl->AddEntry(g_YieldWithLaserPosition[2],"itv = 6 mm");
-  tl->AddEntry(g_YieldWithLaserPosition[3],"itv = 7 mm");
-  tl->AddEntry(g_YieldWithLaserPosition[4],"itv = 8 mm");
-  tl->AddEntry(g_YieldWithLaserPosition[5],"itv = 9 mm");
+  //tl->AddEntry(g_YieldWithLaserPosition[0],"itv = 4 mm","l");
+  //tl->AddEntry(g_YieldWithLaserPosition[1],"itv = 5 mm","l");
+  //tl->AddEntry(g_YieldWithLaserPosition[2],"itv = 6 mm","l");
+  //tl->AddEntry(g_YieldWithLaserPosition[3],"itv = 7 mm","l");
+  //tl->AddEntry(g_YieldWithLaserPosition[4],"itv = 8 mm","l");
+  //tl->AddEntry(g_YieldWithLaserPosition[5],"itv = 9 mm","l");
   tl->Draw();
-  c2->SaveAs("210207-itvScan-tot.C");
-  c2->SaveAs("210207-itvScan-tot.pdf");
-  c2->SaveAs("210207-itvScan-tot.root");
+  //c2->SaveAs("210207-itvScan-tot.C");
+  //c2->SaveAs("210207-itvScan-tot.pdf");
+  //c2->SaveAs("210207-itvScan-tot.root");
 
 
 
