@@ -3,13 +3,12 @@
 #include <fstream>
 #define drawseries
 
-void draw_210208_afterdiscussion(int interval = 5){
+void draw_210209_FurtherAnaLaserPositionScan(int interval = 5){
 
 
   int Nfile = 2;
   int LaserPositions = 21;
   int LaserPosition = 0;
-  //int interval = 5;
   int shootingtime = 1300;
 
 
@@ -21,8 +20,6 @@ void draw_210208_afterdiscussion(int interval = 5){
   TGraphErrors ** g_Yield = new TGraphErrors*[Nfile];
   TGraphErrors * g_YieldDiff = new TGraphErrors();
 
-  ofstream OutputTxtFile;
-  OutputTxtFile.open(Form("210208_AfterDiscussion/Itv_%d_OptYield.txt",interval));
 
 
   for(int i = 0 ; i< Nfile; i++){
@@ -71,51 +68,44 @@ void draw_210208_afterdiscussion(int interval = 5){
 
   #ifdef drawseries
 
-  TCanvas ** c2 = new TCanvas*[LaserPositions];
+  TCanvas ** c2 = new TCanvas*[2];
+  c2[0] = new TCanvas(Form("c2_%d_with_Reflection",0),Form("Mu yield in the laser region (with reflection), interval %d",interval),700,500);
+  c2[1] = new TCanvas(Form("c2_%d_without_Reflection",1),Form("Mu yield in the laser region (without reflection), interval %d",interval),700,500);
 
   for(int k = 0; k<LaserPositions; k++){
     LaserPosition = k+3;
-    c2[k] = new TCanvas(Form("c2_%d",k),Form("Mu yield in the laser region, interval %d, laser position %d",interval,LaserPosition),700,500);
 
-    //hT[0][k]->SetLineColor();
+    c2[0]->cd();
+    if(k==0){hT[0][k]->SetNormFactor(hT[0][k]->GetEntries()*1.0/hT[0][k]->GetMaximum());hT[0][k]->DrawNormalized();}
+    else    {hT[0][k]->SetNormFactor(hT[0][k]->GetEntries()*1.0/hT[0][k]->GetMaximum());hT[0][k]->DrawNormalized("same");}
+    //tt = new TText(4e-6,0.5*hT[0][k]->GetMaximum(),Form("laser center Z=%d mm",LaserPosition) );
+    //tt->Draw();
+    c2[1]->cd();
     hT[1][k]->SetLineColor(kRed);
-
-    hT[0][k]->Draw();
-    hT[1][k]->Draw("same");
-    tl->Draw();
-
-    tt = new TText(4e-6,0.5*hT[0][k]->GetMaximum(),Form("laser center Z=%d mm",LaserPosition) );
-    //tt->SetTextSize(2);
-    tt->Draw();
-    tt = new TText(5e-6,0.35*hT[0][k]->GetMaximum(),Form("interval %d mm",interval) );
-    tt->Draw();
-
-
-    c2[k]->SaveAs( Form("210208_AfterDiscussion/Itv_%d/Itv_%d_LaserPosition_%d.png",interval,interval,LaserPosition));
-    OutputTxtFile
-      <<"With reflection, maximum Yield in the laser region "
-      <<hT[0][k]->GetMaximum()
-      <<" in the bin "
-      <<hT[0][k]->GetMaximumBin()
-      <<" when laser position is z = "
-      <<LaserPosition<<" mm"
-      <<" with interval "
-      <<interval
-      <<"Without reflection, maximum Yield in the laser region "
-      <<hT[1][k]->GetMaximum()
-      <<" in the bin "
-      <<hT[1][k]->GetMaximumBin()
-      <<" when laser position is z = "
-      <<LaserPosition<<" mm"
-      <<" with interval "
-      <<interval
-      <<endl;
+    if(k==0){hT[1][k]->SetNormFactor(hT[1][k]->GetEntries()*1.0/hT[1][k]->GetMaximum());hT[1][k]->DrawNormalized();}
+    else    {hT[1][k]->SetNormFactor(hT[1][k]->GetEntries()*1.0/hT[1][k]->GetMaximum());hT[1][k]->DrawNormalized("same");}
+    //tt = new TText(4e-6,0.5*hT[0][k]->GetMaximum(),Form("laser center Z=%d mm",LaserPosition) );
+    //tt->Draw();
 
   }
-  OutputTxtFile.close();
+
+  c2[0]->cd();
+  //tt = new TText(5e-6,0.35*hT[0][0]->GetMaximum(),Form("interval %d mm",interval) );
+  tt = new TText(5e-6,0.35,Form("interval %d mm",interval) );
+  tt->Draw();
+  c2[1]->cd();
+  //tt = new TText(5e-6,0.35*hT[0][0]->GetMaximum(),Form("interval %d mm",interval) );
+  tt = new TText(5e-6,0.35,Form("interval %d mm",interval) );
+  tt->Draw();
+
+  hT[0][0]->GetYaxis()->SetRangeUser(0,1.3*TMath::MaxElement(LaserPositions,g_OptYield[0]->GetY()));
+  hT[1][0]->GetYaxis()->SetRangeUser(0,1.3*TMath::MaxElement(LaserPositions,g_OptYield[1]->GetY()));
+  c2[0]->SaveAs( Form("210209_FurtherAnaItvScan/Itv_%d/Itv_%d_drawallposition_withReflection.png",interval,interval));
+  c2[1]->SaveAs( Form("210209_FurtherAnaItvScan/Itv_%d/Itv_%d_drawallposition-withoutReflection.png",interval,interval));
+
   #endif
 
-
+/*
   EColor ci[7] = {kYellow, kOrange, kRed, kPink, kMagenta ,kViolet, kBlack};
 
   TCanvas * c3 = new TCanvas("c3","c3_time");
@@ -136,7 +126,7 @@ void draw_210208_afterdiscussion(int interval = 5){
   tl->AddEntry(g_OptTime[1],"without reflection","l");
   tl->Draw();
 
-  c3->SaveAs( Form("210208_AfterDiscussion/Itv_%d/Itv_%d_OptTime.png",interval,interval));
+  c3->SaveAs( Form("210209_FurtherAnaItvScan/Itv_%d/Itv_%d_OptTime.png",interval,interval));
 
   TCanvas * c4 = new TCanvas("c4","c4_yield");
 
@@ -157,7 +147,7 @@ void draw_210208_afterdiscussion(int interval = 5){
   tl->AddEntry(g_OptYield[1],"without reflection","l");
   tl->Draw();
 
-  c4->SaveAs( Form("210208_AfterDiscussion/Itv_%d/Itv_%d_OptYield.png",interval,interval));
+  c4->SaveAs( Form("210209_FurtherAnaItvScan/Itv_%d/Itv_%d_OptYield.png",interval,interval));
 
   TCanvas * c5 = new TCanvas("c5","c5_YieldDiff");
   g_YieldDiff->SetLineColor(ci[2]);
@@ -168,7 +158,7 @@ void draw_210208_afterdiscussion(int interval = 5){
   g_YieldDiff->GetYaxis()->SetRangeUser(0.9*TMath::MinElement(LaserPositions,g_YieldDiff->GetY()),1.1*TMath::MaxElement(LaserPositions,g_YieldDiff->GetY()));
   g_YieldDiff->Draw();
 
-  c5->SaveAs( Form("210208_AfterDiscussion/Itv_%d/Itv_%d_YieldDiff.png",interval,interval));
+  c5->SaveAs( Form("210209_FurtherAnaItvScan/Itv_%d/Itv_%d_YieldDiff.png",interval,interval));
 
   TCanvas * c6 = new TCanvas("c6","c6_yield");
 
@@ -189,13 +179,13 @@ void draw_210208_afterdiscussion(int interval = 5){
   tl->AddEntry(g_Yield[1],"without reflection","l");
   tl->Draw();
 
-  c6->SaveAs( Form("210208_AfterDiscussion/Itv_%d/Itv_%d_YieldAt%d.png",interval,interval,shootingtime));
-
+  c6->SaveAs( Form("210209_FurtherAnaItvScan/Itv_%d/Itv_%d_YieldAt%d.png",interval,interval,shootingtime));
+*/
 
 
 
 
 }
-void macro_draw_210208_afterdiscussion(){
-  for(int i = 4; i<10;i++)draw_210208_afterdiscussion(i);
+void macro_draw_210209_FurtherAnaLaserPositionScan(){
+  for(int i = 4; i<10;i++)draw_210209_FurtherAnaLaserPositionScan(i);
 }

@@ -1,4 +1,3 @@
-With reflection, maximum Yield in the laser region 1601 in the bin 1036 when laser position is z = 2 mm with interval 6Without reflection, maximum Yield in the laser region 1536 in the bin 791 when laser position is z = 2 mm with interval 6
 With reflection, maximum Yield in the laser region 2043 in the bin 943 when laser position is z = 3 mm with interval 6Without reflection, maximum Yield in the laser region 2005 in the bin 841 when laser position is z = 3 mm with interval 6
 With reflection, maximum Yield in the laser region 2414 in the bin 1042 when laser position is z = 4 mm with interval 6Without reflection, maximum Yield in the laser region 2335 in the bin 847 when laser position is z = 4 mm with interval 6
 With reflection, maximum Yield in the laser region 2708 in the bin 802 when laser position is z = 5 mm with interval 6Without reflection, maximum Yield in the laser region 2679 in the bin 802 when laser position is z = 5 mm with interval 6
