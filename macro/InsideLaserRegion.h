@@ -97,13 +97,14 @@ bool InsideLaserRegion(double x, double y, double z, int MCtype, double laser_ce
 		case 3012:
 
 			Thick = 25;
-			if( z>=1 && z<=(Thick+1)){
+			//if( z>=1 && z<=(Thick+1)){
+			if( z>=0 && z<=(Thick)){
 
-				if(y < 17 && y > 15) return true;
-				if(y < 9 && y > 7) return true;
-				if(y < 1 && y > -1) return true;
-				if(y < -7 && y > -9) return true;
-				if(y < -15 && y > -17) return true;
+				if(y < 17.5 && y > 14.5) return true;
+				if(y < 9.5 && y > 6.5) return true;
+				if(y < 1.5 && y > -1.5) return true;
+				if(y < -6.5 && y > -9.5) return true;
+				if(y < -14.5 && y > -17.5) return true;
 
 			}
 			return false;

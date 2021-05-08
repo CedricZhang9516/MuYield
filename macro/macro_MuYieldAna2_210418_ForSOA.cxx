@@ -11,9 +11,9 @@ using namespace std;
 
 
 
-void macro_MuYieldAna2(){//TString filename = "MuYield.root", int MCtype=1002){
+void macro_MuYieldAna2_210418_ForSOA(){//TString filename = "MuYield.root", int MCtype=1002){
 
-	const int Nfile = 3;//4;//8;
+	const int Nfile = 1;//4;//8;
 
 	TString filename [Nfile] = {
 
@@ -37,10 +37,16 @@ void macro_MuYieldAna2(){//TString filename = "MuYield.root", int MCtype=1002){
 
 
 		// 21-02-07 check the three files are consistent:
-		"../Root/Root_tape/210202_Reflection/210202_Reflection_5003_stopping255_tot_tree_Type5003_D87000_T322_Nrepeat2918562_NewGeo0_TBEAM_0.root", //MCtype = 3012;
-		"/home/had/zhangce/MuYield/Root/Root_tape/210205_Reflection/S2areaMuYield_Sline_210205/S2areaMuYield_Sline_210205_tot-Itv-4_Type5003_D87000_T322_NewGeo0_TBEAM_0.root",
-		"/home/had/zhangce/MuYield/Root/Root_tape/210205_Reflection/S2areaMuYield_SlineItvScan_210205-sus-Itv-4/S2areaMuYield_SlineItvScan_210205_tot-Itv-4_TBEAM_0.root"
+		//"../Root/Root_tape/210202_Reflection/210202_Reflection_5003_stopping255_tot_tree_Type5003_D87000_T322_Nrepeat2918562_NewGeo0_TBEAM_0.root", //MCtype = 3012;
+		//"/home/had/zhangce/MuYield/Root/Root_tape/210205_Reflection/S2areaMuYield_Sline_210205/S2areaMuYield_Sline_210205_tot-Itv-4_Type5003_D87000_T322_NewGeo0_TBEAM_0.root",
+		//"/home/had/zhangce/MuYield/Root/Root_tape/210205_Reflection/S2areaMuYield_SlineItvScan_210205-sus-Itv-4/S2areaMuYield_SlineItvScan_210205_tot-Itv-4_TBEAM_0.root"
 
+		//"/home/had/zhangce/MuYield/Root/Root_tape/210205_Reflection/S2areaMuYield_SlineItvScan_210205-sus-Itv-4/S2areaMuYield_SlineItvScan_210205_tot-Itv-4_TBEAM_0.root",
+		//"/home/had/zhangce/MuYield/Root/Root_tape/210205_Reflection/S2areaMuYield_SlineItvScan_210205-sus-Itv-4/S2areaMuYield_SlineItvScan_210205_tot-Itv-4_TBEAM_0.root",
+		//"/home/had/zhangce/MuYield/Root/Root_tape/210205_Reflection/S2areaMuYield_SlineItvScan_210205-sus-Itv-4/S2areaMuYield_SlineItvScan_210205_tot-Itv-4_TBEAM_0.root"
+
+		"/home/had/zhangce/MuYield/Root/210506_hline/210506_hline_5003_210506_2e6_999_330076_450_tree_Type5003_D87000_T322_Nrepeat83151_NewGeo0.root"
+		//"/home/had/zhangce/MuYield/Root/210506_hline/210506_hline_5003_210506_all_2e6_999_330076_450_tree_Type3012_D87000_T322_Nrepeat162986_NewGeo0.root"
 		//"/home/had/zhangce/MuYield/Root/Root_tape/210205_Reflection/S2areaMuYield_SlineItvScan_210205-sus-Itv-5/S2areaMuYield_SlineItvScan_210205_tot-Itv-5_TBEAM_0.root"
 		//"/home/had/zhangce/MuYield/Root/Root_tape/210205_Reflection/S2areaMuYield_SlineItvScan_210205-sus-Itv-6/S2areaMuYield_SlineItvScan_210205_tot-Itv-6_TBEAM_0.root"
 		//"/home/had/zhangce/MuYield/Root/Root_tape/210205_Reflection/S2areaMuYield_SlineItvScan_210205-sus-Itv-7/S2areaMuYield_SlineItvScan_210205_tot-Itv-7_TBEAM_0.root"
@@ -74,35 +80,14 @@ void macro_MuYieldAna2(){//TString filename = "MuYield.root", int MCtype=1002){
 	};
 
 	int MCtype [Nfile] = {
-		//3005,
-		//3006,
-		//3006,
-		//3011,
-		//3006
-		//3012,
-		//3012,
-		//3012,
-		//3012,
-		//3012
-		//4006
+		//4003,
+		//5003,
 		//5003
-		5003,
-		5003,
-		5003
-		//5004
-
-		//1002,
-		//2001
-/*
-		4002,
-		4003,
-		4004,
-		4005,
-		4006,
-		4007,
-		4008
-*/
-		//3021
+		4003
+		//3012
+	};
+	int LaserCenter[Nfile] = {
+		6//,6,20
 	};
 
 	//SetPalette();
@@ -112,7 +97,7 @@ void macro_MuYieldAna2(){//TString filename = "MuYield.root", int MCtype=1002){
 	TGraph*** g = new TGraph**[Nfile];
 	TGraph*** g_reflection = new TGraph**[Nfile];
 
-	lasertime = 1.35;
+	double LaserTime[Nfile] = {1.2};//1.0,0.9,0.9};
 
 	for(int i = 0; i< Nfile; i++){
 
@@ -120,92 +105,58 @@ void macro_MuYieldAna2(){//TString filename = "MuYield.root", int MCtype=1002){
 
 		t[i] = new MuYield_Class(filename[i], MCtype[i]);
 		t[i]->Surface();
-		t[i]->SetLasertime(lasertime);
-		t[i]->SetLaserCenter(6);
+		//t[i]->SetLasertime(lasertime);
+		t[i]->SetLasertime(LaserTime[i]);
+		t[i]->SetLaserCenter(LaserCenter[i]);
 		//t[i]->LoopEvent();
-		//t[i]->LoopEventWithReflection(1,Form("Output-210113-reflection-3012-%d.dat",i) );
-		t[i]->LoopEventWithReflection(1);
+		t[i]->LoopEventWithReflection(1,Form("Output-210508-hline-reflection_ForSOA-%d-MCtype-%d.dat",i,MCtype[i]) );
+		//t[i]->LoopEventWithReflection(1);
 		//t[i]->LoopTime();
 		//t[i]->QuickLaserIonization(lasertime,Form("LaserOutput/%s.dat",MCtype) );
 		//t[i]->QuickLaserIonization(lasertime);
 
-		t[i]->SavePlots();
+		//t[i]->SavePlots();
 
 		//double LasertimeAti = 1e6* (t[i]->GetTBeam(i) + t[i]->GetDecayT(i) ) * 0.99;
 		//t[i]->SetLasertime(LasertimeAti);
 
 		/// Draw track without reflection
-		g[i] = new TGraph*[t[i]->Nentries];
-		g_reflection[i] = new TGraph*[t[i]->Nentries];
+		//g[i] = new TGraph*[t[i]->Nentries];
+		//g_reflection[i] = new TGraph*[t[i]->Nentries];
 
-		double LasertimeAti = 1e6* (t[i]->GetTBeam(i) + t[i]->GetDecayT(i) ) * 0.99;
-		t[i]->SetLasertime(LasertimeAti);
+		//double LasertimeAti = 1e6* (t[i]->GetTBeam(i) + t[i]->GetDecayT(i) ) * 0.99;
+		//t[i]->SetLasertime(LasertimeAti);
 		//for(int j = 0; j<t[i]->Nentries;j++) g[i][j] = t[i]->Track(j);
-		for(int j = 0; j<20;j++) g[i][j] = t[i]->Track(j);
-		for(int j = 0; j<20;j++){
-			g_reflection[i][j] = t[i]->TrackWithReflection(j);
+		//for(int j = 0; j<20;j++) g[i][j] = t[i]->Track(j);
+		//for(int j = 0; j<20;j++){
+		//	g_reflection[i][j] = t[i]->TrackWithReflection(j);
 			//if(t[1]->IsInsideLaserRegion(i, lasertime))cout<<"MCtype "<<MCtype[1]<<" file "<<1<<" has the event "<<i<<" inside laser region at "<<lasertime<<" us"<<endl;
-		}
+		//}
 
 	}
 
 	//// draw preliminary
-	EColor ci[4] = {kBlack, kRed, kOrange, kYellow};//kYellow, kGreen};
-
-	TLegend *tl = new TLegend(0.7,0.7,0.9,0.9);
-	TCanvas * c0 = new TCanvas("c0_reflection_hT","c0_hT_reflection",700,500);
-	t[Nfile-1]->hT->SetLineColor(1);
-	t[Nfile-1]->hT->SetLineWidth(2);
-	t[Nfile-1]->hT->Draw();
-
 	//c0->SaveAs("210204_Reflection/210204_bottomNoreflction.C");
 	//c0->SaveAs("210204_Reflection/210204_bottomNoreflction.pdf");
 
-	TCanvas * c1 = new TCanvas("c1_reflection","c1_reflection",1400,500);
-	c1->Divide(2,1);
-	c1->cd(1);
+	TCanvas * c1 = new TCanvas("c1_reflection","c1_reflection",1400,1500);
+	c1->Divide(3,3);
+	for(int i=0;i<1;i++){
+		c1->cd( 3*(i)+1 );
 	//t[Nfile-1]->hT->SetNormFactor(0.1*t[Nfile-1]->hT->GetEntries());
 	//t[Nfile-1]->hT->GetYaxis()->SetRangeUser(0,62000);
-	t[Nfile-1]->hT->Draw();
+		t[i]->hT->Draw();
+		c1->cd(3*i+2);
+		t[i]->hZY2D_laser->Draw("colz");
+		c1->cd(3*i+3);
+		t[i]->hXY2D->Draw("colz");
 	//t[Nfile-1]->hT->SetLineColor(1);
 	//t[Nfile-1]->hT->SetLineWidth(2);
-	tl->AddEntry(t[Nfile-1]->hT,Form("%d mm",6+2),"L");
+	//tl->AddEntry(t[Nfile-1]->hT,Form("%d mm",6+2),"L");
 	//for(int i = Nfile-2; i>=0;i--){t[i]->hT->SetLineColor(Nfile+1-i);t[i]->hT->SetLineWidth(2);t[i]->hT->Draw("same");tl->AddEntry(t[i]->hT,Form("%d mm",i+2),"L");}
-	for(int i = Nfile-2; i>=0;i--){t[i]->hT->SetLineColor(ci[i+1]);t[i]->hT->SetLineWidth(2);t[i]->hT->Draw("same");tl->AddEntry(t[i]->hT,Form("%d mm",i+2),"L");}
-	tl->Draw();
-
-	c1->cd(2);
-	t[0]->hZY2D_sf->Draw("colz");
-	//t[i]->hT->Draw();
-	//t[i]->hXY2D_0->Draw("colz");
-	//t[0]->hZY2D_sf->Draw("colz");
-	//t[0]->g_track_reflection->Draw("PLsame");
-	//t[0]->hZY2D_sf->Draw("colz");
-	t[0]->g_track_reflection->Draw("PLsame");
-	//g[0][1]->Draw("PLsame");
-
-	//c1->SaveAs(Form("/Users/zhangce/WorkArea/MuYield/macro/20-11-19-reflection-itv-scan/%d.pdf",MCtype[0]));
-
-	//// Comparison of the track
-
-	TCanvas * c2 = new TCanvas("c2_comparison","c2_comparison");
-	c2->Divide(2,2);
-	int c_i = 0;
-	for(int i = 0; i<Nfile;i++){
-		c2->cd(++c_i);
-		t[i]->hZY2D_sf->Draw("colz");
-		//for(int j = 0; j<100;j++){g[i][j]->SetLineColor(j);g[i][j]->Draw("PLsame");}
-		for(int j = 0; j<20;j++){g[i][j]->SetLineColor(j);g[i][j]->Draw("PLsame");}
-
-		c2->cd(++c_i);
-		t[i]->hZY2D_sf->Draw("colz");
-		for(int j = 0; j<20;j++){g_reflection[i][j]->SetLineColor(j);g_reflection[i][j]->Draw("PLsame");}
-
+	//for(int i = Nfile-2; i>=0;i--){t[i]->hT->SetLineColor(ci[i+1]);t[i]->hT->SetLineWidth(2);t[i]->hT->Draw("same");tl->AddEntry(t[i]->hT,Form("%d mm",i+2),"L");}
+	//tl->Draw();
 	}
-
-	c2->cd(3);
-	t[0]->hZY2D_laser->Draw("colz");
-
 
 }
 

@@ -47,7 +47,7 @@ void MuYield_Class::Surface()
 
 		if(z>0){
 
-			ReInitializaingSurfaceXYZ0(X_sf,Y_sf,Z_sf, MCtype);
+			//ReInitializaingSurfaceXYZ0(X_sf,Y_sf,Z_sf, MCtype);
 
 			hZY2D_sf->Fill(Z_sf, Y_sf);
 			hZX2D_sf->Fill(Z_sf, X_sf);
@@ -256,7 +256,7 @@ void MuYield_Class::LoopEventWithReflection(int N_track_event = -1, TString Outp
 
 		if(MCtype>4000 && !(Y_sf>-7 && Y_sf<7)  )continue;
 
-		ReInitializaingSurfaceXYZ0(X_sf,Y_sf,Z_sf, MCtype);
+		//ReInitializaingSurfaceXYZ0(X_sf,Y_sf,Z_sf, MCtype);
 
 		t = DiffusionT + TBeam;
 		x = X_sf;
@@ -311,6 +311,10 @@ void MuYield_Class::LoopEventWithReflection(int N_track_event = -1, TString Outp
 
 				NLaserRegion3++;
 
+				hZY2D_laser->Fill(z, y);
+				hZX2D_laser->Fill(z, x);
+				hXY2D_laser->Fill(x, y);
+
 				double p = 1.0*sqrt(2.0*LaserE*mmu+LaserE*LaserE);
 				double g = 1.0*(mmu+LaserE)/mmu;
 				double b = 1.0*sqrt(2.0*LaserE*mmu+LaserE*LaserE)/(mmu+LaserE);
@@ -318,6 +322,8 @@ void MuYield_Class::LoopEventWithReflection(int N_track_event = -1, TString Outp
 
 				double xp = VX_sf/VZ_sf;
 				double yp = VY_sf/VZ_sf;
+
+				//if(abs(y)>20)cout<<"y "<<y<<endl;
 
 				wf << x*0.1 << " "
 				<< xp*1000 << " "
